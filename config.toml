@@ -1,0 +1,50 @@
+theme = "Hugo-Octopress"
+baseURL = "https://ecstatic-noyce-53de81.netlify.com"
+languageCode = "en-us"
+title = "Anything is |Data| is Anything"
+ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown", "_files$", "_cache$"]
+
+[permalinks]
+post = "/blog/:year-:month-:day-:title/" # change the post URL to look like the old ones
+
+# Make tags and categories work
+# As of Hugo v0.33 these are not needed anymore
+# [indexes]
+#   tag = "tags"
+#   category = "categories"
+
+[params]
+
+  # --- Start sidebar options ---
+  # Number of last posts that will be displayed in the sidebar - set to 0 or remove to hide this section
+  sidebarRecentLimit = 5
+
+  # Sidebar header - passed to markdownify so you can write markdown here
+  sidebarHeader = "About Me"
+
+  # Sidebar text also supports markdown
+  # New lines can be added with </br> or normal markdown (two spaces at the end of line or two new lines).
+  # when adding two new lines, remember to remove the indentation otherwise the new line will be treated as a codeblock
+  sidebarText = """I'm Jeremy, and am deeply interested in data science. Especially R. 
+  <br><br>
+  But my educational background is in **Chinese** and German. **Think that's unrelated with R**? <br>
+  <br> Well, I see language is a door to another world, and data science as a skillset to understanding it. <br><br> *Anything is Data, and Data is Anything*. 
+  </br><br>
+**Me on Other Platforms:**  </br>
+
+  """
+  # Sidebar menu - if true will add a sidebar menu between sidebar text and recent posts
+  sidebarMenuEnabled = false
+  sidebarMenuHeader = "Check out"
+
+  # sidebar links
+  github = "https://github.com/Jjohn987/"
+  stackoverflow = "https://stackexchange.com/users/11094434/superball10000"
+  linkedin = "https://www.linkedin.com/in/jeremy-johnson-09016a112"
+  
+  subtitle = "Centered around the investigation of things, ... in R!"
+  author = "Jeremy Johnson"
+
+defaultDescription = "My R blog, with projects in analytics, Chinese text analysis, data mining, and visualization"
+  # defaultKeywords = ["R Studio" , "Chinese text analysis" , "data visualization" , "data science"]
+
