@@ -3,10 +3,10 @@ baseURL = "https://upbeat-ardinghelli-01cdfc.netlify.com"
 languageCode = "en-us"
 title = "Anything is |Data| is Anything"
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown", "_files$", "_cache$"]
+disqusShortname = "Your disqus shortname"
 
-
-
-
+pygmentscodefences = true
+pygmentsuseclasses = true
 
 [permalinks]
 post = "/blog/:year-:month-:day-:title/" # change the post URL to look like the old ones
