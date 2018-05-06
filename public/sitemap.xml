@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>https://ecstatic-noyce-53de81.netlify.com/blog/2018-05-06-on-relocating-to-github/netlify/</loc>
+    <lastmod>2018-05-06T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://ecstatic-noyce-53de81.netlify.com/blog/1-01-01-/</loc>
+  </url>
+  
+  <url>
+    <loc>https://ecstatic-noyce-53de81.netlify.com/</loc>
+    <lastmod>2018-05-06T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://ecstatic-noyce-53de81.netlify.com/tags/blogdown/</loc>
+    <lastmod>2018-05-06T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://ecstatic-noyce-53de81.netlify.com/categories/blogging/</loc>
+    <lastmod>2018-05-06T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://ecstatic-noyce-53de81.netlify.com/categories/</loc>
+    <lastmod>2018-05-06T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://ecstatic-noyce-53de81.netlify.com/tags/github/</loc>
+    <lastmod>2018-05-06T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://ecstatic-noyce-53de81.netlify.com/tags/hugo/</loc>
+    <lastmod>2018-05-06T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://ecstatic-noyce-53de81.netlify.com/tags/netlify/</loc>
+    <lastmod>2018-05-06T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://ecstatic-noyce-53de81.netlify.com/post/</loc>
+    <lastmod>2018-05-06T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://ecstatic-noyce-53de81.netlify.com/tags/</loc>
+    <lastmod>2018-05-06T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+</urlset>
