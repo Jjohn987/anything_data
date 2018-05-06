@@ -1,5 +1,5 @@
 theme = "Hugo-Octopress"
-baseURL = "https://ecstatic-noyce-53de81.netlify.com"
+baseURL = "https://upbeat-ardinghelli-01cdfc.netlify.com"
 languageCode = "en-us"
 title = "Anything is |Data| is Anything"
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown", "_files$", "_cache$"]

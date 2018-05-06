@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Netlify on Anything is |Data| is Anything</title>
-    <link>https://ecstatic-noyce-53de81.netlify.com/tags/netlify/</link>
+    <link>/tags/netlify/</link>
     <description>Recent content in Netlify on Anything is |Data| is Anything</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 06 May 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://ecstatic-noyce-53de81.netlify.com/tags/netlify/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/tags/netlify/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>On Relocating to GitHub/Netlify</title>
-      <link>https://ecstatic-noyce-53de81.netlify.com/blog/2018-05-06-on-relocating-to-github/netlify/</link>
+      <link>/blog/2018-05-06-on-relocating-to-github/netlify/</link>
       <pubDate>Sun, 06 May 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://ecstatic-noyce-53de81.netlify.com/blog/2018-05-06-on-relocating-to-github/netlify/</guid>
+      <guid>/blog/2018-05-06-on-relocating-to-github/netlify/</guid>
       <description>Deep, labored breathing
 Hello everyone, this is the opening post on my new blog, which I&amp;rsquo;m relocating from Wordpress to GitHub Pages and Netlify. It&amp;rsquo;s so nice I&amp;rsquo;ve given it a name - because nice things have names!
 But, why was I panting? The relocation effort wasn&amp;rsquo;t easy. Why did I follow through with it? Becuase it is worth the effort. This post is evidence of my victory. Now please, let me explain.</description>
