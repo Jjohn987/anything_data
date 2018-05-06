@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories on Anything is |Data| is Anything</title>
-    <link>https://upbeat-ardinghelli-01cdfc.netlify.com/categories/</link>
+    <link>/categories/</link>
     <description>Recent content in Categories on Anything is |Data| is Anything</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 06 May 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://upbeat-ardinghelli-01cdfc.netlify.com/categories/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Blogging</title>
-      <link>https://upbeat-ardinghelli-01cdfc.netlify.com/categories/blogging/</link>
+      <link>/categories/blogging/</link>
       <pubDate>Sun, 06 May 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://upbeat-ardinghelli-01cdfc.netlify.com/categories/blogging/</guid>
+      <guid>/categories/blogging/</guid>
       <description></description>
     </item>
     
