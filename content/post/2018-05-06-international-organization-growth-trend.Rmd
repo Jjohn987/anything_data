@@ -7,7 +7,6 @@ categories: [Data Wrangling, Data Visualization]
 tags: [tidyr, tidyverse, international organizations, Correlates of War Project]
 ---
 
-*Migrated from my original Wordpress blog* 
 
 Note: This was my first "project" in R - and I had simple goals: **learning data wrangling** of a not-so-tidy dataset, and performing **basic visualization**. I wanted to learn the **tidyverse** set of packages, use pipe commands, and convert data from wide to long formats for different purposes. 
 
@@ -170,3 +169,6 @@ I learned a generic workflow within the tidyverse packages, made pipe commands, 
 
 **Citation**
 *Pevehouse, Jon C., Timothy Nordstrom, and Kevin Warnke. 2004. "The COW-2 International Organizations Dataset Version 2.0," Conflict Management and Peace Science 21:101-119.*
+
+
+*Migrated from my original Wordpress blog* 

@@ -1,0 +1,99 @@
+---
+title: Visualizing European WWI Defense Treaties with iGraph in R
+author: ~
+date: '2018-03-14'
+slug: visualizing-european-wwi-defense-treaties-with-igraph-in-r
+categories: [Network Analysis, Data Visualization]
+tags: [igraph, network analysis, WWI Defense Treaties, Correlates of War Project]
+---
+
+
+
+<p>*Migrated from my Word Press blog</p>
+<p>Network analysis and network visualization are two fascinating aspects of data science. Just about anything can be imagined as a network. The two basic requirements are:</p>
+<ul>
+<li>There should be a “distinct set of entities”, such as humans, organizations</li>
+<li>There should exist a known relationship between these entities (Zweig, 5).</li>
+</ul>
+<p>Network analysis is useful when it can reveal much about structure, relationships, or arrangements. Likewise it can possibly reveal indirect effects between enities brought on by the network structure. (Zweig, 12)</p>
+<p>Beginning a simple project, relationships between countries seemed to be a natural idea for me to use in order to learn about network visualization in R. So I decided to revisit the Correlates of War Project and access the <a href="http://www.correlatesofwar.org/data-sets/formal-alliances">alliances 4.1 dataset</a>. I also decided to use the <code>igraph</code> package in R. Working with it was more similar to base R in my opinion, especially plotting. However, manipulating the dataframe could be entirely done with dplyr too if you want to pre process the data without relying on igraph functions.</p>
+<pre class="r"><code>library(tidyverse)
+library(lubridate)
+library(scales)
+library(igraph)
+##import data
+Alliances &lt;- read_csv(&quot;alliance_v4.1_by_directed.csv&quot;)</code></pre>
+<p>The dataset is quite expansive but for the purposes at hand (European Defense Treaties relating to World War I) I choose treaties that occured between 1878 and 1914.</p>
+<div id="data-cleaning" class="section level2">
+<h2>Data cleaning</h2>
+<pre class="r"><code>## Create an interval object to find treaty dates
+Beginning &lt;- ymd(1878, truncated = 2L)
+End &lt;- ymd(1914, truncated = 2L)
+Alliance_Timeline &lt;- interval(Beginning, End)
+##clean up the data
+Tidy_Alliances &lt;- Alliances %&gt;% select(ID = version4id, CC1 = ccode1, CC2 = ccode2, From = state_name1, To = state_name2, contains(&quot;dyad&quot;), defense, neutrality, nonaggression,entente) %&gt;%
+unite(Start_Date, c(&quot;dyad_st_month&quot;, &quot;dyad_st_day&quot;, &quot;dyad_st_year&quot;), sep = &quot;-&quot;) %&gt;%
+unite(End_Date, c(&quot;dyad_end_month&quot;, &quot;dyad_end_day&quot;, &quot;dyad_end_year&quot;), sep = &quot;-&quot;) %&gt;% 
+mutate(Start_Date = mdy(Start_Date), End_Date = mdy(End_Date)) 
+
+##Filter for specific years and only European countries. 
+Key_Treaties &lt;- Tidy_Alliances %&gt;% filter(Start_Date %within% Alliance_Timeline, End_Date %within% Alliance_Timeline) %&gt;%
+  distinct(From) %&gt;%
+  filter(!From %in% c(&quot;Brazil&quot;, &quot;Argentina&quot;, &quot;Uruguay&quot;))</code></pre>
+<p>Now that’s the basic data frame which I’m going to use to create my node and edge dataframes. The next idea is to create a dataframe of edges (with additional attributes) as well as a dataframe of vertices (with attributes) for igraph.</p>
+<pre class="r"><code>## Create a look up vector with the sides of each country at start of WW1.
+Sides &lt;- c(&quot;Austria-Hungary&quot; = &quot;Central Powers&quot;, &quot;Bulgaria&quot; = &quot;Central Powers&quot;, &quot;China&quot; = &quot;Allies&quot;, &quot;France&quot; = &quot;Allies&quot;, &quot;Germany&quot; = &quot;Central Powers&quot;, &quot;Greece&quot; = &quot;Neutral&quot;, &quot;Italy&quot; = &quot;Central Powers&quot;, &quot;Japan&quot; = &quot;NA&quot;,
+&quot;Korea&quot; = &quot;NA&quot;, &quot;Russia&quot; = &quot;Allies&quot;, &quot;Spain&quot; = &quot;Neutral&quot;, &quot;Turkey&quot; = &quot;Central Powers&quot;, &quot;United Kingdom&quot; = &quot;Allies&quot;, &quot;United States of America&quot; = &quot;Allies&quot;, &quot;Yugoslavia&quot; = &quot;Allies&quot;)
+
+##Create Edge data frame
+Edges &lt;- Tidy_Alliances %&gt;%
+  filter(Start_Date %within% Alliance_Timeline, End_Date %within% Alliance_Timeline, From %in% Key_Treaties$From) %&gt;%
+  group_by(From, To) %&gt;%
+  select(From, To) %&gt;%
+  mutate(width = n()) %&gt;%
+  distinct()
+
+##Create Vertices data frame
+Vertices_Weights &lt;- Edges %&gt;%
+  select(From, To) %&gt;%
+  gather(Key, Country) %&gt;%
+  group_by(Country) %&gt;%
+  mutate(size = n()) %&gt;% 
+  ungroup() %&gt;%
+  select(Country, size) %&gt;%
+  distinct()
+
+Vertices &lt;- data.frame(Country = Edges$From, Side = Sides[Edges$From], stringsAsFactors = FALSE) %&gt;% distinct()</code></pre>
+<p>By adding special vertex and edge attributes the igraph plot can become more interesting. This means unique colors for the nodes (based on which “side” countries fought for) and node/edge weights (based on their total number of treaties for the time period).</p>
+<pre class="r"><code>##Create our igraph object
+Treaty_igraph &lt;- graph_from_data_frame(d = Edges, vertices = Vertices, directed = F)
+
+V(Treaty_igraph)$size &lt;- Vertices_Weights$size
+V(Treaty_igraph)$sides &lt;- Sides[vertex_attr(Treaty_igraph)$name]
+V(Treaty_igraph)$color &lt;- ifelse(V(Treaty_igraph)$sides == &quot;Allies&quot;, &quot;cornflowerblue&quot;, ifelse(V(Treaty_igraph)$sides == &quot;Central Powers&quot;, &quot;olivedrab&quot;, &quot;gainsboro&quot;))
+V(Treaty_igraph)$size &lt;- rescale(V(Treaty_igraph)$size, to = c(10, 20))
+
+E(Treaty_igraph)$arrow.mode &lt;- 0
+
+Treaty_igraph &lt;- delete.vertices(Treaty_igraph, V(Treaty_igraph)$name[V(Treaty_igraph)$name == &quot;United States of America&quot;|V(Treaty_igraph)$name == &quot;Korea&quot;|V(Treaty_igraph)$name == &quot;Japan&quot;])</code></pre>
+<p>I rescaled the node sizes with “rescale” and I deleted the United States, Korea, and Japan nodes and edges with “delete.vertices” because they were isolated and didn’t seem relevant to any time before 1914. I’d have also deleted China for the same reason, where it not for its sole connection to Russia.</p>
+<pre class="r"><code>##plot our graph
+par(bg=&quot;snow2&quot;)
+plot(Treaty_igraph, rescale = TRUE, displaylabels = TRUE, remove.multiple = TRUE,
+     vertex.label.dist = 1.75, vertex.label.cex = .8, vertex.label = V(Treaty_igraph)$name, label.cex = 2, edge.curved = .2,
+     vertex.frame.color = &quot;black&quot;, vertex.col = V(Treaty_igraph)$color, vertex.label.color = &quot;black&quot;,
+     arrow.mode = E(Treaty_igraph)$arrow.mode, edge.color = &quot;darkgoldenrod2&quot;, edge.weight = E(Treaty_igraph)$width, main = &quot;European Treaties 1878-1914&quot;, sub = &quot;Defense Pacts and Ententes&quot;)
+legend(x=-1.5, y=-1.1, c(&quot;Allies&quot;,&quot;Central Powers&quot;, &quot;Neutral&quot;), 
+       col=&quot;#777777&quot;, c(&quot;cornflowerblue&quot;, &quot;olivedrab&quot;, &quot;grey&quot;), pt.cex=1, cex=1, bty=&quot;n&quot;, ncol=1)</code></pre>
+<p><img src="/post/2018-05-06-visualizing-european-wwi-defense-treaties-with-igraph-in-r_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+</div>
+<div id="closing-statements" class="section level2">
+<h2>Closing Statements</h2>
+<p>And there is my World War I network plot.</p>
+<p>In closing, I mainly wanted to get aquainted with igraph plotting (technicality) as opposed to analytical concepts (which I didn’t use here). I feel like I accomplished that goal.</p>
+<p>However, we can easily see that Austria-Hungary, Germany, and Russia were the major players in power and diplomacy at the time.</p>
+<p>That being said, I feel that network analysis is quite exciting and the possibilities are quite rich. And perhaps the dataset I borrowed might hold other useful gems!I close by saying that I hope everybody enjoyed this entry and that they may find it useful or inspiring to check out igraph and other network tools in R.</p>
+<p><strong>Citations</strong></p>
+<p>Gibler, Douglas M. 2009. International military alliances, 1648-2008 (Version 4.1). CQ Press.<br />
+Zweig, K. A. (2013). Network analysis literacy: A practical approach to network analysis project design. Vienna: Springer Verlag GmbH. <a href="http://kateto.net/networks-r-igraph">This igraph tutorial</a></p>
+</div>

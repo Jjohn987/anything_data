@@ -23,6 +23,27 @@ But, why was I panting? The relocation effort wasn’t easy. Why did I follow th
     </item>
     
     <item>
+      <title>Visualizing European WW1 Defense Treaties with iGraph</title>
+      <link>/blog/2018-04-01-visualizing-european-ww1-defense-treaties-with-igraph/</link>
+      <pubDate>Sun, 01 Apr 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2018-04-01-visualizing-european-ww1-defense-treaties-with-igraph/</guid>
+      <description>I suddenly got bit by a bug to learn about network analysis. So I recalled the Correlates of War Project having a dataset about alliances. I decided to revisit them and download the data for this new project, which you can do to.
+To start small, I decided to visualize a certain topic, e.g., European Defense Treaties relating to World War I. For that purpose I filtered the dataset for treaties that occured between 1878 and 1914.</description>
+    </item>
+    
+    <item>
+      <title>Visualizing European WWI Defense Treaties with iGraph in R</title>
+      <link>/blog/2018-03-14-visualizing-european-wwi-defense-treaties-with-igraph-in-r/</link>
+      <pubDate>Wed, 14 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2018-03-14-visualizing-european-wwi-defense-treaties-with-igraph-in-r/</guid>
+      <description>*Migrated from my Word Press blog
+Network analysis and network visualization are two fascinating aspects of data science. Just about anything can be imagined as a network. The two basic requirements are:
+ There should be a “distinct set of entities”, such as humans, organizations There should exist a known relationship between these entities (Zweig, 5).  Network analysis is useful when it can reveal much about structure, relationships, or arrangements.</description>
+    </item>
+    
+    <item>
       <title>Top MBA Programs by US News</title>
       <link>/blog/2017-07-01-top-mba-programs-by-us-news/</link>
       <pubDate>Sat, 01 Jul 2017 00:00:00 +0000</pubDate>

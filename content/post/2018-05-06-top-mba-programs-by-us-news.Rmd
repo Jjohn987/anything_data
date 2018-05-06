@@ -6,7 +6,6 @@ slug: top-mba-programs-by-us-news
 categories: [scraping]
 tags: [Rvest, scraping, US News rankings]
 ---
-*Migrated from My Wordpress*
 
 Somebody once asked me for reccomendations on MBA programs based on rank and tuition. I didn't have any information on hand, but knew how toget it. Webscraping.
 
@@ -152,6 +151,7 @@ Up above, I selected 3 institutions from each "Tier" of rankings with the lowest
 * It'd be better to compare school rankings across a certain program instead of comprehensively
 
 
+*Migrated from my original Wordpress blog*
 
 
 
