@@ -6,21 +6,10 @@
     <description>Recent content in Data Visualization on Anything is |Data| is Anything</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 14 Mar 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 24 Jan 2017 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/data-visualization/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>Visualizing European WWI Defense Treaties with iGraph in R</title>
-      <link>/blog/2018-03-14-visualizing-european-wwi-defense-treaties-with-igraph-in-r/</link>
-      <pubDate>Wed, 14 Mar 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/2018-03-14-visualizing-european-wwi-defense-treaties-with-igraph-in-r/</guid>
-      <description>*Migrated from my Word Press blog
-Network analysis and network visualization are two fascinating aspects of data science. Just about anything can be imagined as a network. The two basic requirements are:
- There should be a “distinct set of entities”, such as humans, organizations There should exist a known relationship between these entities (Zweig, 5).  Network analysis is useful when it can reveal much about structure, relationships, or arrangements.</description>
-    </item>
     
     <item>
       <title>International Organization Growth Trend</title>
@@ -28,8 +17,7 @@ Network analysis and network visualization are two fascinating aspects of data s
       <pubDate>Tue, 24 Jan 2017 00:00:00 +0000</pubDate>
       
       <guid>/blog/2017-01-24-international-organization-growth-trend/</guid>
-      <description>Migrated from my original Wordpress blog
-Note: This was my first “project” in R - and I had simple goals: learning data wrangling of a not-so-tidy dataset, and performing basic visualization. I wanted to learn the tidyverse set of packages, use pipe commands, and convert data from wide to long formats for different purposes.
+      <description>Note: This was my first “project” in R - and I had simple goals: learning data wrangling of a not-so-tidy dataset, and performing basic visualization. I wanted to learn the tidyverse set of packages, use pipe commands, and convert data from wide to long formats for different purposes.
 I chose to learn the tidyverse because it gets all sorts of wrangling done about 90% of the time, (or so its said)</description>
     </item>
     

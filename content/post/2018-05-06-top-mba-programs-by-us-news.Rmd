@@ -69,6 +69,7 @@ get_usnews_mbas <- function(x) {
 
 ##Apply the function, get the data!
 ```{r, message=FALSE, warning=FALSE}
+
 USNEWS_MBAS <- do.call(rbind, lapply(pages, get_usnews_mbas))
 
 ```
@@ -152,19 +153,4 @@ Up above, I selected 3 institutions from each "Tier" of rankings with the lowest
 
 
 *Migrated from my original Wordpress blog*
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

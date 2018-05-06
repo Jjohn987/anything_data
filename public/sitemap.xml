@@ -13,11 +13,6 @@
   </url>
   
   <url>
-    <loc>/blog/2018-03-14-visualizing-european-wwi-defense-treaties-with-igraph-in-r/</loc>
-    <lastmod>2018-03-14T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>/blog/2017-07-01-top-mba-programs-by-us-news/</loc>
     <lastmod>2017-07-01T00:00:00+00:00</lastmod>
   </url>
@@ -59,7 +54,7 @@
   
   <url>
     <loc>/categories/data-visualization/</loc>
-    <lastmod>2018-03-14T00:00:00+00:00</lastmod>
+    <lastmod>2017-01-24T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -156,12 +151,6 @@
   <url>
     <loc>/tags/us-news-rankings/</loc>
     <lastmod>2017-07-01T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/wwi-defense-treaties/</loc>
-    <lastmod>2018-03-14T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

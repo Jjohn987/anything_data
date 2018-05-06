@@ -17,8 +17,7 @@
       <pubDate>Sat, 01 Jul 2017 00:00:00 +0000</pubDate>
       
       <guid>/blog/2017-07-01-top-mba-programs-by-us-news/</guid>
-      <description>Migrated from My Wordpress
-Somebody once asked me for reccomendations on MBA programs based on rank and tuition. I didn’t have any information on hand, but knew how toget it. Webscraping.
+      <description>Somebody once asked me for reccomendations on MBA programs based on rank and tuition. I didn’t have any information on hand, but knew how toget it. Webscraping.
 Webscraping is an immensly useful tool for gathering data from webpages, when it isn’t hosted on an API or stored in a file somewhere. R’s best tool for webscraping is Rvest.
 So I decided to scrape information on the US News website for university rankings, which has at least 20 pages of MBA probrams available.</description>
     </item>
