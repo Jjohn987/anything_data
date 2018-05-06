@@ -1,0 +1,172 @@
+---
+title: International Organization Growth Trend
+author: ~
+date: '2017-01-24'
+slug: international-organization-growth-trend
+categories: [Data Wrangling, Data Visualization]
+tags: [tidyr, tidyverse, international organizations, Correlates of War Project]
+---
+
+*Migrated from my original Wordpress blog* 
+
+Note: This was my first "project" in R - and I had simple goals: **learning data wrangling** of a not-so-tidy dataset, and performing **basic visualization**. I wanted to learn the **tidyverse** set of packages, use pipe commands, and convert data from wide to long formats for different purposes. 
+
+I chose to learn the tidyverse because it gets all sorts of wrangling done about 90% of the time, (or so its said) 
+
+The dataset I grabbed was from the [Correlates of War](http://www.correlatesofwar.org/data-sets/IGOs) and its citation is at the end of this document. If you wish to access this dataset, then you might visit this link.
+
+```{r, message=FALSE, warning=FALSE}
+##load packages
+library(tidyverse)
+library(countrycode)
+##load the data from the link above, remember to use your own directory!
+igos <- read_csv("/Users/jeremyjohnson/Desktop/R Directory/igounit.csv")
+```
+
+To tidy this data, I first wanted to convert it from wide to long (each country is its own column, which is not useful for passing functions across). I also want to put the different membership variables (active, dead, integrated, etc) in one single column. 
+
+To go from wide to long, ```tidyr::gather``` is very useful. 
+
+##Let's tidy this data 
+```{r, message=FALSE, warning=FALSE, echo=TRUE}
+
+## Gather the countries and membership status into a single column respecitively. 
+
+tidied_countries <- gather(igos, Country, Membership, afghanistan:zimbabwe)
+
+## add a region column to go with country. Use "Misc" for NA values.
+tidied_countries$Region <- countrycode(tidied_countries$Country, "country.name", "region", warn = FALSE)
+tidied_countries$Region[is.na(tidied_countries$Region)] <- "Misc"
+
+## There's no column detailing a "founding year" or a "dead" year, let's fix that.
+tidied_countries <- tidied_countries %>%  
+  group_by(orgname) %>%
+  mutate(Founded = min(year)) %>%
+  gather(Status, Year, Founded, deaddate) 
+```
+
+
+I want a quick idea of the growth trend of international organizations over the recent two centuries. This can be done with a simple (but slightly lengthy) dplyr chain. I prefer to work with only relevant columns, and I need to calculate consecutive growth. So that means I'll need to ```dplyr::select```, ```dplyr::group_by```, ```dplyr::mutate```, and more.
+
+##  Overall Consecutive IGO growth by year
+
+```{r, undefinedmessage=FALSE, warning=FALSE}
+Overall_Growth <- tidied_countries %>% 
+  select(orgname, Status, Year) %>%
+  group_by(orgname, Year, Status) %>%
+  distinct() %>%
+  arrange(Year) %>%
+  mutate(Count = ifelse(Status == "Founded", 1, ifelse(Status == "deaddate" & Year != is.na(Year), -1, NA))) %>% 
+  ungroup() %>%
+  group_by(Year) %>%
+  mutate(Growth = cumsum(Count)) %>% 
+  filter(Growth == max(Growth)) %>%
+  ungroup() %>%
+  mutate(Growth = cumsum(Growth))
+
+ggplot(Overall_Growth, aes(x = Year, y=Growth)) + geom_line(color = "steelblue", size = 1.1) + theme_bw() + ggtitle("Growth of International Organizations", subtitle = "From 1850 - 2005")
+
+```
+
+What a simple but nice line plot depicting the general trend. While it doesn't depict everything, it does provide us some information at first glance. There's a near flat line, then upward and downward ticks, then a dramatic climb.
+
+Next up I'd like to simply look at the decline in international organizations, or when organizations went "dead".
+
+```{r, message=FALSE, warning=FALSE}
+  
+ Death_Trend <- tidied_countries %>% 
+  select(orgname, Status, Year) %>%
+  group_by(orgname, Year, Status) %>%
+  distinct() %>%
+  arrange(Year) %>%
+  mutate(Count = ifelse(Status == "Founded", 1, ifelse(Status == "deaddate" & Year != is.na(Year), -1, NA))) %>% 
+  ungroup() %>%
+  filter(Status == "deaddate" & !is.na(Year)) %>% group_by(Year, Count) %>% summarise(Dead = sum(Count)) %>%
+  ungroup() %>%
+  mutate(New.Total = cumsum(Dead)) 
+
+Abnormal_Years <- Death_Trend %>% top_n(-2, Dead)
+
+  ggplot(Death_Trend, aes(x = Year, y = New.Total)) +
+  geom_line(color = "red", size = 1.2, linetype = "dashed") +
+  geom_area(stat = "identity", alpha = .6, fill = "black") +
+  geom_point(data = Abnormal_Years, aes(x = Year, y = New.Total), color = "black", size = 3.5) +
+      geom_point(data = Abnormal_Years, aes(x = Year, y = New.Total), color = "red", size = 2, shape = 18, alpha = .8) +
+  geom_text(data = Abnormal_Years, aes(label = paste(Abnormal_Years$Year), x = Year, y = New.Total), nudge_x = 1, nudge_y = -6, color = "black", fontface = "bold") +
+  theme_bw() +
+    ggtitle("Death Trend of International Organizations", subtitle = "And Some Comparatively Bad Years")
+  
+  Abnormal_Years
+  
+```
+  
+This plot can look deceiving depending on your perspective. Just remember that this is a consecutive count of international organizations that died out over time. 
+   
+There were a few years that stood out as worse than others. In particular, 1914 saw the greatest decline in international organizations, with 9 going dead from that year alone. Also, recent years have had a count of around 7 international organizations that died out repspectively. Odd - maybe they were ill-conceived or perhaps they got consolidated into more complex ones.
+   
+  
+While the first plot showed the consolidated trend, let's depict the consecutive growth and decline trends separately in the same plot. (That is, if we were to subtract the red from the blue, we'd get the original plot seen at the beginning of this post.)
+
+   
+```{r, undefinedmessage=FALSE, warning=FALSE}
+  
+   Total_Trend <- tidied_countries %>% 
+  select(orgname, Status, Year) %>%
+  group_by(orgname, Year) %>%
+  distinct() %>%
+  arrange(Year) %>%
+  mutate(Count = ifelse(Status == "Founded", 1, ifelse(Status == "deaddate" & Year != is.na(Year), -1, NA)), Status = ifelse(Status == "deaddate", "Dead", Status)) %>% 
+  group_by(Status, Year) %>%
+  summarise(Change = sum(Count)) %>% group_by(Status) %>% mutate(New.Total = cumsum(Change))
+
+High_Growth_Years <- Total_Trend %>% 
+  ungroup() %>%
+  top_n(2, Change)
+
+High_Decline_Years <- Total_Trend %>%
+  ungroup() %>%
+  top_n(-2, Change)
+
+
+  ggplot(Total_Trend, aes(x = Year, y = New.Total, fill = Status)) +
+  geom_line(size=1.2, color = "black") +
+    geom_area() +
+    geom_point(data = High_Growth_Years, aes(x = Year, y = New.Total), color = "black", size = 3.5) +
+     geom_point(data = High_Growth_Years, aes(x = Year, y = New.Total), color = "steelblue", size = 1.5) +
+       geom_point(data = High_Decline_Years, aes(x = Year, y = New.Total), color = "black", size = 3.5) +
+       geom_point(data = High_Decline_Years, aes(x = Year, y = New.Total), color = "red", size = 1.5) +
+    geom_text(data = High_Decline_Years, aes(label = paste(High_Decline_Years$Year), x = Year, y = New.Total), nudge_x = -11, nudge_y = -17, color = "black") +
+     geom_text(data = High_Growth_Years, aes(label = paste(High_Growth_Years$Year), x = Year, y = New.Total), nudge_x = -11, nudge_y = 17, color = "black")+
+    theme_bw() +
+    ggtitle("International Organizations Growth and Decline", subtitle = "|Significant Years Annotated") 
+```
+
+Now a direct comparison between the growth and decline of international organizations can be seen. But let's show the figures as well. So, when selecting 3 standout years (taking maximum counts), many more were founded than went dead.
+
+```{r}
+## Examine Significant Years of Growth and Decline
+High_Growth_Years
+High_Decline_Years
+```
+
+##Observations
+
+* Before 1900, international organization growth was slow but stable.
+* 1914 had the most organizations go dead (9 that year).
+* 1945 (a year after Bretton Woods) had the 2nd most organizations founded (36).
+* 1960 was the year with the most new international organizations (41) (many are African related; the 60's were apparently a ["golden age"](https://sarpn.org/documents/d0000407/P373_Baah.pdf) for development.
+
+
+And this was my first ever project in R. I...
+
+* found a dataset
+* loaded it in
+* learned how manipulate tidy data - reading it in, processing it, and visualizing it.
+
+
+
+I learned a generic workflow within the tidyverse packages, made pipe commands, and passed the tidied results off to ggplot. Off to a good start, I dare say!
+
+
+**Citation**
+*Pevehouse, Jon C., Timothy Nordstrom, and Kevin Warnke. 2004. "The COW-2 International Organizations Dataset Version 2.0," Conflict Management and Peace Science 21:101-119.*

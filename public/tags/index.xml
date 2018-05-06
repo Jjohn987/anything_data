@@ -21,11 +21,29 @@
     </item>
     
     <item>
+      <title>Correlates of War Project</title>
+      <link>/tags/correlates-of-war-project/</link>
+      <pubDate>Tue, 24 Jan 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/correlates-of-war-project/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Github Pages</title>
       <link>/tags/github-pages/</link>
       <pubDate>Sun, 06 May 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/github-pages/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>International Organizations</title>
+      <link>/tags/international-organizations/</link>
+      <pubDate>Tue, 24 Jan 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/international-organizations/</guid>
       <description></description>
     </item>
     
@@ -53,6 +71,24 @@
       <pubDate>Sat, 01 Jul 2017 00:00:00 +0000</pubDate>
       
       <guid>/tags/scraping/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Tidyr</title>
+      <link>/tags/tidyr/</link>
+      <pubDate>Tue, 24 Jan 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/tidyr/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Tidyverse</title>
+      <link>/tags/tidyverse/</link>
+      <pubDate>Tue, 24 Jan 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/tidyverse/</guid>
       <description></description>
     </item>
     

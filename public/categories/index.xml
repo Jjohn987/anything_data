@@ -21,6 +21,24 @@
     </item>
     
     <item>
+      <title>Data Visualization</title>
+      <link>/categories/data-visualization/</link>
+      <pubDate>Tue, 24 Jan 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/data-visualization/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Data Wrangling</title>
+      <link>/categories/data-wrangling/</link>
+      <pubDate>Tue, 24 Jan 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/data-wrangling/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Scraping</title>
       <link>/categories/scraping/</link>
       <pubDate>Sat, 01 Jul 2017 00:00:00 +0000</pubDate>

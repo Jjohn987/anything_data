@@ -34,5 +34,16 @@ Webscraping is an immensly useful tool for gathering data from webpages, when it
 So I decided to scrape information on the US News website for university rankings, which has at least 20 pages of MBA probrams available.</description>
     </item>
     
+    <item>
+      <title>International Organization Growth Trend</title>
+      <link>/blog/2017-01-24-international-organization-growth-trend/</link>
+      <pubDate>Tue, 24 Jan 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2017-01-24-international-organization-growth-trend/</guid>
+      <description>Migrated from my original Wordpress blog
+Note: This was my first “project” in R - and I had simple goals: learning data wrangling of a not-so-tidy dataset, and performing basic visualization. I wanted to learn the tidyverse set of packages, use pipe commands, and convert data from wide to long formats for different purposes.
+I chose to learn the tidyverse because it gets all sorts of wrangling done about 90% of the time, (or so its said)</description>
+    </item>
+    
   </channel>
 </rss>
