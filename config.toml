@@ -4,6 +4,10 @@ languageCode = "en-us"
 title = "Anything is |Data| is Anything"
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown", "_files$", "_cache$"]
 
+
+
+
+
 [permalinks]
 post = "/blog/:year-:month-:day-:title/" # change the post URL to look like the old ones
 
@@ -47,4 +51,7 @@ post = "/blog/:year-:month-:day-:title/" # change the post URL to look like the 
 
 defaultDescription = "My R blog, with projects in analytics, Chinese text analysis, data mining, and visualization"
   # defaultKeywords = ["R Studio" , "Chinese text analysis" , "data visualization" , "data science"]
+
+pygmentscodefences = true
+pygmentsuseclasses = true
 
