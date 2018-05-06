@@ -3,7 +3,7 @@ baseURL = "https://upbeat-ardinghelli-01cdfc.netlify.com"
 languageCode = "en-us"
 title = "Anything is |Data| is Anything"
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown", "_files$", "_cache$"]
-disqusShortname = "Your disqus shortname"
+disqusShortname = "Jjohn987"
 
 pygmentscodefences = true
 pygmentsuseclasses = true
