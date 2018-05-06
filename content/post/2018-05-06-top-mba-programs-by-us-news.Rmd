@@ -142,7 +142,7 @@ coord_flip() +
 
 ```
 
-Up above, I selected 3 instututions from each "Tier" of rankings with the lowest tuition and plotted them. Some universities have suspiciously low tuition, which is likely due to documentation error on the US News website. 
+Up above, I selected 3 institutions from each "Tier" of rankings with the lowest tuition and plotted them. Some universities have suspiciously low tuition, which is likely due to documentation error on the US News website. 
 
 ##Some Observations 
 

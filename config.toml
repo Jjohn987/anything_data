@@ -32,7 +32,7 @@ post = "/blog/:year-:month-:day-:title/" # change the post URL to look like the 
   sidebarText = """I'm Jeremy, and am deeply interested in data science. Especially R. 
   <br><br>
   But my educational background is in **Chinese** and German. **Think that's unrelated with R**? <br>
-  <br> Well, I see language is a door to another world, and data science as a skillset to understanding it. <br><br> *Anything is Data, and Data is Anything*. 
+  <br> Well, I see language is a door to another world, and data science as a skillset to understanding it. <br><br> **Anything is Data, and Data is Anything**. 
   </br><br>
 **Me on Other Platforms:**  </br>
 
