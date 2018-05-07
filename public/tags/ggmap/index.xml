@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Tidyverse on Anything is |Data| is Anything</title>
-    <link>/tags/tidyverse/</link>
-    <description>Recent content in Tidyverse on Anything is |Data| is Anything</description>
+    <title>Ggmap on Anything is |Data| is Anything</title>
+    <link>/tags/ggmap/</link>
+    <description>Recent content in Ggmap on Anything is |Data| is Anything</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 29 Jan 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/tidyverse/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/tags/ggmap/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -19,16 +19,6 @@
       <guid>/blog/2018-01-29-plotting-fortune-500-hqs-in-r/</guid>
       <description>Today I’d like to work a little on geospatial mapping in R, so I’ve chosen a small dataset (only 256 kb) that can be plotted on a map. It the location information of Fortune 500 company headquarters in the US. You can download it from here.
 R has several choices for plotting geospatial information. Here I use ggmap, however in the future I’ll check out the raster and sp packages. Anyway, let’s get started by loading in and cleaning the data.</description>
-    </item>
-    
-    <item>
-      <title>International Organization Growth Trend</title>
-      <link>/blog/2017-01-24-international-organization-growth-trend/</link>
-      <pubDate>Tue, 24 Jan 2017 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/2017-01-24-international-organization-growth-trend/</guid>
-      <description>Note: This was my first “project” in R - and I had simple goals: learning data wrangling of a not-so-tidy dataset, and performing basic visualization. I wanted to learn the tidyverse set of packages, use pipe commands, and convert data from wide to long formats for different purposes.
-I chose to learn the tidyverse because it gets all sorts of wrangling done about 90% of the time, (or so its said)</description>
     </item>
     
   </channel>
