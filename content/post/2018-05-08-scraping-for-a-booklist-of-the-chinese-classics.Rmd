@@ -11,7 +11,9 @@ Last week I was considering a project that would be interesting and unique. I de
 
 Of course, the first key question was, **from where can I get the data?**  
 
-One website with a rich amount of Chinese text data regarding the classics is [ctext.org](https://ctext.org/). But I wondered "How can I get this in R?" Scraping wasn;t entirely feasible due to the terms outlawing this practice. Secondly, scraping is a bit of a delicate operation - if text isn't formated uniformly across pages then you might be in for a headache. You also don't want to give the server unnecessary stress. 
+![](/img/ctextscreen.png)
+
+One website with a rich amount of Chinese text data regarding the classics is [ctext.org](https://ctext.org/). But I wondered "How can I get this in R?" Scraping wasn't entirely feasible due to the terms outlawing this practice. Secondly, scraping is a bit of a delicate operation - if text isn't formated uniformly across pages then you might be in for a headache. You also don't want to give the server unnecessary stress. 
 
 The solution was to build an API. There is an API avaialble on ctext.org's website, but made in Python. I've never built an API or proto-API functions before, but the latter was easier than I thought. I'll save that for a future post.  
 
@@ -87,7 +89,6 @@ all_works <- map2(genre_data$genre, genre_data$genre_links, ~ scraping_function(
 book_list <- all_works %>% do.call(rbind, .)
 
 ```
-
 And here it is. The final variable "book_list" is a collection of books and chapters of each book, as listed on Ctext.org. 
 ```{r}
 head(book_list)
@@ -98,3 +99,5 @@ str(book_list)
 ```
 
 It is quite lengthy at nearly 6,000 rows and 130 different books. And this is an important dataframe which I will use in my API that I make, to pull textual data into R from Ctext.org. 
+
+Next post, I plan on sharing the process and results of my Chinese Classics text analysis.
