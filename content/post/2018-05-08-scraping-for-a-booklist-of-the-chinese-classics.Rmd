@@ -9,21 +9,22 @@ tags: [Rvest, scraping, Chinese classics, Ctext.org]
 
 Last week I was considering a project that would be interesting and unique. I decided I would like to do a text analysis on classical Chinese texts, but wasn't sure what kind of analysis regarding which texts. I decided to keep it small - and use five of the "core" Chinese classics - The Analects, The Mengzi, Dao De Jing, Zhuangzi, and Mozi. While there are many books in Confucianism, Daoism, and Moism, these texts are often used as the most representative examples of each "genre". 
 
-Of course, the first key question was, **from where can I get the data?**  
+Of course, the first key question was, **from where can I get the data?**  One website with a rich amount of Chinese text data regarding the classics is [ctext.org](https://ctext.org/).
 
-![](/img/ctextscreen.png)
+![A screenshot of Ctext.org](/img/ctextscreen.png)
 
-One website with a rich amount of Chinese text data regarding the classics is [ctext.org](https://ctext.org/). But I wondered "How can I get this in R?" Scraping wasn't entirely feasible due to the terms outlawing this practice. Secondly, scraping is a bit of a delicate operation - if text isn't formated uniformly across pages then you might be in for a headache. You also don't want to give the server unnecessary stress. 
+But when looking at the site design, I wondered "How can I get this in R?" Scraping wasn't entirely feasible due to the terms outlawing this practice. Secondly, scraping is a bit of a delicate operation - if text isn't formated uniformly across pages then you might be in for a headache. You also don't want to give the server unnecessary stress. In the end, if you opt for it, you'll have to make your functions work with the site structure - and as evidenced by the screenshot, it seemed a bit... messy. (Well, it turns out that actually it wasn't.)
 
-The solution was to build an API. There is an API avaialble on ctext.org's website, but made in Python. I've never built an API or proto-API functions before, but the latter was easier than I thought. I'll save that for a future post.  
+To get the text of the Chinese classics into R, the solution was to build an API. There is an API avaialble on ctext.org's website, but it's made in Python. I've never built an API or proto-API functions before, but the latter was easier than I thought. Right now I'll save that for a future post.  
 
-To the point - Many of the key functions revolve around passing a book or chapter as the args. So, it turned out scraping (keeping it limited and ethical) was a necessary evil. 
+To wrap up this post - Many of the key functions in the site API revolve around passing a book or chapter as the args. So, it turned out scraping was a necessary evil. Therefore I kept it limited and not too demanding.
 
-Without ado, here is the (very limited) scraping I did to create a book list, with chapters, which I put to use in my homemade API. 
+Without ado, here is the (very limited) scraping I did to create a book list with chapters, which I put to use later in my homemade API. 
 
 ```{r message=FALSE, warning=FALSE, paged.print=FALSE}
 library(tidyverse)
 library(rvest)
+library(stringr)
 ```
 
 ## First Scrape
