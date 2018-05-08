@@ -1,0 +1,90 @@
+---
+title: Scraping for a Booklist of the Chinese Classics
+author: Jeremy Johnson
+date: '2018-05-08'
+slug: scraping-for-a-booklist-of-the-chinese-classics
+categories: [Scraping, Text Analysis, Chinese Text]
+tags: [Rvest, scraping, Chinese classics, Ctext.org]
+---
+
+
+
+<pre class="r"><code>library(tidyverse)
+library(rvest)</code></pre>
+<p>Last week I was considering a project that would be interesting and unique. I decided I would like to do a text analysis on classical Chinese texts, but wasn’t sure what kind of analysis regarding which texts. I decided to keep it small - and use five of the “core” Chinese classics - The Analects, The Mengzi, Dao De Jing, Zhuangzi, and Mozi. While there are many books in Confucianism, Daoism, and Moism, these texts are often used as the most representative examples of each “genre”. Of course, the first key question was, <strong>from where can I get the data?</strong></p>
+<p>One website with a rich amount of Chinese text data regarding the classics is <a href="https://ctext.org/">ctext.org</a>. I was torn about how to get its data into R, however. First, scraping the entire website isn’t feasible due to the terms outlawing this practice. Secondly, I find scraping to be a bit of a delicate operation - if text isn’t formated uniformly across pages then you might be in for a headache. You also don’t want to give the server unnecessary stress.</p>
+<p>The solution was to build an API.There is an API avaialble on ctext.org’s website, but it is made in Python. I’ve never built an API or proto-API functions before, but the latter was easier than I thought. Since many of the key functions revolve around pullng text data into R, so I decided to start there.</p>
+<p>But first I decided I need a book list and relevant chapters of each book, in order for those functions to work. So, without ado, here is the (very limited) scraping I did to create a book list, with chapters, which I put to use in my homemade API.</p>
+<div id="first-scrape" class="section level2">
+<h2>First Scrape</h2>
+<pre class="r"><code>## 1st Scrape - Get list of books available on ctext website. 
+url &lt;- &quot;https://ctext.org/&quot;
+
+path &lt;- read_html(url)
+genre_data &lt;- path %&gt;%
+  html_nodes(css = &quot;.container &gt; .etext&quot;) %&gt;%
+  html_attr(&quot;href&quot;)
+
+##Delete first observation which is not a genre
+genre_data &lt;- genre_data[-1] %&gt;% tibble(&quot;genre&quot; = .)
+##Append the base url to the sub-links
+genre_data &lt;- genre_data %&gt;%
+  mutate(genre_links = paste(&quot;https://ctext.org&quot;, &quot;/&quot;, genre_data[[1]], sep = &quot;&quot;))</code></pre>
+<p>Next I set up a scraping function which needs to iterate over each book from the “genre_data” dataframe just created. Note the “Sys.sleep” call at the end to avoid overloading the server and play nicely with the website.</p>
+</div>
+<div id="function---preparing-for-the-2nd-scrape" class="section level2">
+<h2>Function - Preparing for the 2nd scrape</h2>
+<pre class="r"><code>##2nd Scrape - Make function to apply to each book, to get chapters
+scraping_function &lt;- function(genre, genre_links) {
+  url &lt;- genre_links[[1]]
+  path &lt;- read_html(url)
+  
+  data &lt;- path %&gt;%
+    html_nodes(css = &quot;#content3 &gt; a&quot;) %&gt;%
+    html_attr(&quot;href&quot;)
+  
+  genre &lt;- genre
+  data &lt;- data_frame(data, genre)
+  
+  ##Some string cleaning with stringr and mutate commands
+  data &lt;- data %&gt;% mutate(book = str_extract(data, &quot;^[a-z].*[\\/]&quot;)) %&gt;%
+    mutate(book = str_replace(book, &quot;\\/&quot;, &quot;&quot;))
+  data &lt;- data %&gt;%
+    mutate(chapter = str_extract(data, &quot;[\\/].*$&quot;)) %&gt;%
+    mutate(chapter = str_replace(chapter, &quot;/&quot;, &quot;&quot;))
+  data &lt;- data %&gt;%
+    mutate(links = paste(&quot;https://ctext.org/&quot;, book, &quot;/&quot;, chapter, sep = &quot;&quot;))
+  data &lt;- data %&gt;% select(-data) %&gt;%
+    filter(complete.cases(.))
+
+  Sys.sleep(2.5)
+  data
+}</code></pre>
+<p>If there was one takeaway from writing that function, it was that I should deepen my proficiency in regex. Finding the right regular expressions to capture the relevant text information wasn’t HARD, but I did have to make several attempts before getting it all right. Anyway, let’s apply the hard work to our original genre dataframe so that we can get a dataframe of books and their chapters. It’s going to be a big one.</p>
+</div>
+<div id="apply-the-function-and-get-the-data" class="section level2">
+<h2>Apply the function and get the data</h2>
+<pre class="r"><code>##Apply function to genre_data dataframe, create a data frame of books and chapters
+all_works &lt;- map2(genre_data$genre, genre_data$genre_links, ~ scraping_function(..1, ..2))
+
+book_list &lt;- all_works %&gt;% do.call(rbind, .)</code></pre>
+<p>And here it is. The final variable “book_list” is a collection of books and chapters of each book, as listed on Ctext.org.</p>
+<pre class="r"><code>head(book_list)</code></pre>
+<pre><code>## # A tibble: 6 x 4
+##   genre        book     chapter       links                               
+##   &lt;chr&gt;        &lt;chr&gt;    &lt;chr&gt;         &lt;chr&gt;                               
+## 1 confucianism analects xue-er        https://ctext.org/analects/xue-er   
+## 2 confucianism analects wei-zheng     https://ctext.org/analects/wei-zheng
+## 3 confucianism analects ba-yi         https://ctext.org/analects/ba-yi    
+## 4 confucianism analects li-ren        https://ctext.org/analects/li-ren   
+## 5 confucianism analects gong-ye-chang https://ctext.org/analects/gong-ye-~
+## 6 confucianism analects yong-ye       https://ctext.org/analects/yong-ye</code></pre>
+<p>It is clearly in long format (convenient but not necessary, in fact this more a side effect of my scraping)</p>
+<pre class="r"><code>str(book_list)</code></pre>
+<pre><code>## Classes &#39;tbl_df&#39;, &#39;tbl&#39; and &#39;data.frame&#39;:    5869 obs. of  4 variables:
+##  $ genre  : chr  &quot;confucianism&quot; &quot;confucianism&quot; &quot;confucianism&quot; &quot;confucianism&quot; ...
+##  $ book   : chr  &quot;analects&quot; &quot;analects&quot; &quot;analects&quot; &quot;analects&quot; ...
+##  $ chapter: chr  &quot;xue-er&quot; &quot;wei-zheng&quot; &quot;ba-yi&quot; &quot;li-ren&quot; ...
+##  $ links  : chr  &quot;https://ctext.org/analects/xue-er&quot; &quot;https://ctext.org/analects/wei-zheng&quot; &quot;https://ctext.org/analects/ba-yi&quot; &quot;https://ctext.org/analects/li-ren&quot; ...</code></pre>
+<p>It is quite lengthy at nearly 6,000 rows and 130 different books. And this is an important dataframe which I will use in my API that I make, to pull textual data into R from Ctext.org.</p>
+</div>

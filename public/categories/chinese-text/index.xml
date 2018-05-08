@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Rvest on Anything is |Data| is Anything</title>
-    <link>/tags/rvest/</link>
-    <description>Recent content in Rvest on Anything is |Data| is Anything</description>
+    <title>Chinese Text on Anything is |Data| is Anything</title>
+    <link>/categories/chinese-text/</link>
+    <description>Recent content in Chinese Text on Anything is |Data| is Anything</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 08 May 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/rvest/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/categories/chinese-text/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -18,17 +18,6 @@
       
       <guid>/blog/2018-05-08-scraping-for-a-booklist-of-the-chinese-classics/</guid>
       <description>library(tidyverse)library(rvest)Last week I was considering a project that would be interesting and unique. I decided I would like to do a text analysis on classical Chinese texts, but wasn’t sure what kind of analysis regarding which texts. I decided to keep it small - and use five of the “core” Chinese classics - The Analects, The Mengzi, Dao De Jing, Zhuangzi, and Mozi. While there are many books in Confucianism, Daoism, and Moism, these texts are often used as the most representative examples of each “genre”.</description>
-    </item>
-    
-    <item>
-      <title>Top MBA Programs by US News</title>
-      <link>/blog/2017-07-01-top-mba-programs-by-us-news/</link>
-      <pubDate>Sat, 01 Jul 2017 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/2017-07-01-top-mba-programs-by-us-news/</guid>
-      <description>Somebody once asked me for reccomendations on MBA programs based on rank and tuition. I didn’t have any information on hand, but knew how toget it. Webscraping.
-Webscraping is an immensly useful tool for gathering data from webpages, when it isn’t hosted on an API or stored in a file somewhere. R’s best tool for webscraping is Rvest.
-So I decided to scrape information on the US News website for university rankings, which has at least 20 pages of MBA probrams available.</description>
     </item>
     
   </channel>

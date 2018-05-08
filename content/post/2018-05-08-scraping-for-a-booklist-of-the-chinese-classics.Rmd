@@ -1,0 +1,95 @@
+---
+title: Scraping for a Booklist of the Chinese Classics
+author: Jeremy Johnson
+date: '2018-05-08'
+slug: scraping-for-a-booklist-of-the-chinese-classics
+categories: [Scraping, Text Analysis, Chinese Text]
+tags: [Rvest, scraping, Chinese classics, Ctext.org]
+---
+
+```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+library(tidyverse)
+library(rvest)
+```
+
+Last week I was considering a project that would be interesting and unique. I decided I would like to do a text analysis on classical Chinese texts, but wasn't sure what kind of analysis regarding which texts. I decided to keep it small - and use five of the "core" Chinese classics - The Analects, The Mengzi, Dao De Jing, Zhuangzi, and Mozi. While there are many books in Confucianism, Daoism, and Moism, these texts are often used as the most representative examples of each "genre". Of course, the first key question was, **from where can I get the data?**  
+
+One website with a rich amount of Chinese text data regarding the classics is [ctext.org](https://ctext.org/). I was torn about how to get its data into R, however. First, scraping the entire website isn't feasible due to the terms outlawing this practice. Secondly, I find scraping to be a bit of a delicate operation - if text isn't formated uniformly across pages then you might be in for a headache. You also don't want to give the server unnecessary stress. 
+
+The solution was to build an API.There is an API avaialble on ctext.org's website, but it is made in Python. I've never built an API or proto-API functions before, but the latter was easier than I thought. Since many of the key functions revolve around pullng text data into R, so I decided to start there. 
+
+But first I decided I need a book list and relevant chapters of each book, in order for those functions to work. So, without ado, here is the (very limited) scraping I did to create a book list, with chapters, which I put to use in my homemade API. 
+
+## First Scrape
+
+```{r genre_data}
+## 1st Scrape - Get list of books available on ctext website. 
+url <- "https://ctext.org/"
+
+path <- read_html(url)
+genre_data <- path %>%
+  html_nodes(css = ".container > .etext") %>%
+  html_attr("href")
+
+##Delete first observation which is not a genre
+genre_data <- genre_data[-1] %>% tibble("genre" = .)
+##Append the base url to the sub-links
+genre_data <- genre_data %>%
+  mutate(genre_links = paste("https://ctext.org", "/", genre_data[[1]], sep = ""))
+
+```
+
+Next I set up a scraping function which needs to iterate over each book from the "genre_data" dataframe just created. Note the "Sys.sleep" call at the end to avoid overloading the server and play nicely with the website.
+
+##Function - Preparing for the 2nd scrape
+```{r 2nd scrape Function}
+##2nd Scrape - Make function to apply to each book, to get chapters
+scraping_function <- function(genre, genre_links) {
+  url <- genre_links[[1]]
+  path <- read_html(url)
+  
+  data <- path %>%
+    html_nodes(css = "#content3 > a") %>%
+    html_attr("href")
+  
+  genre <- genre
+  data <- data_frame(data, genre)
+  
+  ##Some string cleaning with stringr and mutate commands
+  data <- data %>% mutate(book = str_extract(data, "^[a-z].*[\\/]")) %>%
+    mutate(book = str_replace(book, "\\/", ""))
+  data <- data %>%
+    mutate(chapter = str_extract(data, "[\\/].*$")) %>%
+    mutate(chapter = str_replace(chapter, "/", ""))
+  data <- data %>%
+    mutate(links = paste("https://ctext.org/", book, "/", chapter, sep = ""))
+  data <- data %>% select(-data) %>%
+    filter(complete.cases(.))
+
+  Sys.sleep(2.5)
+  data
+}
+
+```
+
+If there was one takeaway from writing that function, it was that I should deepen my proficiency in regex. Finding the right regular expressions to capture the relevant text information wasn't HARD, but I did have to make several attempts before getting it all right. Anyway, let's apply the hard work to our original genre dataframe so that we can get a dataframe of books and their chapters. It's going to be a big one.
+
+##Apply the function and get the data
+```{r}
+##Apply function to genre_data dataframe, create a data frame of books and chapters
+all_works <- map2(genre_data$genre, genre_data$genre_links, ~ scraping_function(..1, ..2))
+
+book_list <- all_works %>% do.call(rbind, .)
+
+```
+
+And here it is. The final variable "book_list" is a collection of books and chapters of each book, as listed on Ctext.org. 
+```{r}
+head(book_list)
+```
+It is clearly in long format (convenient but not necessary, in fact this more a side effect of my scraping)
+```{r}
+str(book_list)
+```
+
+It is quite lengthy at nearly 6,000 rows and 130 different books. And this is an important dataframe which I will use in my API that I make, to pull textual data into R from Ctext.org. 
