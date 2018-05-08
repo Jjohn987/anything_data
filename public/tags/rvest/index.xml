@@ -17,7 +17,7 @@
       <pubDate>Tue, 08 May 2018 00:00:00 +0000</pubDate>
       
       <guid>/blog/2018-05-08-scraping-for-a-booklist-of-the-chinese-classics/</guid>
-      <description>library(tidyverse)library(rvest)Last week I was considering a project that would be interesting and unique. I decided I would like to do a text analysis on classical Chinese texts, but wasn’t sure what kind of analysis regarding which texts. I decided to keep it small - and use five of the “core” Chinese classics - The Analects, The Mengzi, Dao De Jing, Zhuangzi, and Mozi. While there are many books in Confucianism, Daoism, and Moism, these texts are often used as the most representative examples of each “genre”.</description>
+      <description>Last week I was considering a project that would be interesting and unique. I decided I would like to do a text analysis on classical Chinese texts, but wasn’t sure what kind of analysis regarding which texts. I decided to keep it small - and use five of the “core” Chinese classics - The Analects, The Mengzi, Dao De Jing, Zhuangzi, and Mozi. While there are many books in Confucianism, Daoism, and Moism, these texts are often used as the most representative examples of each “genre”.</description>
     </item>
     
     <item>

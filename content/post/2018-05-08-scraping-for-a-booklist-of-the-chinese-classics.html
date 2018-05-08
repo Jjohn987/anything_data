@@ -9,12 +9,14 @@ tags: [Rvest, scraping, Chinese classics, Ctext.org]
 
 
 
+<p>Last week I was considering a project that would be interesting and unique. I decided I would like to do a text analysis on classical Chinese texts, but wasn’t sure what kind of analysis regarding which texts. I decided to keep it small - and use five of the “core” Chinese classics - The Analects, The Mengzi, Dao De Jing, Zhuangzi, and Mozi. While there are many books in Confucianism, Daoism, and Moism, these texts are often used as the most representative examples of each “genre”.</p>
+<p>Of course, the first key question was, <strong>from where can I get the data?</strong></p>
+<p>One website with a rich amount of Chinese text data regarding the classics is <a href="https://ctext.org/">ctext.org</a>. But I wondered “How can I get this in R?” Scraping wasn;t entirely feasible due to the terms outlawing this practice. Secondly, scraping is a bit of a delicate operation - if text isn’t formated uniformly across pages then you might be in for a headache. You also don’t want to give the server unnecessary stress.</p>
+<p>The solution was to build an API. There is an API avaialble on ctext.org’s website, but made in Python. I’ve never built an API or proto-API functions before, but the latter was easier than I thought. I’ll save that for a future post.</p>
+<p>To the point - Many of the key functions revolve around passing a book or chapter as the args. So, it turned out scraping (keeping it limited and ethical) was a necessary evil.</p>
+<p>Without ado, here is the (very limited) scraping I did to create a book list, with chapters, which I put to use in my homemade API.</p>
 <pre class="r"><code>library(tidyverse)
 library(rvest)</code></pre>
-<p>Last week I was considering a project that would be interesting and unique. I decided I would like to do a text analysis on classical Chinese texts, but wasn’t sure what kind of analysis regarding which texts. I decided to keep it small - and use five of the “core” Chinese classics - The Analects, The Mengzi, Dao De Jing, Zhuangzi, and Mozi. While there are many books in Confucianism, Daoism, and Moism, these texts are often used as the most representative examples of each “genre”. Of course, the first key question was, <strong>from where can I get the data?</strong></p>
-<p>One website with a rich amount of Chinese text data regarding the classics is <a href="https://ctext.org/">ctext.org</a>. I was torn about how to get its data into R, however. First, scraping the entire website isn’t feasible due to the terms outlawing this practice. Secondly, I find scraping to be a bit of a delicate operation - if text isn’t formated uniformly across pages then you might be in for a headache. You also don’t want to give the server unnecessary stress.</p>
-<p>The solution was to build an API.There is an API avaialble on ctext.org’s website, but it is made in Python. I’ve never built an API or proto-API functions before, but the latter was easier than I thought. Since many of the key functions revolve around pullng text data into R, so I decided to start there.</p>
-<p>But first I decided I need a book list and relevant chapters of each book, in order for those functions to work. So, without ado, here is the (very limited) scraping I did to create a book list, with chapters, which I put to use in my homemade API.</p>
 <div id="first-scrape" class="section level2">
 <h2>First Scrape</h2>
 <pre class="r"><code>## 1st Scrape - Get list of books available on ctext website. 
@@ -60,11 +62,12 @@ scraping_function &lt;- function(genre, genre_links) {
   Sys.sleep(2.5)
   data
 }</code></pre>
-<p>If there was one takeaway from writing that function, it was that I should deepen my proficiency in regex. Finding the right regular expressions to capture the relevant text information wasn’t HARD, but I did have to make several attempts before getting it all right. Anyway, let’s apply the hard work to our original genre dataframe so that we can get a dataframe of books and their chapters. It’s going to be a big one.</p>
+<p>If there was one takeaway from writing that function, it was that I should deepen my proficiency in regex. Finding the right regular expressions to capture the book and chapter names wasn’t HARD, but I did have to make several attempts before getting it all right. Previously web content was clean enough that I didn’t have to do this. Anyway, let’s apply the hard work to our original genre dataframe so that we can get a dataframe of books and their chapters. It’s going to be a big one.</p>
 </div>
-<div id="apply-the-function-and-get-the-data" class="section level2">
-<h2>Apply the function and get the data</h2>
+<div id="apply-the-function-and-get-the-data..-i-have-come-to-love-purrr-for-this." class="section level2">
+<h2>Apply the function and get the data.. I have come to love <code>purrr</code> for this.</h2>
 <pre class="r"><code>##Apply function to genre_data dataframe, create a data frame of books and chapters
+
 all_works &lt;- map2(genre_data$genre, genre_data$genre_links, ~ scraping_function(..1, ..2))
 
 book_list &lt;- all_works %&gt;% do.call(rbind, .)</code></pre>
