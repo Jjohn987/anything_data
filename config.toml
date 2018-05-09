@@ -4,7 +4,7 @@ languageCode = "en-us"
 title = "Anything is |Data| is Anything"
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown", "_files$", "_cache$"]
 disqusShortname = "anything-is-data-is-anything"
-
+GoogleAnalytics = "UA-118999723-1"
 pygmentscodefences = true
 pygmentsuseclasses = true
 
