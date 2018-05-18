@@ -12,12 +12,12 @@
     
     
     <item>
-      <title>ctextclassics, my First Package</title>
+      <title>Ctextclassics, my First Package</title>
       <link>/blog/2018-05-17-ctextclassics-my-first-package/</link>
       <pubDate>Thu, 17 May 2018 00:00:00 +0000</pubDate>
       
       <guid>/blog/2018-05-17-ctextclassics-my-first-package/</guid>
-      <description>My latest update is a big one - a milestone! I have authored my first ever R package, and it is available on my Github! It is an API caller for ctext.org, a site that hosts numerous pre-modern Chinese texts. The scope is broad, but think philosophical works in Confucianism, Daoism, Legalism, military doctrines, history compilations, works in medicine, and many more.
+      <description>My latest update is a big one - a milestone! I have authored my first ever R package, available on my Github! It is an API caller for ctext.org, a site that hosts numerous pre-modern Chinese texts. The scope is broad, but think philosophical works in Confucianism, Daoism, Legalism, military doctrines, history compilations, works in medicine, and many more.
 I’ve indexed at least 130 individual works and I’ll keep an eye out for more.</description>
     </item>
     
