@@ -182,6 +182,7 @@ head(unique(book_list$book), n = 5)</code></pre>
 </tr>
 </tbody>
 </table>
+<p><br></p>
 <p>It’s not a perfect package. Like, be wary of the API limit. Also, tue API call method among various Chinese texts is inconsistent. Some book names are translated into English (e.g., “analects”) whereas others are written in Pinyin (e.g., “mengzi”) and some chapters cut out the word “the” whereas others don’t. I may end up coding different methods into the current data frame. Most likely I’ll research other ways to match args. For the long term it is important that users be able to avoid the inconsistencies in the actual API. There’s a lot that can be improved here but I“m looking forward to it.</p>
 <p>So, what’s my ultimate goal? It is to use <code>ctextclassics</code> for text analysis on Chinese classic texts - Similar to how we see the amazing Tidytext and gutenbergr packages used! Quite ambitious, I know.</p>
 <p>Sound interesting? You can use <code>ctextclassics</code> too! Just type ```install_github(“Jjohn987/ctextclassics”)</p>
