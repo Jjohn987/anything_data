@@ -21,13 +21,12 @@ knitr::kable(head(get_books("analects")))
 <br>
 
 It's not a perfect package. Like, be wary of the API limit. 
-Also, the API call method for different Chinese texts is inconsistent. Some book names are translated into English (e.g., "analects") whereas others are written in Pinyin (e.g., "mengzi") and some chapters cut out the word "the" whereas others don't. I may end up coding different methods into the current data frame. Most likely I'll research other ways to match args. For the long term it is important that users be able to avoid the inconsistencies in the actual API. There's a lot that can be improved here but I"m looking forward to it.
+Currently the API translates some book names into English (e.g., "analects") whereas others are written in Pinyin (e.g., "mengzi"). Some books' chapters use the word "the" whereas others don't. So eventually I'll need to make the function calls more robust and help users avoid those inconsistencies. There's a lot that can be improved here, but I"m looking forward to it!
 
 
+So, what's my ultimate goal? It is to use ```ctextclassics``` for text analysis on Chinese classic texts - Similar to how we see the **amazing Tidytext** and gutenbergr packages used! **Quite ambitious, I know.** At any rate, I'm enjoying reading this classical Chinese. 
 
-So, what's my ultimate goal? It is to use ```ctextclassics``` for text analysis on Chinese classic texts - Similar to how we see the amazing Tidytext and gutenbergr packages used! Quite ambitious, I know. 
 
+To cap off this post, you can use my package by typing ```install_github("Jjohn987/ctextclassics")```.
 
-Sound interesting? You can use ```ctextclassics``` too!  Just type ```install_github("Jjohn987/ctextclassics")
-
-And remember, if you want to contribute, please do so.  You can comment here, fork my Github, or post an issue! 
+If you want to contribute, please do so!  You can comment here, fork my Github, or post an issue.

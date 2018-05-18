@@ -65,7 +65,7 @@ head(unique(book_list$book), n = 5)</code></pre>
 </tbody>
 </table>
 <p><br></p>
-<p>It’s not a perfect package. Like, be wary of the API limit. Also, the API call method for different Chinese texts is inconsistent. Some book names are translated into English (e.g., “analects”) whereas others are written in Pinyin (e.g., “mengzi”) and some chapters cut out the word “the” whereas others don’t. I may end up coding different methods into the current data frame. Most likely I’ll research other ways to match args. For the long term it is important that users be able to avoid the inconsistencies in the actual API. There’s a lot that can be improved here but I“m looking forward to it.</p>
-<p>So, what’s my ultimate goal? It is to use <code>ctextclassics</code> for text analysis on Chinese classic texts - Similar to how we see the amazing Tidytext and gutenbergr packages used! Quite ambitious, I know.</p>
-<p>Sound interesting? You can use <code>ctextclassics</code> too! Just type ```install_github(“Jjohn987/ctextclassics”)</p>
-<p>And remember, if you want to contribute, please do so. You can comment here, fork my Github, or post an issue!</p>
+<p>It’s not a perfect package. Like, be wary of the API limit. Currently the API translates some book names into English (e.g., “analects”) whereas others are written in Pinyin (e.g., “mengzi”). Some books’ chapters use the word “the” whereas others don’t. So eventually I’ll need to make the function calls more robust and help users avoid those inconsistencies. There’s a lot that can be improved here, but I“m looking forward to it!</p>
+<p>So, what’s my ultimate goal? It is to use <code>ctextclassics</code> for text analysis on Chinese classic texts - Similar to how we see the <strong>amazing Tidytext</strong> and gutenbergr packages used! <strong>Quite ambitious, I know.</strong> At any rate, I’m enjoying reading this classical Chinese.</p>
+<p>To cap off this post, you can use my package by typing <code>install_github(&quot;Jjohn987/ctextclassics&quot;)</code>.</p>
+<p>If you want to contribute, please do so! You can comment here, fork my Github, or post an issue.</p>
