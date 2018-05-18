@@ -9,15 +9,21 @@ tags: [ctextclassics, API, httr, text analysis, Chinese]
 
 My latest update is a big one - a milestone!  I have authored my first ever R package, available on my Github! It is an API caller for ctext.org, a site that hosts numerous pre-modern Chinese texts. The scope is broad, but think philosophical works in Confucianism, Daoism, Legalism, military doctrines, history compilations, works in medicine, and many more.
 
-I've indexed at least 130 individual works and I'll keep an eye out for more.  The three main functions of ctextclassics are ```get_text("book", "chapter")``` ,```get_books("book")```, and the internal dataframe ```book_list``` which shows the available texts. So try ```unique(book_list$book)``` and use my package to download a classic Chinese book!
+I've indexed at least 130 individual works and I'll keep an eye out for more.  The three main functions of ctextclassics are ```get_text("book", "chapter")``` ,```get_books("book")```, and the internal dataframe ```book_list``` which shows the available texts. So perhaps try something like:
+
+```{r echo=TRUE, message=FALSE}
+library(ctextclassics)
+head(unique(book_list$book), n = 5)
+knitr::kable(head(get_books("analects")))
+``` 
 
 
-It's not a perfect package. The API call method among various Chinese texts is inconsistent. Some book names are translated into English (e.g., "analects") whereas others are written in Pinyin (e.g., "mengzi") and some chapters cut out the word "the" whereas others don't. I may end up coding different methods into the current data frame. Most likely I'll research other ways to match args. For the long term it is important that users be able to avoid the inconsistencies in the actual API. 
+It's not a perfect package. Like, be wary of the API limit. 
+Also, tue API call method among various Chinese texts is inconsistent. Some book names are translated into English (e.g., "analects") whereas others are written in Pinyin (e.g., "mengzi") and some chapters cut out the word "the" whereas others don't. I may end up coding different methods into the current data frame. Most likely I'll research other ways to match args. For the long term it is important that users be able to avoid the inconsistencies in the actual API. There's a lot that can be improved here but I"m looking forward to it.
 
 
 
-
-So, what's my goal? It is to use ```ctextclassics``` for text analysis on Chinese classic texts - Similar to how we see the amazing Tidytext and gutenbergr packages used! Quite ambitious, I know. 
+So, what's my ultimate goal? It is to use ```ctextclassics``` for text analysis on Chinese classic texts - Similar to how we see the amazing Tidytext and gutenbergr packages used! Quite ambitious, I know. 
 
 
 Sound interesting? You can use ```ctextclassics``` too!  Just type ```install_github("Jjohn987/ctextclassics")
