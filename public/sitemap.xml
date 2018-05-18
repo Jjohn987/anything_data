@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>/blog/2018-05-17-ctextclassics-my-first-package/</loc>
+    <lastmod>2018-05-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/blog/2018-05-08-scraping-for-a-booklist-of-the-chinese-classics/</loc>
     <lastmod>2018-05-08T00:00:00+00:00</lastmod>
   </url>
@@ -34,7 +39,19 @@
   
   <url>
     <loc>/</loc>
-    <lastmod>2018-05-08T00:00:00+00:00</lastmod>
+    <lastmod>2018-05-17T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/api/</loc>
+    <lastmod>2018-05-17T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/categories/api/</loc>
+    <lastmod>2018-05-17T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -52,7 +69,13 @@
   
   <url>
     <loc>/categories/</loc>
-    <lastmod>2018-05-06T00:00:00+00:00</lastmod>
+    <lastmod>2018-05-17T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/chinese/</loc>
+    <lastmod>2018-05-17T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -77,6 +100,12 @@
   <url>
     <loc>/tags/ctext.org/</loc>
     <lastmod>2018-05-08T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/ctextclassics/</loc>
+    <lastmod>2018-05-17T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -123,6 +152,12 @@
   </url>
   
   <url>
+    <loc>/tags/httr/</loc>
+    <lastmod>2018-05-17T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/tags/igraph/</loc>
     <lastmod>2018-04-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -160,7 +195,7 @@
   
   <url>
     <loc>/post/</loc>
-    <lastmod>2018-05-08T00:00:00+00:00</lastmod>
+    <lastmod>2018-05-17T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -184,13 +219,19 @@
   
   <url>
     <loc>/tags/</loc>
-    <lastmod>2018-05-06T00:00:00+00:00</lastmod>
+    <lastmod>2018-05-17T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/text-analysis/</loc>
+    <lastmod>2018-05-17T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/categories/text-analysis/</loc>
-    <lastmod>2018-05-08T00:00:00+00:00</lastmod>
+    <lastmod>2018-05-17T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

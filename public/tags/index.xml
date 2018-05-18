@@ -6,10 +6,19 @@
     <description>Recent content in Tags on Anything is |Data| is Anything</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 06 May 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 17 May 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Api</title>
+      <link>/tags/api/</link>
+      <pubDate>Thu, 17 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/api/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Blogdown</title>
@@ -17,6 +26,15 @@
       <pubDate>Sun, 06 May 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/blogdown/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Chinese</title>
+      <link>/tags/chinese/</link>
+      <pubDate>Thu, 17 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/chinese/</guid>
       <description></description>
     </item>
     
@@ -44,6 +62,15 @@
       <pubDate>Tue, 08 May 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/ctext.org/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ctextclassics</title>
+      <link>/tags/ctextclassics/</link>
+      <pubDate>Thu, 17 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/ctextclassics/</guid>
       <description></description>
     </item>
     
@@ -80,6 +107,15 @@
       <pubDate>Mon, 29 Jan 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/google/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Httr</title>
+      <link>/tags/httr/</link>
+      <pubDate>Thu, 17 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/httr/</guid>
       <description></description>
     </item>
     
@@ -143,6 +179,15 @@
       <pubDate>Tue, 08 May 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/scraping/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Text Analysis</title>
+      <link>/tags/text-analysis/</link>
+      <pubDate>Thu, 17 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/text-analysis/</guid>
       <description></description>
     </item>
     

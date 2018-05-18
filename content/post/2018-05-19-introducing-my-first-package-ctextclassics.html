@@ -1,0 +1,18 @@
+---
+title: ctextclassics, my First Package
+author: Jeremy Johnson
+date: '2018-05-17'
+slug: introducing-my-first-package-ctextclassics
+categories: [API, text analysis]
+tags: [ctextclassics, API, httr, text analysis, Chinese]
+---
+
+
+
+<p>My latest update is a big one - a milestone! I have authored my first ever R package, and it is available on my Github! The package, while simple, is quite useful. It is an API caller for ctext.org, which allows users to access a potential of at least 130 classical or pre-modern Chinese texts (indexed from an internal data.frame in my package). The three main functions of ctextclassics are <code>get_text(&quot;book&quot;, &quot;chapter&quot;)</code> ,<code>get_books(&quot;book&quot;)</code>, and the internal dataframe <code>book_list</code> which you should access to know which books and chapters you can call. So give it a try - <code>unique(book_list$book)</code> - and download a classic Chinese book!</p>
+<p>It’s not a perfect package - but that’s not the point - In fact, I already have development goals in mind.</p>
+<p>For example, the current call methods to Chinese texts is very subjective and not flexible. The books in the ctext API have different conventions. Some are translated into English (e.g., “analects”) whereas others are written in Pinyin (e.g., “mengzi”) and some chapters cut out the word “the” whereas others don’t. I can probably code different methods into the data frame. Or research other ways to match similar sounding params. It’s important that users be able to avoid inconsistencies inherent in the actual API.</p>
+<p>So, yeah. It isn’t a perfect package. But it is a start. And it would be great if others could contribute.</p>
+<p>My goal is to use <code>ctextclassics</code> to pull in data and perform a text analysis on Chinese classic texts - Not too different from the amazing tutorials we have seen with the famous Tidytext and gutenbergr packages.</p>
+<p>Sound interesting? Ycan use it too. Just type ```install_github(“Jjohn987/ctextclassics”)</p>
+<p>And remember, if you want to contribute, please do so. You can Comment here, fork my Github, or post an issue!</p>

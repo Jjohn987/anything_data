@@ -1,0 +1,28 @@
+---
+title: ctextclassics, my First Package
+author: Jeremy Johnson
+date: '2018-05-17'
+slug: introducing-my-first-package-ctextclassics
+categories: [API, text analysis]
+tags: [ctextclassics, API, httr, text analysis, Chinese]
+---
+
+My latest update is a big one - a milestone!  I have authored my first ever R package, and it is available on my Github! The package, while simple, is quite useful. It is an API caller for ctext.org, which allows users to access a potential of at least 130 classical or pre-modern Chinese texts (indexed from an internal data.frame in my package). The three main functions of ctextclassics are ```get_text("book", "chapter")``` ,```get_books("book")```, and the internal dataframe ```book_list``` which you should access to know which books and chapters you can call. So give it a try - ```unique(book_list$book)``` - and download a classic Chinese book!
+
+
+It's not a perfect package - but that's not the point - In fact, I already have development goals in mind. 
+
+For example, the current call methods to Chinese texts is very subjective and not flexible. The books in the ctext API have different conventions. Some are translated into English (e.g., "analects") whereas others are written in Pinyin (e.g., "mengzi") and some chapters cut out the word "the" whereas others don't. I can probably code different methods into the data frame. Or research other ways to match similar sounding params. It's important that users be able to avoid inconsistencies inherent in the actual API. 
+
+
+
+So, yeah. It isn't a perfect package.  But it is a start. And it would be great if others could contribute.  
+
+
+
+My goal is to use ```ctextclassics``` to pull in data and perform a text analysis on Chinese classic texts -  Not too different from the amazing tutorials we have seen with the famous Tidytext and gutenbergr packages. 
+
+
+Sound interesting? Ycan use it too.  Just type ```install_github("Jjohn987/ctextclassics")
+
+And remember, if you want to contribute, please do so.  You can Comment here, fork my Github, or post an issue! 

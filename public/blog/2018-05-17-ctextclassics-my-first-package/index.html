@@ -1,6 +1,3 @@
-
-
-
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
@@ -20,7 +17,7 @@
   
 
   
-  <title>Ctext.org</title>
+  <title>ctextclassics, my First Package</title>
 
   
   
@@ -40,7 +37,7 @@
   
   
 
-  <link href="/tags/ctext.org/index.xml" rel="alternate" type="application/rss+xml" title="Anything is |Data| is Anything" />
+  
 
   <meta name="description" content="My R blog, with projects in analytics, Chinese text analysis, data mining, and visualization">
   <meta name="keywords" content="">
@@ -103,47 +100,97 @@ ga('send', 'pageview');
 <div id="main">
   <div id="content">
     <div>
-      <article role="article">
-        <header>
-          <h1 class="entry-title">
-            Tag: Ctext.org
-          </h1>
-        </header>
-        <div id="blog-archives" class="category">
-          
-          <h2>
-            2018
-          </h2>
-          <article>
-            <h1>
-              <a href="/blog/2018-05-08-scraping-for-a-booklist-of-the-chinese-classics/" title="Scraping for a Booklist of the Chinese Classics">Scraping for a Booklist of the Chinese Classics</a>
-            </h1>
-            <time>
-              <span class="month">May</span>
-              <span class="day">8</span>
-            </time>
-            <footer>
-              <span class="categories"> 
-                
-                
-                posted in:
-                 <a class="category" href="/categories/scraping">Scraping</a> <a class="category" href="/categories/text-analysis">Text Analysis</a> <a class="category" href="/categories/chinese-text">Chinese Text</a>
-              </br>
-                
+      <article class="hentry" role="article">
 
-                
-                
-                tags:
-                 <a class="category" href="/tags/rvest">Rvest</a> <a class="category" href="/tags/scraping">scraping</a> <a class="category" href="/tags/chinese-classics">Chinese classics</a> <a class="category" href="/tags/ctext.org">Ctext.org</a>
-                
-              </span>
-            </footer>
-          </article>
+        
+        
+
+<header>
+    <p class="meta">May 17, 2018
+         - 2 minute read 
+         - <a href="/blog/2018-05-17-ctextclassics-my-first-package/#disqus_thread">Comments</a>
+
+        
+        
+        
+            - <a class="label" href="/categories/api/">API </a><a class="label" href="/categories/text-analysis/">text analysis </a>
+        
+    </p>
+    <h1 class="entry-title">
+         ctextclassics, my First Package 
+    </h1>
+</header>
+
+
+        <div class="entry-content">
           
+          
+          
+          
+          <p>My latest update is a big one - a milestone! I have authored my first ever R package, and it is available on my Github! The package, while simple, is quite useful. It is an API caller for ctext.org, which allows users to access a potential of at least 130 classical or pre-modern Chinese texts (indexed from an internal data.frame in my package). The three main functions of ctextclassics are <code>get_text(&quot;book&quot;, &quot;chapter&quot;)</code> ,<code>get_books(&quot;book&quot;)</code>, and the internal dataframe <code>book_list</code> which you should access to know which books and chapters you can call. So give it a try - <code>unique(book_list$book)</code> - and download a classic Chinese book!</p>
+<p>It’s not a perfect package - but that’s not the point - In fact, I already have development goals in mind.</p>
+<p>For example, the current call methods to Chinese texts is very subjective and not flexible. The books in the ctext API have different conventions. Some are translated into English (e.g., “analects”) whereas others are written in Pinyin (e.g., “mengzi”) and some chapters cut out the word “the” whereas others don’t. I can probably code different methods into the data frame. Or research other ways to match similar sounding params. It’s important that users be able to avoid inconsistencies inherent in the actual API.</p>
+<p>So, yeah. It isn’t a perfect package. But it is a start. And it would be great if others could contribute.</p>
+<p>My goal is to use <code>ctextclassics</code> to pull in data and perform a text analysis on Chinese classic texts - Not too different from the amazing tutorials we have seen with the famous Tidytext and gutenbergr packages.</p>
+<p>Sound interesting? Ycan use it too. Just type ```install_github(“Jjohn987/ctextclassics”)</p>
+<p>And remember, if you want to contribute, please do so. You can Comment here, fork my Github, or post an issue!</p>
+
         </div>
+        
+
+<footer>
+  <p class="meta">
+    <span class="byline author vcard">Posted by <span class="fn">Jeremy Johnson</span></span>
+    
+    <time>May 17, 2018</time>
+    
+      <span class="categories">
+        Tags:
+        
+          <a class="category" href="/tags/ctextclassics">ctextclassics</a>  <a class="category" href="/tags/api">API</a>  <a class="category" href="/tags/httr">httr</a>  <a class="category" href="/tags/text-analysis">text analysis</a>  <a class="category" href="/tags/chinese">Chinese</a>  
+    
+    </span>
+  </p>
+
+  
+  
+
+  
+
+  <p class="meta">
+    
+        <a class="basic-alignment left" href="/blog/2018-05-08-scraping-for-a-booklist-of-the-chinese-classics/" title="Scraping for a Booklist of the Chinese Classics">Scraping for a Booklist of the Chinese Classics</a>
+    
+
+    
+  </p>
+  
+    
+      <div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'anything-is-data-is-anything';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+    
+  
+</footer>
+
       </article>
     </div>
-
     
 
 <aside class="sidebar thirds">
