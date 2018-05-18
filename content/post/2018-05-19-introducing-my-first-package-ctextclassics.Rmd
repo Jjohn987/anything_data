@@ -10,6 +10,7 @@ tags: [ctextclassics, API, httr, text analysis, Chinese]
 My latest update is a big one - a milestone!  I have authored my first ever R package, available on my Github! It is an API caller for ctext.org, a site that hosts numerous pre-modern Chinese texts. The scope is broad, but think philosophical works in Confucianism, Daoism, Legalism, military doctrines, history compilations, works in medicine, and many more.
 
 I've indexed at least 130 individual works and I'll keep an eye out for more.  The three main functions of ctextclassics are ```get_text("book", "chapter")``` ,```get_books("book")```, and the internal dataframe ```book_list``` which shows the available texts. So perhaps try something like:
+<br>
 
 ```{r echo=TRUE, message=FALSE}
 library(ctextclassics)
@@ -20,7 +21,7 @@ knitr::kable(head(get_books("analects")))
 <br>
 
 It's not a perfect package. Like, be wary of the API limit. 
-Also, tue API call method among various Chinese texts is inconsistent. Some book names are translated into English (e.g., "analects") whereas others are written in Pinyin (e.g., "mengzi") and some chapters cut out the word "the" whereas others don't. I may end up coding different methods into the current data frame. Most likely I'll research other ways to match args. For the long term it is important that users be able to avoid the inconsistencies in the actual API. There's a lot that can be improved here but I"m looking forward to it.
+Also, the API call method for different Chinese texts is inconsistent. Some book names are translated into English (e.g., "analects") whereas others are written in Pinyin (e.g., "mengzi") and some chapters cut out the word "the" whereas others don't. I may end up coding different methods into the current data frame. Most likely I'll research other ways to match args. For the long term it is important that users be able to avoid the inconsistencies in the actual API. There's a lot that can be improved here but I"m looking forward to it.
 
 
 

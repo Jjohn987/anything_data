@@ -10,7 +10,7 @@ tags: [ctextclassics, API, httr, text analysis, Chinese]
 
 
 <p>My latest update is a big one - a milestone! I have authored my first ever R package, available on my Github! It is an API caller for ctext.org, a site that hosts numerous pre-modern Chinese texts. The scope is broad, but think philosophical works in Confucianism, Daoism, Legalism, military doctrines, history compilations, works in medicine, and many more.</p>
-<p>I’ve indexed at least 130 individual works and I’ll keep an eye out for more. The three main functions of ctextclassics are <code>get_text(&quot;book&quot;, &quot;chapter&quot;)</code> ,<code>get_books(&quot;book&quot;)</code>, and the internal dataframe <code>book_list</code> which shows the available texts. So perhaps try something like:</p>
+<p>I’ve indexed at least 130 individual works and I’ll keep an eye out for more. The three main functions of ctextclassics are <code>get_text(&quot;book&quot;, &quot;chapter&quot;)</code> ,<code>get_books(&quot;book&quot;)</code>, and the internal dataframe <code>book_list</code> which shows the available texts. So perhaps try something like: <br></p>
 <pre class="r"><code>library(ctextclassics)
 head(unique(book_list$book), n = 5)</code></pre>
 <pre><code>## [1] &quot;analects&quot;        &quot;art-of-war&quot;      &quot;bai-hu-tong&quot;     &quot;baopuzi&quot;        
@@ -65,7 +65,7 @@ head(unique(book_list$book), n = 5)</code></pre>
 </tbody>
 </table>
 <p><br></p>
-<p>It’s not a perfect package. Like, be wary of the API limit. Also, tue API call method among various Chinese texts is inconsistent. Some book names are translated into English (e.g., “analects”) whereas others are written in Pinyin (e.g., “mengzi”) and some chapters cut out the word “the” whereas others don’t. I may end up coding different methods into the current data frame. Most likely I’ll research other ways to match args. For the long term it is important that users be able to avoid the inconsistencies in the actual API. There’s a lot that can be improved here but I“m looking forward to it.</p>
+<p>It’s not a perfect package. Like, be wary of the API limit. Also, the API call method for different Chinese texts is inconsistent. Some book names are translated into English (e.g., “analects”) whereas others are written in Pinyin (e.g., “mengzi”) and some chapters cut out the word “the” whereas others don’t. I may end up coding different methods into the current data frame. Most likely I’ll research other ways to match args. For the long term it is important that users be able to avoid the inconsistencies in the actual API. There’s a lot that can be improved here but I“m looking forward to it.</p>
 <p>So, what’s my ultimate goal? It is to use <code>ctextclassics</code> for text analysis on Chinese classic texts - Similar to how we see the amazing Tidytext and gutenbergr packages used! Quite ambitious, I know.</p>
 <p>Sound interesting? You can use <code>ctextclassics</code> too! Just type ```install_github(“Jjohn987/ctextclassics”)</p>
 <p>And remember, if you want to contribute, please do so. You can comment here, fork my Github, or post an issue!</p>
