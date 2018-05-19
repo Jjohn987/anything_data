@@ -8,7 +8,7 @@ tags: [network analysis, network visualization, iGraph, Correlates of War Projec
 ---
 
 
-I suddenly got bit by a bug to learn about network analysis. So I recalled the [Correlates of War Project](http://www.correlatesofwar.org/data-sets/formal-alliances) having a dataset about alliances. I decided to revisit them and download the data for this new project, which you can do to.
+I suddenly got bit by a bug to learn about network analysis. So I recalled the [Correlates of War Project](http://www.correlatesofwar.org/data-sets/formal-alliances) having a dataset about alliances. I decided to revisit them and download the data for this new project, which you can do too.
 
 To start small, I decided to visualize a certain topic, e.g., European Defense Treaties relating to World War I. For that purpose I filtered the dataset **for treaties that occured between 1878 and 1914.** As usual there's a lot of cleaning to be done before anything else can be done. 
 

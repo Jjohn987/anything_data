@@ -21,7 +21,7 @@ knitr::kable(head(get_books("analects")))
 <br>
 
 It's not a perfect package. Like, be wary of the API limit. 
-Currently the API translates some book names into English (e.g., "analects") whereas others are written in Pinyin (e.g., "mengzi"). Some books' chapters use the word "the" whereas others don't. So eventually I'll need to make the function calls more robust and help users avoid those inconsistencies. There's a lot that can be improved here, but I"m looking forward to it!
+Currently the API translates some book names into English (e.g., "analects") whereas others are written in Pinyin (e.g., "mengzi"). Some books' chapters use the word "the" whereas others don't. So eventually I'll need to make the function calls more robust and help users avoid those inconsistencies. There's a lot that can be improved here, but I'm looking forward to it!
 
 
 So, what's my ultimate goal? It is to use ```ctextclassics``` for text analysis on Chinese classic texts - Similar to how we see the **amazing Tidytext** and gutenbergr packages used! **Quite ambitious, I know.** At any rate, I'm enjoying reading this classical Chinese. 

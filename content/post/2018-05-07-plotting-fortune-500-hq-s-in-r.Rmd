@@ -7,7 +7,7 @@ categories: [geospatial mapping]
 tags: [ggmap, tidyverse, google, Fortune 500s]
 ---
 
-Today I’d like to work a little on geospatial mapping in R, so I've chosen a small dataset (only 256 kb) that can be plotted on a map. It the location information of Fortune 500 company headquarters in the US. You can download it from [here](https://hifld-geoplatform.opendata.arcgis.com/datasets/a4d813c396934fc09d0b801a0c491852_0?geometry=-140.445%2C24.931%2C-21.881%2C49.099). 
+Today I’d like to work a little on geospatial mapping in R, so I've chosen a small dataset (only 256 kb) that can be plotted on a map. It is the geographic location information of Fortune 500 company headquarters in the US. You can download it from [here](https://hifld-geoplatform.opendata.arcgis.com/datasets/a4d813c396934fc09d0b801a0c491852_0?geometry=-140.445%2C24.931%2C-21.881%2C49.099). 
 
 R has several choices for plotting geospatial information. Here I use ```ggmap```,  however in the future I'll check out the ```raster``` and ```sp``` packages. Anyway, let's get started by loading in and cleaning the data.
 
