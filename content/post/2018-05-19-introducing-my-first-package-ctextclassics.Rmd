@@ -9,7 +9,7 @@ tags: [ctextclassics, API, httr, text analysis, Chinese]
 
 My latest update is a big one - a milestone!  I have authored my first ever R package, available on my Github! It is an API caller for ctext.org, a site that hosts numerous pre-modern Chinese texts. The scope is broad, but think philosophical works in Confucianism, Daoism, Legalism, military doctrines, history compilations, works in medicine, and many more.
 
-The three main functions of ctextclassics are ```get_text("book", "chapter")``` ,```get_books("book")```, and the internal dataframe ```book_list``` which shows the available texts. So perhaps try something like:
+The three main functions of ctextclassics are ```get_chapter("book", "chapter")``` ,```get_chapters("book", chapters)```, ```get_books("book")``` and the internal dataframe ```book_list``` which shows the available texts. So perhaps try something like:
 <br>
 
 ```{r echo=TRUE, message=FALSE}
@@ -27,6 +27,6 @@ Currently the API translates some book names into English (e.g., "analects") whe
 So, what's my ultimate goal? It is to use ```ctextclassics``` for text analysis on Chinese classic texts - Similar to how we see the **amazing Tidytext** and gutenbergr packages used! **Quite ambitious, I know.** At any rate, I'm enjoying reading this classical Chinese. 
 
 
-To cap off this post, you can use my package by typing ```install_github("Jjohn987/ctextclassics")```.
+To cap off this post, you can use my package by typing ```install_github("Jjohn987/ctextclassics")``` and remember to check out the documentation of the functions for a better explanation.
 
 If you want to contribute, please do so!  You can comment here, fork my Github, or post an issue.
