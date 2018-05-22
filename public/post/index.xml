@@ -17,8 +17,8 @@
       <pubDate>Thu, 17 May 2018 00:00:00 +0000</pubDate>
       
       <guid>/blog/2018-05-17-ctextclassics-my-first-package/</guid>
-      <description>My latest update is a big one - a milestone! I have authored my first ever R package, available on my Github! It is an API caller for ctext.org, a site that hosts numerous pre-modern Chinese texts. The scope is broad, but think philosophical works in Confucianism, Daoism, Legalism, military doctrines, history compilations, works in medicine, and many more.
-I’ve indexed at least 130 individual works and I’ll keep an eye out for more.</description>
+      <description>My latest update is a milestone! I have authored my first ever R package which is an API caller for ctext.org. Ctext hosts numerous pre-modern Chinese texts and my package makes them available to you. The scope is broad, but think philosophical works in Confucianism, Daoism, Legalism, military doctrines, history compilations, works in medicine, and many more.
+The three main functions of ctextclassics are get_chapter(&amp;quot;book&amp;quot;, &amp;quot;chapter&amp;quot;) ,get_chapters(&amp;quot;book&amp;quot;, chapters), get_books(&amp;quot;book&amp;quot;) and the internal dataframe book_list which shows the available texts.</description>
     </item>
     
     <item>
@@ -49,16 +49,6 @@ But, why was I panting? The relocation effort wasn’t easy. Why did I follow th
       <guid>/blog/2018-04-01-visualizing-european-ww1-defense-treaties-with-igraph/</guid>
       <description>I suddenly got bit by a bug to learn about network analysis. So I recalled the Correlates of War Project having a dataset about alliances. I decided to revisit them and download the data for this new project, which you can do to.
 To start small, I decided to visualize a certain topic, e.g., European Defense Treaties relating to World War I. For that purpose I filtered the dataset for treaties that occured between 1878 and 1914.</description>
-    </item>
-    
-    <item>
-      <title>Plotting Fortune 500 HQ&#39;s in R</title>
-      <link>/blog/2018-01-29-plotting-fortune-500-hqs-in-r/</link>
-      <pubDate>Mon, 29 Jan 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/2018-01-29-plotting-fortune-500-hqs-in-r/</guid>
-      <description>Today I’d like to work a little on geospatial mapping in R, so I’ve chosen a small dataset (only 256 kb) that can be plotted on a map. It the location information of Fortune 500 company headquarters in the US. You can download it from here.
-R has several choices for plotting geospatial information. Here I use ggmap, however in the future I’ll check out the raster and sp packages. Anyway, let’s get started by loading in and cleaning the data.</description>
     </item>
     
     <item>

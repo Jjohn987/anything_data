@@ -7,7 +7,7 @@ categories: [API, text analysis]
 tags: [ctextclassics, API, httr, text analysis, Chinese]
 ---
 
-My latest update is a big one - a milestone!  I have authored my first ever R package, available on my Github! It is an API caller for ctext.org, a site that hosts numerous pre-modern Chinese texts. The scope is broad, but think philosophical works in Confucianism, Daoism, Legalism, military doctrines, history compilations, works in medicine, and many more.
+My latest update is a milestone! I have authored my first ever R package which is an API caller for ctext.org. Ctext hosts numerous pre-modern Chinese texts and my package makes them available to you. The scope is broad, but think philosophical works in Confucianism, Daoism, Legalism, military doctrines, history compilations, works in medicine, and many more.
 
 The three main functions of ctextclassics are ```get_chapter("book", "chapter")``` ,```get_chapters("book", chapters)```, ```get_books("book")``` and the internal dataframe ```book_list``` which shows the available texts. So perhaps try something like:
 <br>
@@ -20,13 +20,14 @@ knitr::kable(head(get_books("analects")))
 
 <br>
 
-It's not a perfect package. Like, be wary of the API limit. 
-Currently the API translates some book names into English (e.g., "analects") whereas others are written in Pinyin (e.g., "mengzi"). Some books' chapters use the word "the" whereas others don't. So eventually I'll need to make the function calls more robust and help users avoid those inconsistencies. There's a lot that can be improved here, be it adding authentication, a better way to keep track of API call count, or anything else - but I'm looking forward to it!
+Just be careful, the API limit is around 60-ish. Which means you can get about 3 books on average before my download functions start spitting out NA values. 
+
+The API indexes its book and chapter names differently. Some are in English (e.g., "analects") whereas others are written in Pinyin (e.g., "mengzi"). Some chapter titles use the word "the" whereas others don't. So eventually I'll consider the need to make the function calls more robust and help users avoid those inconsistencies. There's a lot that can be improved here, be it adding authentication, a way to keep track of API call count, or anything else - but I'm looking forward to it!
 
 
 So, what's my ultimate goal? It is to use ```ctextclassics``` for text analysis on Chinese classic texts - Similar to how we see the **amazing Tidytext** and gutenbergr packages used! **Quite ambitious, I know.** At any rate, I'm enjoying reading this classical Chinese. 
 
 
-To cap off this post, you can use my package by typing ```install_github("Jjohn987/ctextclassics")``` and remember to check out the documentation of the functions for a better explanation.
+To cap off this post, you can use my package by typing ```devtools::install_github("Jjohn987/ctextclassics")``` and remember to check out the documentation of the functions for a better explanation.
 
 If you want to contribute, please do so!  You can comment here, fork my Github, or post an issue.
