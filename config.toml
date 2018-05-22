@@ -51,7 +51,7 @@ post = "/blog/:year-:month-:day-:title/" # change the post URL to look like the 
   subtitle = "Centered around the investigation of things, ... in R!"
   author = "Jeremy Johnson"
 
-defaultDescription = "My R blog, with projects in analytics, Chinese text analysis, data mining, and visualization"
+defaultDescription = "My R blog, with projects in analytics, text analysis, data mining, and visualization. I might occasionally include Chinese text."
   # defaultKeywords = ["R Studio" , "Chinese text analysis" , "data visualization" , "data science"]
 
 pygmentscodefences = true
