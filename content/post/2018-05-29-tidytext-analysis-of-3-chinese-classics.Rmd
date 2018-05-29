@@ -9,7 +9,7 @@ tags: [ctextclassics, tidytext, tmcn]
 
 For a long time I've admired the ```tidytext``` package and its wonderful companion book [*Text Mining with R*](https://www.tidytextmining.com). After reading it I thought, "Why not undertake a project of Chinese text analysis?" I am deeply interested in Chinese philosophy but I decided to keep the analysis narrow by selecting just three works - The Analects, Zhuangzi, and the Mozi. 
 
-In following similar pace with Tidytext, I first download my data. Here I use my package ```ctextclassics```, but I want to point out the API limit is very low and I had to download my books between two different days. So therefore in this post, I source my data in from a file of my text data.
+In following similar pace with Tidytext, I first download my data. Here I use my package ```ctextclassics``` and the function ```get_books(c(...))``` but I want to point out the API limit is very low and I had to download my books between two different days. So therefore in this post I source my data in from a file of my text data.
 
 ```{r message=FALSE, warning=FALSE}
 library(tidyverse)
@@ -23,7 +23,7 @@ library(readr)
 my_classics <- read_csv("~/Desktop/anything_data/content/post/my_classics.csv")
 ```
 
-If you run into the API limit, it's not that bad. Simply figure out which chapters produced NA and re-download them the next day with "get_chapters("book", chapter:chapter)". Before binding those rows with those that worked in the original dataframe, remember to filter out the NAs first.
+If you run into the API limit, it's not that bad. Simply figure out which chapters produced NA and re-download them the next day with ```get_chapters("book", chapter:chapter)```. Before binding those rows with those that worked in the original dataframe, remember to filter out the NAs first.
 
 Now, to get started - With any text analysis, tokenizing the text and filtering out stop words is fundamental. Tidytext segments English quite naturally, considering words are easily separated by spaces. However, I'm not so sure how it performs with Chinese characters.
 

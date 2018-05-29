@@ -11,7 +11,7 @@ tags: [ctextclassics, tidytext, tmcn]
 
 
 <p>For a long time I’ve admired the <code>tidytext</code> package and its wonderful companion book <a href="https://www.tidytextmining.com"><em>Text Mining with R</em></a>. After reading it I thought, “Why not undertake a project of Chinese text analysis?” I am deeply interested in Chinese philosophy but I decided to keep the analysis narrow by selecting just three works - The Analects, Zhuangzi, and the Mozi.</p>
-<p>In following similar pace with Tidytext, I first download my data. Here I use my package <code>ctextclassics</code>, but I want to point out the API limit is very low and I had to download my books between two different days. So therefore in this post, I source my data in from a file of my text data.</p>
+<p>In following similar pace with Tidytext, I first download my data. Here I use my package <code>ctextclassics</code> and the function <code>get_books(c(...))</code> but I want to point out the API limit is very low and I had to download my books between two different days. So therefore in this post I source my data in from a file of my text data.</p>
 <pre class="r"><code>library(tidyverse)
 library(stringr)
 library(ctextclassics)
@@ -21,7 +21,7 @@ library(topicmodels)
 library(readr)
 
 my_classics &lt;- read_csv(&quot;~/Desktop/anything_data/content/post/my_classics.csv&quot;)</code></pre>
-<p>If you run into the API limit, it’s not that bad. Simply figure out which chapters produced NA and re-download them the next day with “get_chapters(”book“, chapter:chapter)”. Before binding those rows with those that worked in the original dataframe, remember to filter out the NAs first.</p>
+<p>If you run into the API limit, it’s not that bad. Simply figure out which chapters produced NA and re-download them the next day with <code>get_chapters(&quot;book&quot;, chapter:chapter)</code>. Before binding those rows with those that worked in the original dataframe, remember to filter out the NAs first.</p>
 <p>Now, to get started - With any text analysis, tokenizing the text and filtering out stop words is fundamental. Tidytext segments English quite naturally, considering words are easily separated by spaces. However, I’m not so sure how it performs with Chinese characters.</p>
 <p>There are specific segementers for Chinese text - one main tool is <code>jiebaR</code>, which is also included in the <code>tmcn</code> package.</p>
 <p>However, when comparing the two methods, I noticed that JiebaR segments text in a way most suitable for <strong>modern</strong> Chinese (Mostly 2 character words). Since I’m dealing with classical Chinese here, Tidytext’s one character segmentaions are more preferable.</p>
