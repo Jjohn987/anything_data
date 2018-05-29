@@ -9,7 +9,7 @@ tags: [ctextclassics, tidytext, tmcn]
 
 For a long time I've admired the ```tidytext``` package and its wonderful companion book [*Text Mining with R*](https://www.tidytextmining.com). After reading it I thought, "Why not undertake a project of Chinese text analysis?" I am deeply interested in Chinese philosophy but I decided to keep the analysis narrow by selecting just three works - The Analects, Zhuangzi, and the Mozi. 
 
-In following similar pace with Tidytext, I first download my data. Here I use my package ```ctextclassics``` and the function ```get_books(c(...))``` but I want to point out the API limit is very low and I had to download my books between two different days. So therefore in this post I source my data in from a file of my text data.
+Following similar pace with Tidytext, I first download my data. Here I use my package ```ctextclassics``` and the function ```get_books(c(...))``` but I want to point out the API limit is very low and I had to download my books between two different days. For information on ctextclassics, check out my previous post or type ```install_github("Jjohn987/ctextclassics")```
 
 ```{r message=FALSE, warning=FALSE}
 library(tidyverse)
@@ -23,9 +23,7 @@ library(readr)
 my_classics <- read_csv("~/Desktop/anything_data/content/post/my_classics.csv")
 ```
 
-If you run into the API limit, it's not that bad. Simply figure out which chapters produced NA and re-download them the next day with ```get_chapters("book", chapter:chapter)```. Before binding those rows with those that worked in the original dataframe, remember to filter out the NAs first.
-
-Now, to get started - With any text analysis, tokenizing the text and filtering out stop words is fundamental. Tidytext segments English quite naturally, considering words are easily separated by spaces. However, I'm not so sure how it performs with Chinese characters.
+With any text analysis, tokenizing the text and filtering out stop words is fundamental. Tidytext segments English quite naturally, considering words are easily separated by spaces. However, I'm not so sure how it performs with Chinese characters.
 
 There are specific segementers for Chinese text - one main tool is ```jiebaR```, which is also included in the ```tmcn``` package. 
 
@@ -143,9 +141,11 @@ Overall, we saw the top 10 most common characters/words in these three ancient c
 
 ##Next Post 
 
-In my next post, I would like to either **follow the same procedure but with bigrams**, and/or **apply LDA (Latent Dirichlet Allocation)** to these 3 works and see whether or not their chapters can be distinguished from one another. The word frequencies feel quite characteristic for these texts. But I'm not so sure that all of these chapters can be distinguished from one another (espcially because there are many shared words - Dao isn't solely mentioned in Taoist texts, the Analects also make many mentions of civic related concepts, and the Mozi is a long text written by different authors...) 
+In my next post, I would like to either **follow the same procedure but with bigrams**, and/or **apply LDA (Latent Dirichlet Allocation)** to these 3 works and see whether or not their chapters can be distinguished from one another. The word frequencies feel quite characteristic for these texts. 
 
-Anyway, to be continued! 
+But I'm not so sure that all of these chapters can be distinguished from one another (there are many shared words - Dao isn't solely mentioned in Taoist texts, the Analects also makes many mentions of civic related concepts, and the Mozi is a long text written by different authors...) 
+
+To be continued! 
 
 
 
