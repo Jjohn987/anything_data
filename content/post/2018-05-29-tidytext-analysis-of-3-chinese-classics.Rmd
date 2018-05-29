@@ -9,7 +9,7 @@ tags: [ctextclassics, tidytext, tmcn]
 
 For a long time I've admired the ```tidytext``` package and its wonderful companion book [*Text Mining with R*](https://www.tidytextmining.com). After reading it I thought, "Why not undertake a project of Chinese text analysis?" **I am deeply interested in Chinese philosophy** but I decided to keep the analysis narrow by selecting just three works - **The Analects, Zhuangzi, and the Mozi**. 
 
-Following similar pace with Tidytext, I first download my data. Here I use my package ```ctextclassics``` and the function ```get_books(c(...))``` but I want to point out the API limit is very low and I had to download my books between two different days. For information on ctextclassics, check out my previous post or type ```install_github("Jjohn987/ctextclassics")```
+Following similar pace with Tidytext, I first download my data. Here I use my package ```ctextclassics``` and specifically, the function ```get_books(c(...))```. But I want to point out the API limit is very low and I had to download my books between two different days. For information on ctextclassics, check out my previous post or type ```install_github("Jjohn987/ctextclassics")```
 
 ```{r message=FALSE, warning=FALSE}
 library(tidyverse)
@@ -128,16 +128,17 @@ In this post, I...
 
 These word frequencies are very pleasing! 
 
-We can see that the Analects has prevalant usage of words such as "Benevolence" (仁), "Gentleman" (君子) and "Confucius" (孔子). (I capitalize these terms to show they are uniquely different from contemporary English equivalents.) In fact, the Analects often mentions these terms - one examplary sentence may be:
-
-"君子而不仁者有矣夫。未有小人而仁者也." My own (shorthand) translation:
-
-*Of gentlemen, there are some who do not possess Benevolence; but of villians, there is not a single one that possesses it.*
+The Analects has prevalant usage of words such as "Benevolence" (仁), "Gentleman" (君子) and "Confucius" (孔子). (I capitalize these terms to show they are uniquely different from contemporary English equivalents.) 
 
 The Zhuangzi, a Taoist text, mentions cosmological concepts such as the Tao(道), morality (德), and evil(邪).
 
 The Mozi seems to have terms that are mostly civic related, such as country (国), citizen (民) and govern （治). 
 
+These frequencies do a good job of capturing the context of the works - e.g., the Analects often mentions these terms - one examplary sentence may be:
+
+"君子而不仁者有矣夫。未有小人而仁者也." My own (shorthand) translation:
+
+*Of gentlemen, there are some who do not possess Benevolence; but of villians, there is not a single one that possesses it.*
 
 ##Next Post 
 

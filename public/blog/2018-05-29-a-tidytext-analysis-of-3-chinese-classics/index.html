@@ -131,7 +131,7 @@ ga('send', 'pageview');
 
 
 <p>For a long time I’ve admired the <code>tidytext</code> package and its wonderful companion book <a href="https://www.tidytextmining.com"><em>Text Mining with R</em></a>. After reading it I thought, “Why not undertake a project of Chinese text analysis?” <strong>I am deeply interested in Chinese philosophy</strong> but I decided to keep the analysis narrow by selecting just three works - <strong>The Analects, Zhuangzi, and the Mozi</strong>.</p>
-<p>Following similar pace with Tidytext, I first download my data. Here I use my package <code>ctextclassics</code> and the function <code>get_books(c(...))</code> but I want to point out the API limit is very low and I had to download my books between two different days. For information on ctextclassics, check out my previous post or type <code>install_github(&quot;Jjohn987/ctextclassics&quot;)</code></p>
+<p>Following similar pace with Tidytext, I first download my data. Here I use my package <code>ctextclassics</code> and specifically, the function <code>get_books(c(...))</code>. But I want to point out the API limit is very low and I had to download my books between two different days. For information on ctextclassics, check out my previous post or type <code>install_github(&quot;Jjohn987/ctextclassics&quot;)</code></p>
 <pre class="r"><code>library(tidyverse)
 library(stringr)
 library(ctextclassics)
@@ -756,11 +756,12 @@ ggplot(book_top_words, aes(x = reorder(word, word_freq), y = word_freq, fill = b
 <div id="conclusion" class="section level2">
 <h2>Conclusion</h2>
 <p>These word frequencies are very pleasing!</p>
-<p>We can see that the Analects has prevalant usage of words such as “Benevolence” (仁), “Gentleman” (君子) and “Confucius” (孔子). (I capitalize these terms to show they are uniquely different from contemporary English equivalents.) In fact, the Analects often mentions these terms - one examplary sentence may be:</p>
-<p>“君子而不仁者有矣夫。未有小人而仁者也.” My own (shorthand) translation:</p>
-<p><em>Of gentlemen, there are some who do not possess Benevolence; but of villians, there is not a single one that possesses it.</em></p>
+<p>The Analects has prevalant usage of words such as “Benevolence” (仁), “Gentleman” (君子) and “Confucius” (孔子). (I capitalize these terms to show they are uniquely different from contemporary English equivalents.)</p>
 <p>The Zhuangzi, a Taoist text, mentions cosmological concepts such as the Tao(道), morality (德), and evil(邪).</p>
 <p>The Mozi seems to have terms that are mostly civic related, such as country (国), citizen (民) and govern （治).</p>
+<p>These frequencies do a good job of capturing the context of the works - e.g., the Analects often mentions these terms - one examplary sentence may be:</p>
+<p>“君子而不仁者有矣夫。未有小人而仁者也.” My own (shorthand) translation:</p>
+<p><em>Of gentlemen, there are some who do not possess Benevolence; but of villians, there is not a single one that possesses it.</em></p>
 </div>
 <div id="next-post" class="section level2">
 <h2>Next Post</h2>

@@ -18,7 +18,7 @@
       
       <guid>/blog/2018-05-29-a-tidytext-analysis-of-3-chinese-classics/</guid>
       <description>For a long time I’ve admired the tidytext package and its wonderful companion book Text Mining with R. After reading it I thought, “Why not undertake a project of Chinese text analysis?” I am deeply interested in Chinese philosophy but I decided to keep the analysis narrow by selecting just three works - The Analects, Zhuangzi, and the Mozi.
-Following similar pace with Tidytext, I first download my data. Here I use my package ctextclassics and the function get_books(c(.</description>
+Following similar pace with Tidytext, I first download my data. Here I use my package ctextclassics and specifically, the function get_books(c(.</description>
     </item>
     
     <item>
