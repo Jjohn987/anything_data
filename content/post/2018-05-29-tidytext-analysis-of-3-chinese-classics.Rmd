@@ -128,11 +128,11 @@ In this post, I...
 
 These word frequencies are very pleasing! 
 
-We can see that the Analects has prevalant usage of words such as "Benevolence" (仁), "Gentleman" (君子) and "Confucius" (孔子). In fact, the Analects often mentions these terms - one examplary sentence may be:
+We can see that the Analects has prevalant usage of words such as "Benevolence" (仁), "Gentleman" (君子) and "Confucius" (孔子). (I capitalize these terms to show they are uniquely different from contemporary English equivalents.) In fact, the Analects often mentions these terms - one examplary sentence may be:
 
 "君子而不仁者有矣夫。未有小人而仁者也." My own (shorthand) translation:
 
-*Of gentlemen, there are some who do not possess benevolence; but of villians, there is not a single one that possesses it.*
+*Of gentlemen, there are some who do not possess Benevolence; but of villians, there is not a single one that possesses it.*
 
 The Zhuangzi, a Taoist text, mentions cosmological concepts such as the Tao(道), morality (德), and evil(邪).
 
