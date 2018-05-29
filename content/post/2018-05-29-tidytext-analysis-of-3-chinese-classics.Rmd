@@ -7,7 +7,7 @@ categories: [text analysis, visualization, chinese text analysis]
 tags: [ctextclassics, tidytext, tmcn]
 ---
 
-For a long time I've admired the ```tidytext``` package and its wonderful companion book [*Text Mining with R*](https://www.tidytextmining.com). After reading it I thought, "Why not undertake a project of Chinese text analysis?" I am deeply interested in Chinese philosophy but I decided to keep the analysis narrow by selecting just three works - The Analects, Zhuangzi, and the Mozi. 
+For a long time I've admired the ```tidytext``` package and its wonderful companion book [*Text Mining with R*](https://www.tidytextmining.com). After reading it I thought, "Why not undertake a project of Chinese text analysis?" **I am deeply interested in Chinese philosophy** but I decided to keep the analysis narrow by selecting just three works - **The Analects, Zhuangzi, and the Mozi**. 
 
 Following similar pace with Tidytext, I first download my data. Here I use my package ```ctextclassics``` and the function ```get_books(c(...))``` but I want to point out the API limit is very low and I had to download my books between two different days. For information on ctextclassics, check out my previous post or type ```install_github("Jjohn987/ctextclassics")```
 
@@ -114,6 +114,16 @@ ggplot(book_top_words, aes(x = reorder(word, word_freq), y = word_freq, fill = b
 
 ```
 
+##Summary
+
+In this post, I...
+
+* Used ctextclassics to download classic Chinese texts
+* Split the text into character tokens of 1
+* Filtered out common stop words
+* Grouped the data by book and word, calculating total words and word frequencies
+* Made a (calligraphy inspired) bar plot of the top 10 most frequent words in each text. 
+
 ##Conclusion
 
 These word frequencies are very pleasing! 
@@ -129,23 +139,13 @@ The Zhuangzi, a Taoist text, mentions cosmological concepts such as the Tao(道)
 The Mozi seems to have terms that are mostly civic related, such as country (国), citizen (民) and govern （治). 
 
 
- To conclude this post I summarize that I...
-
-* Used ctextclassics to download classic Chinese texts
-* Split the text into character tokens of 1
-* Filtered out common stop words
-* Grouped the data by book and word, calculating total words and word frequencies
-* Made a (calligraphy inspired) bar plot of the top 10 most frequent words in each text. 
-
-Overall, we saw the top 10 most common characters/words in these three ancient classical philosophical texts.
-
 ##Next Post 
 
-In my next post, I would like to either **follow the same procedure but with bigrams**, and/or **apply LDA (Latent Dirichlet Allocation)** to these 3 works and see whether or not their chapters can be distinguished from one another. The word frequencies feel quite characteristic for these texts. 
+In my next post, I would like to either **follow the same procedure but with bigrams**, and/or **apply LDA (Latent Dirichlet Allocation)** to see whether chapters can be distinguished from one another. 
 
-But I'm not so sure that all of these chapters can be distinguished from one another (there are many shared words - Dao isn't solely mentioned in Taoist texts, the Analects also makes many mentions of civic related concepts, and the Mozi is a long text written by different authors...) 
+Although frequent words are very different among texts, I'm not so sure that each book can be completely distinguished from others (There are many shared words - Dao isn't solely mentioned in Taoist texts, and each text includes civic related concepts related to proper governance, plus, the Mozi is likely authored by different people!)
 
-To be continued! 
+On that note, to be continued! 
 
 
 

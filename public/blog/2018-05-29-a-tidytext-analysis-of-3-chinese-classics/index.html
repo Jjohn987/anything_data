@@ -130,7 +130,7 @@ ga('send', 'pageview');
           <script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
 
 
-<p>For a long time I’ve admired the <code>tidytext</code> package and its wonderful companion book <a href="https://www.tidytextmining.com"><em>Text Mining with R</em></a>. After reading it I thought, “Why not undertake a project of Chinese text analysis?” I am deeply interested in Chinese philosophy but I decided to keep the analysis narrow by selecting just three works - The Analects, Zhuangzi, and the Mozi.</p>
+<p>For a long time I’ve admired the <code>tidytext</code> package and its wonderful companion book <a href="https://www.tidytextmining.com"><em>Text Mining with R</em></a>. After reading it I thought, “Why not undertake a project of Chinese text analysis?” <strong>I am deeply interested in Chinese philosophy</strong> but I decided to keep the analysis narrow by selecting just three works - <strong>The Analects, Zhuangzi, and the Mozi</strong>.</p>
 <p>Following similar pace with Tidytext, I first download my data. Here I use my package <code>ctextclassics</code> and the function <code>get_books(c(...))</code> but I want to point out the API limit is very low and I had to download my books between two different days. For information on ctextclassics, check out my previous post or type <code>install_github(&quot;Jjohn987/ctextclassics&quot;)</code></p>
 <pre class="r"><code>library(tidyverse)
 library(stringr)
@@ -742,6 +742,17 @@ ggplot(book_top_words, aes(x = reorder(word, word_freq), y = word_freq, fill = b
   ggtitle(&quot;Word Frequencies&quot;) +
   theme(plot.title = element_text(size = 20, color = &quot;#232528&quot;, hjust = 0.5))</code></pre>
 <p><img src="/post/2018-05-29-tidytext-analysis-of-3-chinese-classics_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<div id="summary" class="section level2">
+<h2>Summary</h2>
+<p>In this post, I…</p>
+<ul>
+<li>Used ctextclassics to download classic Chinese texts</li>
+<li>Split the text into character tokens of 1</li>
+<li>Filtered out common stop words</li>
+<li>Grouped the data by book and word, calculating total words and word frequencies</li>
+<li>Made a (calligraphy inspired) bar plot of the top 10 most frequent words in each text.</li>
+</ul>
+</div>
 <div id="conclusion" class="section level2">
 <h2>Conclusion</h2>
 <p>These word frequencies are very pleasing!</p>
@@ -750,21 +761,12 @@ ggplot(book_top_words, aes(x = reorder(word, word_freq), y = word_freq, fill = b
 <p><em>Of gentlemen, there are some who do not possess benevolence; but of villians, there is not a single one that possesses it.</em></p>
 <p>The Zhuangzi, a Taoist text, mentions cosmological concepts such as the Tao(道), morality (德), and evil(邪).</p>
 <p>The Mozi seems to have terms that are mostly civic related, such as country (国), citizen (民) and govern （治).</p>
-<p>To conclude this post I summarize that I…</p>
-<ul>
-<li>Used ctextclassics to download classic Chinese texts</li>
-<li>Split the text into character tokens of 1</li>
-<li>Filtered out common stop words</li>
-<li>Grouped the data by book and word, calculating total words and word frequencies</li>
-<li>Made a (calligraphy inspired) bar plot of the top 10 most frequent words in each text.</li>
-</ul>
-<p>Overall, we saw the top 10 most common characters/words in these three ancient classical philosophical texts.</p>
 </div>
 <div id="next-post" class="section level2">
 <h2>Next Post</h2>
-<p>In my next post, I would like to either <strong>follow the same procedure but with bigrams</strong>, and/or <strong>apply LDA (Latent Dirichlet Allocation)</strong> to these 3 works and see whether or not their chapters can be distinguished from one another. The word frequencies feel quite characteristic for these texts.</p>
-<p>But I’m not so sure that all of these chapters can be distinguished from one another (there are many shared words - Dao isn’t solely mentioned in Taoist texts, the Analects also makes many mentions of civic related concepts, and the Mozi is a long text written by different authors…)</p>
-<p>To be continued!</p>
+<p>In my next post, I would like to either <strong>follow the same procedure but with bigrams</strong>, and/or <strong>apply LDA (Latent Dirichlet Allocation)</strong> to see whether chapters can be distinguished from one another.</p>
+<p>Although frequent words are very different among texts, I’m not so sure that each book can be completely distinguished from others (There are many shared words - Dao isn’t solely mentioned in Taoist texts, and each text includes civic related concepts related to proper governance, plus, the Mozi is likely authored by different people!)</p>
+<p>On that note, to be continued!</p>
 </div>
 
         </div>
