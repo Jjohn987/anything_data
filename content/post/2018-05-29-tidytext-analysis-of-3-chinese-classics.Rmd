@@ -118,15 +118,20 @@ ggplot(book_top_words, aes(x = reorder(word, word_freq), y = word_freq, fill = b
 
 ##Conclusion
 
-These word frequencies are very pleasing! From the graph, we can see that the Analects has prevalant usage of words such as "Benevolence" (仁), "Gentleman" (君子) and "Confucius" (孔子). I say pleasing, because in fact, benevolence is one of the core ideals of Confucianism. An examplary sentence can be found in the Analecs may be
+These word frequencies are very pleasing! 
+
+We can see that the Analects has prevalant usage of words such as "Benevolence" (仁), "Gentleman" (君子) and "Confucius" (孔子). In fact, the Analects often mentions these terms - one examplary sentence may be:
 
 "君子而不仁者有矣夫。未有小人而仁者也." My own (shorthand) translation:
 
 *Of gentlemen, there are some who do not possess benevolence; but of villians, there is not a single one that possesses it.*
 
-The Zhuangzi, a Taoist text, mentions cosmological concepts such as the Tao(道) and morality (德).
+The Zhuangzi, a Taoist text, mentions cosmological concepts such as the Tao(道), morality (德), and evil(邪).
 
-And this is a convenient end to conclude this post on. In this post, I...
+The Mozi seems to have terms that are mostly civic related, such as country (国), citizen (民) and govern （治). 
+
+
+ To conclude this post I summarize that I...
 
 * Used ctextclassics to download classic Chinese texts
 * Split the text into character tokens of 1
@@ -138,7 +143,9 @@ Overall, we saw the top 10 most common characters/words in these three ancient c
 
 ##Next Post 
 
-In my next post, I would like to either **follow the same procedure but with bigrams**, and/or **apply LDA (Latent Dirichlet Allocation)** to these 3 works and see whether or not their chapters can be distinguished from one another. 
+In my next post, I would like to either **follow the same procedure but with bigrams**, and/or **apply LDA (Latent Dirichlet Allocation)** to these 3 works and see whether or not their chapters can be distinguished from one another. The word frequencies feel quite characteristic for these texts. But I'm not so sure that all of these chapters can be distinguished from one another (espcially because there are many shared words - Dao isn't solely mentioned in Taoist texts, the Analects also make many mentions of civic related concepts, and the Mozi is a long text written by different authors...) 
+
+Anyway, to be continued! 
 
 
 
