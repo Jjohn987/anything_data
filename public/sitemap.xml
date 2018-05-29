@@ -49,13 +49,13 @@
   </url>
   
   <url>
-    <loc>/tags/api/</loc>
+    <loc>/categories/api/</loc>
     <lastmod>2018-05-17T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/categories/api/</loc>
+    <loc>/tags/api/</loc>
     <lastmod>2018-05-17T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
@@ -187,13 +187,13 @@
   </url>
   
   <url>
-    <loc>/tags/network-analysis/</loc>
+    <loc>/categories/network-analysis/</loc>
     <lastmod>2018-04-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/categories/network-analysis/</loc>
+    <loc>/tags/network-analysis/</loc>
     <lastmod>2018-04-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
@@ -217,13 +217,13 @@
   </url>
   
   <url>
-    <loc>/tags/scraping/</loc>
+    <loc>/categories/scraping/</loc>
     <lastmod>2018-05-08T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/categories/scraping/</loc>
+    <loc>/tags/scraping/</loc>
     <lastmod>2018-05-08T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
@@ -235,14 +235,14 @@
   </url>
   
   <url>
-    <loc>/tags/text-analysis/</loc>
-    <lastmod>2018-05-17T00:00:00+00:00</lastmod>
+    <loc>/categories/text-analysis/</loc>
+    <lastmod>2018-05-29T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/categories/text-analysis/</loc>
-    <lastmod>2018-05-29T00:00:00+00:00</lastmod>
+    <loc>/tags/text-analysis/</loc>
+    <lastmod>2018-05-17T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
