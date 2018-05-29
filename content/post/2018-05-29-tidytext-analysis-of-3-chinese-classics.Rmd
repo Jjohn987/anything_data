@@ -132,13 +132,13 @@ The Analects has prevalant usage of words such as "Benevolence" (仁), "Gentlema
 
 The Zhuangzi, a Taoist text, mentions cosmological concepts such as the Tao(道), morality (德), and evil(邪).
 
-The Mozi seems to have terms that are mostly civic related, such as country (国), citizen (民) and govern （治). 
+The Mozi seems to have terms that are mostly civic related, such as country (国), citizen (民) and govern（治). 
 
-These frequencies do a good job of capturing the context of the works - e.g., the Analects often mentions these terms - one examplary sentence may be:
+These frequencies do a good job of capturing the context of the works - e.g., regarding the Analects, Benevolence and the Gentleman are often mentioned - one examplary sentence may be:
 
 "君子而不仁者有矣夫。未有小人而仁者也." My own (shorthand) translation:
 
-*Of gentlemen, there are some who do not possess Benevolence; but of villians, there is not a single one that possesses it.*
+*Of Gentlemen, there are some who do not possess Benevolence; but of Villians, there is not a single one that possesses it.*
 
 ##Next Post 
 
