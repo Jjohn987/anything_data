@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>/blog/2018-05-29-a-tidytext-analysis-of-3-chinese-classics/</loc>
+    <lastmod>2018-05-29T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/blog/2018-05-17-ctextclassics-my-first-package/</loc>
     <lastmod>2018-05-17T00:00:00+00:00</lastmod>
   </url>
@@ -39,7 +44,7 @@
   
   <url>
     <loc>/</loc>
-    <lastmod>2018-05-17T00:00:00+00:00</lastmod>
+    <lastmod>2018-05-29T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -92,6 +97,12 @@
   </url>
   
   <url>
+    <loc>/categories/chinese-text-analysis/</loc>
+    <lastmod>2018-05-29T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/tags/correlates-of-war-project/</loc>
     <lastmod>2018-04-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -105,7 +116,7 @@
   
   <url>
     <loc>/tags/ctextclassics/</loc>
-    <lastmod>2018-05-17T00:00:00+00:00</lastmod>
+    <lastmod>2018-05-29T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -195,7 +206,7 @@
   
   <url>
     <loc>/post/</loc>
-    <lastmod>2018-05-17T00:00:00+00:00</lastmod>
+    <lastmod>2018-05-29T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -231,7 +242,7 @@
   
   <url>
     <loc>/categories/text-analysis/</loc>
-    <lastmod>2018-05-17T00:00:00+00:00</lastmod>
+    <lastmod>2018-05-29T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -242,14 +253,32 @@
   </url>
   
   <url>
+    <loc>/tags/tidytext/</loc>
+    <lastmod>2018-05-29T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/tags/tidyverse/</loc>
     <lastmod>2018-01-29T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
+    <loc>/tags/tmcn/</loc>
+    <lastmod>2018-05-29T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/tags/us-news-rankings/</loc>
     <lastmod>2017-07-01T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/categories/visualization/</loc>
+    <lastmod>2018-05-29T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

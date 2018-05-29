@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tmcn on Anything is |Data| is Anything</title>
+    <link>/tags/tmcn/</link>
+    <description>Recent content in Tmcn on Anything is |Data| is Anything</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 29 May 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/tmcn/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>A Tidytext Analysis of 3 Chinese Classics</title>
+      <link>/blog/2018-05-29-a-tidytext-analysis-of-3-chinese-classics/</link>
+      <pubDate>Tue, 29 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2018-05-29-a-tidytext-analysis-of-3-chinese-classics/</guid>
+      <description>For a long time I’ve admired the tidytext package and its wonderful companion book Text Mining with R. After reading it I thought, “Why not undertake a project of Chinese text analysis?” I am deeply interested in Chinese philosophy but I decided to keep the analysis narrow by selecting just three works - The Analects, Zhuangzi, and the Mozi.
+In following similar pace with Tidytext, I first download my data.</description>
+    </item>
+    
+  </channel>
+</rss>

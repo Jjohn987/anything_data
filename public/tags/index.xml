@@ -68,7 +68,7 @@
     <item>
       <title>Ctextclassics</title>
       <link>/tags/ctextclassics/</link>
-      <pubDate>Thu, 17 May 2018 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 29 May 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/ctextclassics/</guid>
       <description></description>
@@ -201,11 +201,29 @@
     </item>
     
     <item>
+      <title>Tidytext</title>
+      <link>/tags/tidytext/</link>
+      <pubDate>Tue, 29 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/tidytext/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Tidyverse</title>
       <link>/tags/tidyverse/</link>
       <pubDate>Mon, 29 Jan 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/tidyverse/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Tmcn</title>
+      <link>/tags/tmcn/</link>
+      <pubDate>Tue, 29 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/tmcn/</guid>
       <description></description>
     </item>
     
