@@ -132,7 +132,7 @@ ga('send', 'pageview');
 
 <p>In the last post, we saw frequencies of the most common words in the Analects, Zhuangzi, and Mozi texts. The faceted plot did an excellent job of capturing a generic “theme” of each text. However, I wondered how the results might change when plotting bigrams (2 word combinations of adjacent words) as opposed to single values.</p>
 <p>This is where I ran into a problem with Tidytext – although it worked fine for tokenizing Chinese text into single character tokens, it did not perform as well at separating the text into bigrams. I felt my only choice was to define my own (crude) function to segment the text better. So I did.</p>
-<p>To pick up from the last post, I source my data in from a file which I oringinally downloaded with <code>ctextclassics</code>.</p>
+<p>To pick up from the last post, I source my data in from a file which I originally downloaded with <code>ctextclassics</code>.</p>
 <pre class="r"><code>library(tidyverse)
 library(readr)
 library(stringr)

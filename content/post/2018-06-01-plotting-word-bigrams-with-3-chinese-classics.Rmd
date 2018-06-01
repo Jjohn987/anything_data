@@ -12,7 +12,7 @@ In the last post, we saw frequencies of the most common words in the Analects, Z
 This is where I ran into a problem with Tidytext -- although it worked fine for tokenizing Chinese text into single character tokens, it did not perform as well at separating the text into bigrams. I felt my only choice was to define my own (crude) function to segment the text better. So I did. 
 
 
-To pick up from the last post, I source my data in from a file which I oringinally downloaded with ```ctextclassics```. 
+To pick up from the last post, I source my data in from a file which I originally downloaded with ```ctextclassics```. 
 
 ```{r message=FALSE, warning=FALSE}
 
