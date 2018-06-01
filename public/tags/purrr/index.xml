@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Tmcn on Anything is |Data| is Anything</title>
-    <link>/tags/tmcn/</link>
-    <description>Recent content in Tmcn on Anything is |Data| is Anything</description>
+    <title>Purrr on Anything is |Data| is Anything</title>
+    <link>/tags/purrr/</link>
+    <description>Recent content in Purrr on Anything is |Data| is Anything</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Fri, 01 Jun 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/tmcn/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/tags/purrr/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -19,16 +19,6 @@
       <guid>/blog/2018-06-01-plotting-word-bigrams-with-3-chinese-classics/</guid>
       <description>In the last post, we saw frequencies of the most common words in the Analects, Zhuangzi, and Mozi texts. The faceted plot did an excellent job of capturing a generic “idea” of each text. However, I wondered how the results might change when plotting bigrams (2 word combinations of adjacent words) as opposed to single values.
 This is where I ran into a problem with Tidytext – although it worked fine for tokenizing Chinese text into single character tokens, it did not perform as well at separating the text into bigrams.</description>
-    </item>
-    
-    <item>
-      <title>A Tidytext Analysis of 3 Chinese Classics</title>
-      <link>/blog/2018-05-29-a-tidytext-analysis-of-3-chinese-classics/</link>
-      <pubDate>Tue, 29 May 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/2018-05-29-a-tidytext-analysis-of-3-chinese-classics/</guid>
-      <description>For a long time I’ve admired the tidytext package and its wonderful companion book Text Mining with R. After reading it I thought, “Why not undertake a project of Chinese text analysis?” I am deeply interested in Chinese philosophy but I decided to keep the analysis narrow by selecting just three works - The Analects, Zhuangzi, and the Mozi.
-Following similar pace with Tidytext, I first download my data. Here I use my package ctextclassics and specifically, the function get_books(c(.</description>
     </item>
     
   </channel>

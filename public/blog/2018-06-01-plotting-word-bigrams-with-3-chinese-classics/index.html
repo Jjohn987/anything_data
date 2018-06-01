@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
+
+  
+    
+    
+      <link href="/css/fonts.css" rel="stylesheet" type="text/css">
+    
+  
+
+  
+  <title>Plotting Word Bigrams with 3 Chinese Classics</title>
+
+  
+  
+  <link rel="stylesheet" href="/css/hugo-octopress.css">
+
+  
+  
+
+  
+    <link rel="stylesheet" href="/css/fork-awesome.min.css">
+  
+
+  
+  <link href="/favicon.png" rel="icon">
+
+  
+  
+  
+
+  
+
+  <meta name="description" content="My R blog, with projects in analytics, text analysis, data mining, and visualization. I might occasionally include Chinese text.">
+  <meta name="keywords" content="">
+
+  <meta name="author" content="Jeremy Johnson">
+
+  
+  <meta name="generator" content="Hugo 0.40.2" />
+
+  
+  
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-118999723-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+  
+  
+
+</head>
+<body>
+
+
+<header role="banner"><hgroup>
+  
+  <h1><a href="/">Anything is |Data| is Anything</a></h1>
+    <h2>Centered around the investigation of things, ... in R!</h2>
+</hgroup></header>
+
+
+<nav role="navigation">
+<fieldset class="mobile-nav">
+  
+  <select onchange="location = this.value;">
+    <option value="">Navigate…</option>
+      
+
+  </select>
+</fieldset>
+
+
+<ul class="main-navigation">
+  
+  
+</ul>
+
+
+<ul class="subscription">
+  
+
+</ul>
+
+
+</nav>
+
+
+<div id="main">
+  <div id="content">
+    <div>
+      <article class="hentry" role="article">
+
+        
+        
+
+<header>
+    <p class="meta">Jun 1, 2018
+         - 5 minute read 
+         - <a href="/blog/2018-06-01-plotting-word-bigrams-with-3-chinese-classics/#disqus_thread">Comments</a>
+
+        
+        
+        
+            - <a class="label" href="/categories/text-analysis/">text analysis </a>
+        
+    </p>
+    <h1 class="entry-title">
+         Plotting Word Bigrams with 3 Chinese Classics 
+    </h1>
+</header>
+
+
+        <div class="entry-content">
+          
+          
+          
+          
+          <p>In the last post, we saw frequencies of the most common words in the Analects, Zhuangzi, and Mozi texts. The faceted plot did an excellent job of capturing a generic “idea” of each text. However, I wondered how the results might change when plotting bigrams (2 word combinations of adjacent words) as opposed to single values.</p>
+<p>This is where I ran into a problem with Tidytext – although it worked fine for tokenizing Chinese text into single character tokens, it did not perform as well at separating the text into bigrams. I felt my only choice was to define my own (crude) function to segment the text better. So I did.</p>
+<p>To pick up from the last post, I source my data in from a file which I oringinally downloaded with <code>ctextclassics</code>.</p>
+<pre class="r"><code>library(tidyverse)
+library(readr)
+library(stringr)
+
+##For Chinese stopwords, pinyin, simplified, traditional Chinese conversions
+library(tmcn)
+
+my_classics &lt;- read_csv(&quot;~/Desktop/anything_data/content/post/my_classics.csv&quot;) %&gt;%
+  select(-1) %&gt;%
+  mutate(book = str_to_title(book))
+
+## Data look like this 
+knitr::kable(head(my_classics))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">book</th>
+<th align="left">chapter</th>
+<th align="right">chapter_number</th>
+<th align="left">chapter_cn</th>
+<th align="left">word</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Analects</td>
+<td align="left">xue-er</td>
+<td align="right">1</td>
+<td align="left">學而</td>
+<td align="left">子曰：「學而時習之，不亦說乎？有朋自遠方來，不亦樂乎？人不知而不慍，不亦君子乎？」</td>
+</tr>
+<tr class="even">
+<td align="left">Analects</td>
+<td align="left">xue-er</td>
+<td align="right">1</td>
+<td align="left">學而</td>
+<td align="left">有子曰：「其為人也孝弟，而好犯上者，鮮矣；不好犯上，而好作亂者，未之有也。君子務本，本立而道生。孝弟也者，其為仁之本與！」</td>
+</tr>
+<tr class="odd">
+<td align="left">Analects</td>
+<td align="left">xue-er</td>
+<td align="right">1</td>
+<td align="left">學而</td>
+<td align="left">子曰：「巧言令色，鮮矣仁！」</td>
+</tr>
+<tr class="even">
+<td align="left">Analects</td>
+<td align="left">xue-er</td>
+<td align="right">1</td>
+<td align="left">學而</td>
+<td align="left">曾子曰：「吾日三省吾身：為人謀而不忠乎？與朋友交而不信乎？傳不習乎？」</td>
+</tr>
+<tr class="odd">
+<td align="left">Analects</td>
+<td align="left">xue-er</td>
+<td align="right">1</td>
+<td align="left">學而</td>
+<td align="left">子曰：「道千乘之國：敬事而信，節用而愛人，使民以時。」</td>
+</tr>
+<tr class="even">
+<td align="left">Analects</td>
+<td align="left">xue-er</td>
+<td align="right">1</td>
+<td align="left">學而</td>
+<td align="left">子曰：「弟子入則孝，出則弟，謹而信，汎愛眾，而親仁。行有餘力，則以學文。」</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>##Reuse the same stopwords from the previous analysis
+stopwordsCN &lt;- data.frame(word = c(tmcn::stopwordsCN(),
+&quot;子曰&quot;, &quot;曰&quot;, &quot;於&quot;, &quot;則&quot;,&quot;吾&quot;, &quot;子&quot;, &quot;不&quot;, &quot;無&quot;, &quot;斯&quot;,&quot;與&quot;, &quot;為&quot;, &quot;必&quot;,
+&quot;使&quot;, &quot;非&quot;,&quot;天下&quot;, &quot;以為&quot;,&quot;上&quot;, &quot;下&quot;, &quot;人&quot;, &quot;天&quot;, &quot;不可&quot;, &quot;謂&quot;, &quot;是以&quot;,
+&quot;而不&quot;, &quot;皆&quot;, &quot;不亦&quot;, &quot;乎&quot;, &quot;之&quot;, &quot;而&quot;, &quot;者&quot;, &quot;本&quot;, &quot;與&quot;, &quot;吾&quot;, &quot;則&quot;,
+&quot;以&quot;, &quot;其&quot;, &quot;為&quot;, &quot;不以&quot;, &quot;不可&quot;, &quot;也&quot;, &quot;矣&quot;, &quot;子&quot;, &quot;由&quot;, &quot;子曰&quot;, &quot;曰&quot;,
+&quot;非其&quot;, &quot;於&quot;, &quot;不能&quot;, &quot;如&quot;, &quot;斯&quot;, &quot;然&quot;, &quot;君&quot;, &quot;亦&quot;, &quot;言&quot;, &quot;聞&quot;, &quot;今&quot;,
+&quot;君&quot;, &quot;不知&quot;, &quot;无&quot;))</code></pre>
+<p>So, my workflow for working with bigrams with this dataset is:</p>
+<ul>
+<li>I determine a word as being constituted by one character, since since it is classical Chinese.</li>
+<li>I write a simple function to concentate each word with each adjacent word. (ABCD) to (A B, B C, C D)</li>
+<li>I unnest the resulting list column so there is one value per row (tidy format).</li>
+</ul>
+<p>The ultimate workflow beyond this point is nearly the same as previously - obtaining the value-count pairs per book, and then plotting them. The hope here is that these paired words can give us an even deeper undestanding about each book that the single words could not.</p>
+<pre class="r"><code>##Simple function to concentate a value in a vector with adjacent value
+
+simple_bigram &lt;- function(x) {
+  if(length(x) &lt; 2) {
+    return(NA)
+  } else {
+output_length &lt;- length(x) - 1
+output &lt;- vector(length = output_length)
+for(i in 1:output_length) {
+output[i] &lt;- paste(x[i], x[i+1], sep = &quot; &quot;)
+}
+output
+  }
+}
+
+##Use stringi split_boundaries to split the text in lengths of 1 character, so that they can be concencated into 2 character values.
+##integrate the 2 functions into a single call with lapply.
+
+tokenizer &lt;- function(text) {
+unlist(lapply(stringi::stri_split_boundaries(text), function(x) simple_bigram(x)))
+}</code></pre>
+<p>I would like to add a disclaimer that, my “one character = one word” metho for distinguishing bigrams in classical Chinese isn’t perfect in all cases. (Ultimately there are different word lengths and words need to be split with a more specialized tool.) However, in the absence of a fine-tuned segmenter, I do think that this method accomplishes the gist of what I’m attempting to get at.</p>
+<pre class="r"><code>##Clean out all odd punctuation symbols
+##Apply tokenizing function to create bigrams
+##Filter out stop words
+
+bigrams &lt;- my_classics %&gt;%
+  mutate(word = str_replace_all(word, &quot;[「」《》『』,，、。；：？！]&quot;, &quot;&quot;)) %&gt;%
+  mutate(word = map(word, function(x) tokenizer(x))) %&gt;%
+  unnest(word) %&gt;%
+  filter(!is.na(word)) %&gt;%
+  separate(word, into = c(&quot;word1&quot;, &quot;word2&quot;)) %&gt;%
+  filter(!word1 %in% stopwordsCN$word, !word2 %in% stopwordsCN$word) %&gt;% unite(&quot;word&quot;, c(&quot;word1&quot;, &quot;word2&quot;), sep = &quot; &quot;)
+
+
+## Bigram counts per book 
+
+book_bigram_count &lt;- bigrams %&gt;%
+  count(book, word) %&gt;%
+  arrange(book, -n) %&gt;%
+  group_by(book) %&gt;%
+  mutate(frequency = n/sum(n))</code></pre>
+<p>With these counts, we’re almost ready to plot. However, in a minor plot twist, let’s read in a beautiful graphic to use as a background in our plot later. Let’s also set up a color scheme that matches the themes of classical philosophy and calligraphy.</p>
+<pre class="r"><code>library(jpeg)
+library(grid)
+image &lt;- jpeg::readJPEG(&quot;~/Desktop/anything_data/content/post/image.jpg&quot;)
+
+bar_colors &lt;- rev(c(&quot;#271a0c&quot;, &quot;#483030&quot;, &quot;#232528&quot;))</code></pre>
+<p>I also wish to provide English labels to go with the terms we’re plotting.</p>
+<pre class="r"><code>knitr::opts_chunk$set(fig.width=16, fig.height=12)
+
+## I translated after taking the top 10 bigrams, but I place this vector one step ahead in the workflow in order for the processing to occur in one step.
+
+translations &lt;- c(&quot;Studious&quot;, &quot;(Disciple) Yan Hui&quot;, &quot;3 years’ mourning&quot;, &quot;Great officer&quot;, &quot;(Disciple) Zi Zhang asked&quot;, &quot;Enter politics&quot;, &quot;Have not seen&quot;, &quot;(Disciple) Fan Chi&quot;, &quot;(Disciple) Zi Gong asked&quot;, &quot;Inquired about governance&quot;, &quot;Parents&quot;, &quot;Know Ritual&quot;,&quot; Ritual&quot;, &quot;(Disciple) Lu asked&quot;, &quot;Sage King&quot;, &quot;Ghosts/Spirits&quot;, &quot;Common folk&quot;, &quot;Feudal lords&quot;, &quot;Country&quot;, &quot;Engage in&quot;, &quot;Rulers&quot;, &quot;All people&quot;, &quot;10 Steps&quot;, &quot;Control&quot;, &quot;All Things&quot;, &quot;Confucius&quot;, &quot;Benevolence and\n Righteousness&quot;, &quot;Lao Dan/Laozi&quot;, &quot;Master&quot;, &quot;Never&quot;, &quot;Huang Di&quot;, &quot;The Beginning&quot;, &quot;Zhu Liang&quot;, &quot;Life and\n Death&quot;)
+
+##Filter out 3 &quot;nonsense&quot; values that otherwise show up in top bigrams
+##Calculate top 10 bigrams
+##Include English translations for labelling
+
+top_10_bigrams &lt;- book_bigram_count %&gt;%
+  select(book, word, n, frequency) %&gt;%
+  distinct() %&gt;%
+  filter(!word %in% c(&quot;公 問&quot;, &quot;公 大&quot;, &quot;二 三&quot;)) %&gt;%
+  top_n(10, n) %&gt;%
+  arrange(book, -n) %&gt;%
+  ungroup() %&gt;%
+  mutate(translations = translations)
+
+
+##Plot with a nice background image
+##Change text setting to font that can display Asian characters
+##Use colors to create a calligraphy theme
+## Include English labels
+
+ggplot(top_10_bigrams, aes(x = reorder(factor(word), frequency), y = n, fill = book)) +
+   annotation_custom(rasterGrob(image, 
+                               width = unit(1,&quot;npc&quot;), 
+                               height = unit(1,&quot;npc&quot;)), 
+                               -Inf, Inf, -Inf, Inf) +
+  geom_col(alpha = .95, color = &quot;black&quot;, show.legend = FALSE) + 
+  geom_text(aes(label = translations), color = &quot;ivory&quot;, position = position_stack(vjust = 0.5)) + 
+  facet_wrap(~book, scales = &quot;free&quot;) + 
+  coord_flip() +
+  scale_fill_manual(values = bar_colors) +
+  theme_dark(base_family= &quot;HiraKakuProN-W3&quot;) + 
+  theme(axis.text.x = element_text(color = &quot;#232528&quot;, angle = 90)) +
+  theme(axis.text.y = element_text(color = &quot;#232528&quot;, size = 12)) +
+  theme(panel.background = element_rect(fill = &quot;#87969B&quot;), plot.background = element_rect(fill = &quot;ivory&quot;), panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + 
+  labs(x = NULL, y = &quot;Count&quot;) +
+  ggtitle(&quot;Top Word Bigrams \n The Analects, Mozi, and Zhuangzi&quot;) +
+  theme(plot.title = element_text(size = 20, color = &quot;#232528&quot;, hjust = 0.5)) </code></pre>
+<p><img src="/post/2018-06-01-plotting-word-bigrams-with-3-chinese-classics_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+
+        </div>
+        
+
+<footer>
+  <p class="meta">
+    <span class="byline author vcard">Posted by <span class="fn">Jeremy Johnson</span></span>
+    
+    <time>Jun 1, 2018</time>
+    
+      <span class="categories">
+        Tags:
+        
+          <a class="category" href="/tags/tmcn">tmcn</a>  <a class="category" href="/tags/purrr">purrr</a>  <a class="category" href="/tags/ctextclassics">ctextclassics</a>  
+    
+    </span>
+  </p>
+
+  
+  
+
+  
+
+  <p class="meta">
+    
+        <a class="basic-alignment left" href="/blog/2018-05-29-a-tidytext-analysis-of-3-chinese-classics/" title="A Tidytext Analysis of 3 Chinese Classics">A Tidytext Analysis of 3 Chinese Classics</a>
+    
+
+    
+  </p>
+  
+    
+      <div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'anything-is-data-is-anything';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+    
+  
+</footer>
+
+      </article>
+    </div>
+    
+
+<aside class="sidebar thirds">
+  <section class="first odd">
+
+    
+      <h1>About Me</h1>
+    
+
+    <p>
+      
+        <p>I&rsquo;m Jeremy, and am deeply interested in data science. Especially R.
+  <br><br>
+  But my educational background is in <strong>Chinese</strong> and German. <strong>Think that&rsquo;s unrelated with R</strong>? <br>
+  <br> Well, I see language is a door to another world, and data science as a skillset to understanding it. <br><br> <strong>Anything is Data, and Data is Anything</strong>.
+  </br><br>
+  <em>Cool Websites</em> <br>
+  <a href="https://www.r-bloggers.com">https://www.r-bloggers.com</a> <br></p>
+
+<p><strong>Me on Other Platforms:</strong>  </br></p>
+
+      
+    </p>
+  </section>
+
+
+
+  
+  <ul class="sidebar-nav">
+    <li class="sidebar-nav-item">
+      <a target="_blank" href="https://github.com/Jjohn987/" title="https://github.com/Jjohn987/"><i class="fa fa-github fa-3x"></i></a>
+      
+      
+      
+      
+         
+      
+      <a target="_blank" href="https://www.linkedin.com/in/jeremy-johnson-09016a112" title="https://www.linkedin.com/in/jeremy-johnson-09016a112"><i class="fa fa-linkedin fa-3x"></i></a>
+      <a target="_blank" href="https://stackexchange.com/users/11094434/superball10000" title="https://stackexchange.com/users/11094434/superball10000"><i class="fa fa-stack-overflow fa-3x"></i></a>
+      
+      
+      
+      
+      
+
+    
+    
+    </li>
+  </ul>
+
+  
+
+  
+
+  
+  
+  
+    
+      <section class="even">
+        <h1>Recent Posts</h1>
+        <ul id="recent_posts">
+          
+          
+            
+              <li class="post">
+                <a href="/blog/2018-06-01-plotting-word-bigrams-with-3-chinese-classics/">Plotting Word Bigrams with 3 Chinese Classics</a>
+              </li>
+            
+          
+            
+              <li class="post">
+                <a href="/blog/2018-05-29-a-tidytext-analysis-of-3-chinese-classics/">A Tidytext Analysis of 3 Chinese Classics</a>
+              </li>
+            
+          
+            
+              <li class="post">
+                <a href="/blog/2018-05-17-ctextclassics-my-first-package/">Ctextclassics, my First Package</a>
+              </li>
+            
+          
+            
+              <li class="post">
+                <a href="/blog/2018-05-08-scraping-for-a-booklist-of-the-chinese-classics/">Scraping for a Booklist of the Chinese Classics</a>
+              </li>
+            
+          
+            
+              <li class="post">
+                <a href="/blog/2018-05-06-on-relocating-to-github/netlify/">On Relocating to Github/Netlify</a>
+              </li>
+            
+          
+        </ul>
+      </section>
+    
+  
+</aside>
+
+  </div>
+</div>
+
+<footer role="contentinfo">
+  <p>Copyright &copy; 2018 Jeremy Johnson - <a href="/license/">License</a> -
+  <span class="credit">Powered by <a target="_blank" href="https://gohugo.io">Hugo</a> and <a target="_blank" href="https://github.com/parsiya/hugo-octopress/">Hugo-Octopress</a> theme.
+</p>
+
+</footer>
+
+
+
+
+
+
+</body>
+</html>
+
