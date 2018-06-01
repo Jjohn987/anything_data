@@ -30,7 +30,7 @@ my_classics <- read_csv("~/Desktop/anything_data/content/post/my_classics.csv") 
   mutate(book = str_to_title(book))
 ```
 ## The data look like this:
-```{r}
+```{r echo=FALSE}
 options(knitr.table.format = "html") 
 
 knitr::kable(head(my_classics)) %>%

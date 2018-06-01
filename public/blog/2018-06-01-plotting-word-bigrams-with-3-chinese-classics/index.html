@@ -147,12 +147,6 @@ my_classics &lt;- read_csv(&quot;~/Desktop/anything_data/content/post/my_classic
   mutate(book = str_to_title(book))</code></pre>
 <div id="the-data-look-like-this" class="section level2">
 <h2>The data look like this:</h2>
-<pre class="r"><code>options(knitr.table.format = &quot;html&quot;) 
-
-knitr::kable(head(my_classics)) %&gt;%
-  kableExtra::kable_styling(position = &quot;center&quot;, bootstrap_options = &quot;responsive&quot;) %&gt;%
-  kableExtra::row_spec(1:6, color = &quot;white&quot;, background = &quot;#232528&quot;) %&gt;%
-  kableExtra::scroll_box(width = &quot;100%&quot;, height = &quot;350px&quot;)</code></pre>
 <div style="border: 1px solid #ddd; padding: 5px; overflow-y: scroll; height:350px; overflow-x: scroll; width:100%; ">
 <table class="table table-responsive" style="margin-left: auto; margin-right: auto;">
 <thead>
