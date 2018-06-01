@@ -24,10 +24,10 @@ library(kableExtra)
 
 my_classics &lt;- read_csv(&quot;~/Desktop/anything_data/content/post/my_classics.csv&quot;) %&gt;%
   select(-1) %&gt;%
-  mutate(book = str_to_title(book))
-
-options(knitr.table.format = &quot;html&quot;) 
-## The data look like this:
+  mutate(book = str_to_title(book))</code></pre>
+<div id="the-data-look-like-this" class="section level2">
+<h2>The data look like this:</h2>
+<pre class="r"><code>options(knitr.table.format = &quot;html&quot;) 
 
 knitr::kable(head(my_classics)) %&gt;%
   kableExtra::kable_styling(position = &quot;center&quot;, bootstrap_options = &quot;responsive&quot;) %&gt;%
@@ -262,11 +262,14 @@ top_10_bigrams &lt;- book_bigram_count %&gt;%
   labs(x = NULL, y = &quot;Count&quot;) +
   ggtitle(&quot;Top Word Bigrams \n The Analects, Mozi, and Zhuangzi&quot;) +
   theme(plot.title = element_text(size = 20, color = &quot;#232528&quot;, hjust = 0.5)) </code></pre>
-<p><img src="/post/2018-06-01-plotting-word-bigrams-with-3-chinese-classics_files/figure-html/unnamed-chunk-6-1.png" width="1248" style="display: block; margin: auto;" /></p>
+<p><img src="/post/2018-06-01-plotting-word-bigrams-with-3-chinese-classics_files/figure-html/unnamed-chunk-7-1.png" width="1248" style="display: block; margin: auto;" /></p>
+</div>
 <div id="did-counting-bigrams-help" class="section level2">
 <h2>Did Counting Bigrams Help?</h2>
 <p>This method did yield some new information. Firstly we see that the Analects seems to have a prevalent structure of Confucius’s disciples asking him questions. We also see meaning regarding the concept of Ritual, studying, and parents. These values sound very Confucian (and there were more more core themes such as piety, slightly right out of the top 10). Arguably if we filtered out the disciple names we’d see more interesting bigrams.</p>
 <p>The Zhuangzi is still very cosmological - All Things, Life and Death, The Beginning are all evidence of this.</p>
 <p>And as for the Mozi, well, it is still hard to identify a core theme through bigrams. (Hint, calculating top bigrams by chapter helps more meaningful themes such as “Universal Love” shine through.)</p>
 <p>Anyway, that is the conclusion for this post on bigrams!</p>
+<hr />
+<p>*Apologies regarding the background image in plot; I can’t remember its source…</p>
 </div>

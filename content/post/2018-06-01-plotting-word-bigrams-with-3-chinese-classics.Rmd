@@ -28,16 +28,17 @@ library(kableExtra)
 my_classics <- read_csv("~/Desktop/anything_data/content/post/my_classics.csv") %>%
   select(-1) %>%
   mutate(book = str_to_title(book))
-
-options(knitr.table.format = "html") 
+```
 ## The data look like this:
+```{r}
+options(knitr.table.format = "html") 
 
 knitr::kable(head(my_classics)) %>%
   kableExtra::kable_styling(position = "center", bootstrap_options = "responsive") %>%
   kableExtra::row_spec(1:6, color = "white", background = "#232528") %>%
   kableExtra::scroll_box(width = "100%", height = "350px")
-
 ```
+
 *Note, I'm not accustumed to looking at traditional characters.* 
 
 So, my workflow for working with bigrams with this dataset is:
@@ -174,7 +175,10 @@ The Zhuangzi is still very cosmological - All Things, Life and Death, The Beginn
 
 And as for the Mozi, well, it is still hard to identify a core theme through bigrams. (Hint, calculating top bigrams by chapter helps more meaningful themes such as "Universal Love" shine through.)
 
+
 Anyway, that is the conclusion for this post on bigrams!
 
+----
 
+*Apologies regarding the background image in plot; I can't remember its source...
 
