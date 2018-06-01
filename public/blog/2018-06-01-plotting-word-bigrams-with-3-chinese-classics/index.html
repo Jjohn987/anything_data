@@ -107,7 +107,7 @@ ga('send', 'pageview');
 
 <header>
     <p class="meta">Jun 1, 2018
-         - 5 minute read 
+         - 6 minute read 
          - <a href="/blog/2018-06-01-plotting-word-bigrams-with-3-chinese-classics/#disqus_thread">Comments</a>
 
         
@@ -130,7 +130,7 @@ ga('send', 'pageview');
           <script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
 
 
-<p>In the last post, we saw frequencies of the most common words in the Analects, Zhuangzi, and Mozi texts. The faceted plot did an excellent job of capturing a generic “idea” of each text. However, I wondered how the results might change when plotting bigrams (2 word combinations of adjacent words) as opposed to single values.</p>
+<p>In the last post, we saw frequencies of the most common words in the Analects, Zhuangzi, and Mozi texts. The faceted plot did an excellent job of capturing a generic “theme” of each text. However, I wondered how the results might change when plotting bigrams (2 word combinations of adjacent words) as opposed to single values.</p>
 <p>This is where I ran into a problem with Tidytext – although it worked fine for tokenizing Chinese text into single character tokens, it did not perform as well at separating the text into bigrams. I felt my only choice was to define my own (crude) function to segment the text better. So I did.</p>
 <p>To pick up from the last post, I source my data in from a file which I oringinally downloaded with <code>ctextclassics</code>.</p>
 <pre class="r"><code>library(tidyverse)
@@ -383,6 +383,13 @@ top_10_bigrams &lt;- book_bigram_count %&gt;%
   ggtitle(&quot;Top Word Bigrams \n The Analects, Mozi, and Zhuangzi&quot;) +
   theme(plot.title = element_text(size = 20, color = &quot;#232528&quot;, hjust = 0.5)) </code></pre>
 <p><img src="/post/2018-06-01-plotting-word-bigrams-with-3-chinese-classics_files/figure-html/unnamed-chunk-6-1.png" width="1248" style="display: block; margin: auto;" /></p>
+<div id="did-counting-bigrams-help" class="section level2">
+<h2>Did Counting Bigrams Help?</h2>
+<p>This method did yield some new information. Firstly we see that the Analects seems to have a prevalent structure of Confucius’s disciples asking him questions. We also see meaning regarding the concept of Ritual, studying, and parents. These values sound very Confucian (and there were more more core themes such as piety, slightly right out of the top 10). Arguably if we filtered out the disciple names we’d see more interesting bigrams.</p>
+<p>The Zhuangzi is still very cosmological - All Things, Life and Death, The Beginning are all evidence of this.</p>
+<p>And as for the Mozi, well, it is still hard to identify a core theme through bigrams. (Hint, calculating top bigrams by chapter helps more meaningful themes such as “Universal Love” shine through.)</p>
+<p>Anyway, that is the conclusion for this post on bigrams!</p>
+</div>
 
         </div>
         
@@ -396,7 +403,7 @@ top_10_bigrams &lt;- book_bigram_count %&gt;%
       <span class="categories">
         Tags:
         
-          <a class="category" href="/tags/tmcn">tmcn</a>  <a class="category" href="/tags/purrr">purrr</a>  <a class="category" href="/tags/ctextclassics">ctextclassics</a>  
+          <a class="category" href="/tags/tmcn">tmcn</a>  <a class="category" href="/tags/ctextclassics">ctextclassics</a>  <a class="category" href="/tags/tidytext">tidytext</a>  
     
     </span>
   </p>
