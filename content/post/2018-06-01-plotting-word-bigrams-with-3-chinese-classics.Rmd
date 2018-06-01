@@ -19,37 +19,34 @@ To pick up from the last post, I source my data in from a file which I oringinal
 library(tidyverse)
 library(readr)
 library(stringr)
-
 ##For Chinese stopwords, pinyin, simplified, traditional Chinese conversions
 library(tmcn)
+##For pretty HTML tables
+library(kableExtra)
+
 
 my_classics <- read_csv("~/Desktop/anything_data/content/post/my_classics.csv") %>%
   select(-1) %>%
   mutate(book = str_to_title(book))
 
-## Data look like this 
-knitr::kable(head(my_classics))
+options(knitr.table.format = "html") 
+## The data look like this:
 
-
-##Reuse the same stopwords from the previous analysis
-stopwordsCN <- data.frame(word = c(tmcn::stopwordsCN(),
-"子曰", "曰", "於", "則","吾", "子", "不", "無", "斯","與", "為", "必",
-"使", "非","天下", "以為","上", "下", "人", "天", "不可", "謂", "是以",
-"而不", "皆", "不亦", "乎", "之", "而", "者", "本", "與", "吾", "則",
-"以", "其", "為", "不以", "不可", "也", "矣", "子", "由", "子曰", "曰",
-"非其", "於", "不能", "如", "斯", "然", "君", "亦", "言", "聞", "今",
-"君", "不知", "无"))
+knitr::kable(head(my_classics)) %>%
+  kableExtra::kable_styling(position = "center", bootstrap_options = "responsive") %>%
+  kableExtra::row_spec(1:6, color = "white", background = "#232528") %>%
+  kableExtra::scroll_box(width = "100%", height = "350px")
 
 ```
-
+*Note, I'm not accustumed to looking at traditional characters.* 
 
 So, my workflow for working with bigrams with this dataset is:
 
-* I determine a word as being constituted by one character, since since it is classical Chinese.
+* I determine a word as being constituted by one character, since this is usually the case for classical Chinese.
 * I write a simple function to concentate each word with each adjacent word. (ABCD) to (A B, B C, C D)
 * I unnest the resulting list column so there is one value per row (tidy format). 
 
-The ultimate workflow beyond this point is nearly the same as previously - obtaining the value-count pairs per book, and then plotting them. The hope here is that these paired words can give us an even deeper undestanding about each book that the single words could not.
+The workflow beyond this point is ultimately the same as before - obtaining the value-count pairs per book and then plotting them. The hope here is that paired words can give us an even deeper undestanding about each book than the single words did.
 
 
 ```{r}
@@ -68,8 +65,8 @@ output
   }
 }
 
-##Use stringi split_boundaries to split the text in lengths of 1 character, so that they can be concencated into 2 character values.
-##integrate the 2 functions into a single call with lapply.
+##Use stringi split_boundaries to split each string into a vector with one value per character.
+##Use the 2 functions with unlist and lapply.
 
 tokenizer <- function(text) {
 unlist(lapply(stringi::stri_split_boundaries(text), function(x) simple_bigram(x)))
@@ -77,12 +74,21 @@ unlist(lapply(stringi::stri_split_boundaries(text), function(x) simple_bigram(x)
 
 ```
 
-I would like to add a disclaimer that, my "one character = one word" metho for distinguishing bigrams in classical Chinese isn't perfect in all cases. (Ultimately there are different word lengths and words need to be split with a more specialized tool.) However, in the absence of a fine-tuned segmenter, I do think that this method accomplishes the gist of what I'm attempting to get at. 
+I would like to add a disclaimer that, my "one character = one word" assumption for classical Chinese used in constructing bigrams here isn't perfect in all cases. (Ultimately words will have differing lengths, and words will need to be split with a more specialized tool.) However, in the absence of a fine-tuned segmenter, I do think that this method accomplishes the gist of what I'm attempting to get at. 
 
 ```{r message=FALSE, warning=FALSE}
 ##Clean out all odd punctuation symbols
 ##Apply tokenizing function to create bigrams
 ##Filter out stop words
+
+stopwordsCN <- data.frame(word = c(tmcn::stopwordsCN(),
+"子曰", "曰", "於", "則","吾", "子", "不", "無", "斯","與", "為", "必",
+"使", "非","天下", "以為","上", "下", "人", "天", "不可", "謂", "是以",
+"而不", "皆", "不亦", "乎", "之", "而", "者", "本", "與", "吾", "則",
+"以", "其", "為", "不以", "不可", "也", "矣", "子", "由", "子曰", "曰",
+"非其", "於", "不能", "如", "斯", "然", "君", "亦", "言", "聞", "今",
+"君", "不知", "无"))
+
 
 bigrams <- my_classics %>%
   mutate(word = str_replace_all(word, "[「」《》『』,，、。；：？！]", "")) %>%
@@ -90,7 +96,8 @@ bigrams <- my_classics %>%
   unnest(word) %>%
   filter(!is.na(word)) %>%
   separate(word, into = c("word1", "word2")) %>%
-  filter(!word1 %in% stopwordsCN$word, !word2 %in% stopwordsCN$word) %>% unite("word", c("word1", "word2"), sep = " ")
+  filter(!word1 %in% stopwordsCN$word, !word2 %in% stopwordsCN$word) %>%
+  unite("word", c("word1", "word2"), sep = " ")
 
 
 ## Bigram counts per book 
@@ -134,10 +141,10 @@ top_10_bigrams <- book_bigram_count %>%
   mutate(translations = translations)
 
 
-##Plot with a nice background image
-##Change text setting to font that can display Asian characters
-##Use colors to create a calligraphy theme
-## Include English labels
+```
+
+
+```{r, fig.width = 13, fig.height=7, fig.align="center"} 
 
 ggplot(top_10_bigrams, aes(x = reorder(factor(word), frequency), y = n, fill = book)) +
    annotation_custom(rasterGrob(image, 
