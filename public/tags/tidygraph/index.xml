@@ -17,7 +17,7 @@
       <pubDate>Fri, 08 Jun 2018 00:00:00 +0000</pubDate>
       
       <guid>/blog/2018-06-08-part-ii-chinese-classics-word/network-plots/</guid>
-      <description>This is a continuation in my series of exploratory text analysis of 3 Chinese classic works. In the previous post, I calculated word counts for each book, and visualized common words using bar charts. This time, I’d like to examine word use across the texts with network visualization. The goal is to help see “what’s common” and “what’s different” between the texts regarding word usage.
+      <description>This is a continuation in my series of exploratory text analysis of 3 Chinese classic works. In the previous post, I calculated word counts for each book, and visualized common words using bar charts. This time, I’d like to examine word use across the texts with network visualization. The goal is to help see what’s common and what’s different between the texts regarding word usage.
 Network visualization is particularly helpful for discovering simularities and differences between objects - this is because nodes and edges can form connections and clusters (or stay isolated).</description>
     </item>
     
