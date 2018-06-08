@@ -1,0 +1,148 @@
+---
+title: 'Part II: Chinese Classics'' Word/Network Plots'
+author: Jeremy Johnson
+date: '2018-06-08'
+slug: part-ii-chinese-classics-word-network-plots
+categories: [Network Analysis, Text Analysis]
+tags: [tidygraph, ggraph, Chinese text analysis]
+---
+
+
+
+<p>This is a continuation in my series of exploratory text analysis of 3 Chinese classic works. In the previous post, I calculated word counts for each book, and visualized common words using bar charts. This time, I’d like to examine word use <em>across</em> the texts with network visualization. The goal is to help see “what’s common” <em>and</em> “what’s different” between the texts regarding word usage.</p>
+<p>Network visualization is particularly helpful for discovering simularities and differences between objects - this is because nodes and edges can form connections and clusters (or stay isolated). Thus, through a network structure we can get an idea of commonalities and differences between the word usages in these 3 works.</p>
+<p>Disclaimer - the setup of this post is very similar to last time. I’m essentially importing the same data. So just skip past these first 2 code blocks.</p>
+<pre class="r"><code>library(tidyverse)
+library(readr)
+library(stringi)
+library(tidygraph)
+library(ggraph)
+
+
+my_classics &lt;- read_csv(&quot;~/Desktop/anything_data/content/post/my_classics.csv&quot;) %&gt;%
+  select(-1) %&gt;%
+  mutate(book = str_to_title(book))</code></pre>
+<pre class="r"><code>simple_bigram &lt;- function(x) {
+  if(length(x) &lt; 2) {
+    return(NA)
+  } else {
+    output_length &lt;- length(x) - 1
+    output &lt;- vector(length = output_length)
+    for(i in 1:output_length) {
+      output[i] &lt;- paste(x[i], x[i+1], sep = &quot; &quot;)
+    }
+    output
+  }
+}
+
+tokenizer &lt;- function(text) {
+  unlist(lapply(stringi::stri_split_boundaries(text), function(x) simple_bigram(x)))
+}
+
+library(tmcn)
+
+stopwordsCN &lt;- data.frame(word = c(tmcn::stopwordsCN(),
+                                   &quot;子曰&quot;, &quot;曰&quot;, &quot;於&quot;, &quot;則&quot;,&quot;吾&quot;, &quot;子&quot;, &quot;不&quot;, &quot;無&quot;, &quot;斯&quot;,&quot;與&quot;, &quot;為&quot;, &quot;必&quot;,
+                                   &quot;使&quot;, &quot;非&quot;,&quot;天下&quot;, &quot;以為&quot;,&quot;上&quot;, &quot;下&quot;, &quot;人&quot;, &quot;天&quot;, &quot;不可&quot;, &quot;謂&quot;, &quot;是以&quot;,
+                                   &quot;而不&quot;, &quot;皆&quot;, &quot;不亦&quot;, &quot;乎&quot;, &quot;之&quot;, &quot;而&quot;, &quot;者&quot;, &quot;本&quot;, &quot;與&quot;, &quot;吾&quot;, &quot;則&quot;,
+                                   &quot;以&quot;, &quot;其&quot;, &quot;為&quot;, &quot;不以&quot;, &quot;不可&quot;, &quot;也&quot;, &quot;矣&quot;, &quot;子&quot;, &quot;由&quot;, &quot;子曰&quot;, &quot;曰&quot;,
+                                   &quot;非其&quot;, &quot;於&quot;, &quot;不能&quot;, &quot;如&quot;, &quot;斯&quot;, &quot;然&quot;, &quot;君&quot;, &quot;亦&quot;, &quot;言&quot;, &quot;聞&quot;, &quot;今&quot;,
+                                   &quot;君&quot;, &quot;不知&quot;, &quot;无&quot;))
+
+single_words &lt;- my_classics %&gt;%
+  mutate(word = map(word, function(x) unlist(stringi::stri_split_boundaries(x)))) %&gt;%
+  unnest(word) %&gt;%
+  mutate(word = str_replace_all(word, &quot;[「」《》『』,，、。；：？！]&quot;, &quot;&quot;)) %&gt;%
+  filter(!is.na(word)) %&gt;%
+  anti_join(stopwordsCN) %&gt;%
+  select(word, book) %&gt;% 
+  count(book, word) %&gt;%
+  group_by(book) %&gt;%
+  mutate(frequency = n/sum(n), edge_books = book) %&gt;%
+  filter(frequency &gt; .001) %&gt;% ungroup() %&gt;%
+  select(word, book, n, frequency, edge_books)</code></pre>
+<p>Let’s get to the point - the visualizations. I’ve got 2 different kinds in mind. First, let’s look at single word use between each text. There’s bound to be significant overlap, I think. Arranging the edges in “arcs” helps avoid any overplotting or tangling that might exist in the case of too much interconnectivity. I’d also like to point out that these plots are a bit scrunched up by the resolution due to the blog formmating, so please ignore any odd appearing nodes.</p>
+<pre class="r"><code>knitr::opts_chunk$set(fig.width=16, fig.height=12)
+
+as_tbl_graph(single_words, directed = FALSE) %&gt;%
+  ggraph(layout = &quot;fr&quot;) + 
+  geom_edge_arc(aes(edge_width = frequency, color = edge_books, alpha = frequency)) +
+  geom_node_point(alpha = .5, size = 7, show.legend = FALSE) + 
+  geom_node_text(aes(label = name), color = &quot;white&quot;,
+                 family = &quot;HiraKakuProN-W3&quot;, check_overlap = TRUE) +
+  scale_edge_colour_manual(values = c(&quot;#b20047&quot;, &quot;#00b274&quot;, &quot;#FFB52A&quot;)) + 
+  theme(axis.text.x = element_blank()) + 
+  theme(axis.text.y = element_blank()) + 
+  theme(panel.background = element_rect(fill = &quot;#cddbda&quot;),
+        plot.background = element_rect(fill = &quot;#cddbda&quot;),
+        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        plot.margin = margin(0, 0, 0, 0, &quot;cm&quot;)) + 
+  guides(edge_width=FALSE, edge_alpha = FALSE) + 
+  labs(x = NULL, y = NULL,
+       title = &quot;\nCommon Characters\n in the Analects, Mozi, and Zhuangzi\n&quot;) +
+  theme(plot.title = element_text(size = 25, vjust = -10, hjust = 0.5,
+                                  family = &quot;Palatino&quot;, face = &quot;bold.italic&quot;,
+                                  color = &quot;#3d4040&quot;)) + 
+  theme(legend.position = &quot;bottom&quot;, legend.title = element_blank(),
+        legend.key = element_rect(color = &quot;#454444&quot;, fill = &quot;#f5fffe&quot;),
+        legend.text = element_text(size = 12, color = &quot;#3d4040&quot;, family = &quot;Palatino&quot;),
+        legend.key.width = unit(4, &quot;line&quot;),
+        legend.background = element_rect(fill = &quot;#cddbda&quot;))</code></pre>
+<p><img src="/post/2018-06-08-part-ii-chinese-classics-word-network-plots_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>Thinking about this plot, let’s keep in mind it is produced by filtering for words with frequency &gt; .001. With that in mind, words in the center are used between all texts, and the words on the outer edges are unique to the individual texts.</p>
+<p>This method of examining “simularity” between word usage may not be analytically useful; however, I think it shows an extent of simularity and difference regarding word use. From the looks of it, I imagine that the LDA algorithm might run into confusion when I attempt to use it for distinguishing between these texts later.</p>
+<div id="lets-plot-the-the-bigrams" class="section level2">
+<h2>Let’s plot the the bigrams</h2>
+<p>This plot will be a directed network and it will show connections between words in the 3 texts. Here, a bigram is essentially two connected nodes. The connections (edges) between them are colored according to the text they appear in.</p>
+<p>Warning: the plot resolution as displayed here is too small - In order for you to see the Zhuangzi bigrams (in yellow), make it larger! <strong>cough</strong> (Perhaps right click and open in new window?)</p>
+<pre class="r"><code>knitr::opts_chunk$set(fig.width=6, fig.height=6)
+
+bigrams &lt;- my_classics %&gt;%
+  mutate(word = str_replace_all(word, &quot;[「」《》『』,，、。；：？！]&quot;, &quot;&quot;)) %&gt;%
+  mutate(word = map(word, function(x) tokenizer(x))) %&gt;%
+  unnest(word) %&gt;%
+  filter(!is.na(word)) %&gt;%
+  separate(word, into = c(&quot;word1&quot;, &quot;word2&quot;)) %&gt;%
+  filter(!word1 %in% stopwordsCN$word, !word2 %in% stopwordsCN$word) %&gt;%
+  unite(&quot;word&quot;, c(&quot;word1&quot;, &quot;word2&quot;), sep = &quot; &quot;)
+
+book_bigrams &lt;- bigrams %&gt;%
+  count(book, word) %&gt;%
+  arrange(book, -n) %&gt;%
+  group_by(book) %&gt;%
+  mutate(frequency = n/sum(n))
+
+
+book_bigrams %&gt;%
+  separate(word, into = c(&quot;word1&quot;, &quot;word2&quot;)) %&gt;%
+  select(word1, word2, n, frequency, book) %&gt;%
+  filter(frequency &gt; .0009) %&gt;%
+  as_tbl_graph(directed = FALSE) %&gt;%
+  ggraph(layout = &quot;fr&quot;) + 
+  geom_edge_density() +
+  geom_edge_fan(aes(color = book, edge_width = frequency),
+                alpha = .70, arrow = arrow(length = unit(1.5, &quot;mm&quot;)),
+                start_cap = circle(3, &quot;mm&quot;), end_cap = circle(3, &quot;mm&quot;)) +
+  geom_node_point(size = 7, color = &quot;black&quot;, alpha = .75) +
+  geom_node_text(aes(label = name), color = &quot;grey&quot;, family = &quot;HiraKakuProN-W3&quot;, check_overlap = TRUE) +
+  scale_edge_colour_manual(values = c(&quot;#b20047&quot;, &quot;#00b274&quot;, &quot;#fdff00&quot;))+
+  theme(axis.text.x = element_blank()) +
+  theme(axis.text.y = element_blank()) +
+  theme(panel.background = element_rect(fill = &quot;#8AE3C2&quot;),
+        plot.background = element_rect(fill = &quot;#8AE3C2&quot;),
+        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        plot.margin = margin(0, 0, 0, 0, &quot;cm&quot;)) + 
+  guides(edge_width=FALSE) +
+  labs(x = NULL, y = NULL, title = &quot;Bigrams in the Analects, Mozi, and Zhuangzi&quot;) +
+  theme(plot.title = element_text(size = 25, vjust = -10, hjust = 0.5,
+                                  family = &quot;Palatino&quot;, face = &quot;italic&quot;,
+                                  color = &quot;black&quot;)) +
+  theme(legend.position = &quot;bottom&quot;, legend.title = element_blank(),
+        legend.key = element_rect(color = &quot;black&quot;, fill = &quot;#8AE3C2&quot;),
+        legend.text = element_text(size = 12, color = &quot;black&quot;, family = &quot;Palatino&quot;),
+        legend.key.width = unit(4, &quot;line&quot;),
+        legend.background = element_rect(fill = &quot;#8AE3C2&quot;))</code></pre>
+<p><img src="/post/2018-06-08-part-ii-chinese-classics-word-network-plots_files/figure-html/unnamed-chunk-4-1.png" width="1536" /></p>
+<p>I’d like to comment briefly on the <code>tidygraph</code> package which made these plots possible. Previously, I used igraph and found it powerful and quite robust, yet not too intuitive or user-friendly. Tidygraph changes all of that and allows network data to be manipulated in a way similar to the tidyverse methodology. I love tidygraph!</p>
+<p>I hope you enjoyed these two network plots. Until next time!</p>
+</div>
