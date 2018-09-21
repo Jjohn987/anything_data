@@ -169,7 +169,7 @@ ggplot(top_10_bigrams, aes(x = reorder(factor(word), frequency), y = n, fill = b
 
 ## Did Counting Bigrams Help?
 
-This method did yield some new information. Firstly we see that the Analects seems to have a prevalent structure of Confucius's disciples asking him questions. We also see meaning regarding the concept of Ritual, 3 years' mourning after the passing of a parent, studying, and parents. These values sound very Confucian (and there were more more core themes such as piety, slightly right out of the top 10). Arguably if we filtered out the disciple names we'd see more interesting bigrams.
+This method did yield some new information. Firstly we see that the Analects seems to have a prevalent structure of Confucius's disciples asking him questions. We also see meaning regarding the concept of Ritual, 3 years' mourning after the passing of a parent, studying, and parents. These values sound very Confucian (and there were more core themes such as piety, slightly right out of the top 10). Arguably if we filtered out the disciple names we'd see more interesting bigrams.
 
 The Zhuangzi is still very cosmological - All Things, Life and Death, The Beginning are all evidence of this. 
 

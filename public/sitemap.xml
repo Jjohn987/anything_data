@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>/blog/2018-06-08-part-ii-chinese-classics-word/network-plots/</loc>
+    <lastmod>2018-06-08T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/blog/2018-06-01-plotting-word-bigrams-with-3-chinese-classics/</loc>
     <lastmod>2018-06-01T00:00:00+00:00</lastmod>
   </url>
@@ -49,18 +54,18 @@
   
   <url>
     <loc>/</loc>
-    <lastmod>2018-06-01T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/api/</loc>
-    <lastmod>2018-05-17T00:00:00+00:00</lastmod>
+    <lastmod>2018-06-08T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/categories/api/</loc>
+    <lastmod>2018-05-17T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/api/</loc>
     <lastmod>2018-05-17T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
@@ -104,6 +109,12 @@
   <url>
     <loc>/categories/chinese-text-analysis/</loc>
     <lastmod>2018-05-29T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/chinese-text-analysis/</loc>
+    <lastmod>2018-06-08T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -156,6 +167,12 @@
   </url>
   
   <url>
+    <loc>/tags/ggraph/</loc>
+    <lastmod>2018-06-08T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/tags/github-pages/</loc>
     <lastmod>2018-05-06T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -192,13 +209,13 @@
   </url>
   
   <url>
-    <loc>/tags/network-analysis/</loc>
-    <lastmod>2018-04-01T00:00:00+00:00</lastmod>
+    <loc>/categories/network-analysis/</loc>
+    <lastmod>2018-06-08T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/categories/network-analysis/</loc>
+    <loc>/tags/network-analysis/</loc>
     <lastmod>2018-04-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
@@ -211,18 +228,12 @@
   
   <url>
     <loc>/post/</loc>
-    <lastmod>2018-06-01T00:00:00+00:00</lastmod>
+    <lastmod>2018-06-08T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/tags/rvest/</loc>
-    <lastmod>2018-05-08T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/scraping/</loc>
     <lastmod>2018-05-08T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
@@ -234,8 +245,20 @@
   </url>
   
   <url>
+    <loc>/tags/scraping/</loc>
+    <lastmod>2018-05-08T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/tags/</loc>
     <lastmod>2018-05-17T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/categories/text-analysis/</loc>
+    <lastmod>2018-06-08T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -246,8 +269,8 @@
   </url>
   
   <url>
-    <loc>/categories/text-analysis/</loc>
-    <lastmod>2018-06-01T00:00:00+00:00</lastmod>
+    <loc>/tags/tidygraph/</loc>
+    <lastmod>2018-06-08T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
