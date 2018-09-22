@@ -16,7 +16,7 @@ The app is unlike most others in that it goes beyond simply displaying text-base
 
 <center><img src = "/Screen1.png" height = "540" width = "620"></center>
 
-This was my first ever project in Shiny, and I learned a lot. First, I learned how to implement reactive elements in my app. But I also learned about web design, particularly Bootstrap HTML and CSS. This helped add to the overall sleek look.When you open up Halo 5 Stats you will see a lot of these implementations - numerous reactive elements, say, futuristic styled paneling. 
+This was my first ever project in Shiny, and I learned a lot. First, I learned how to implement reactive elements in my app. But I also learned about web design, particularly Bootstrap HTML and CSS. This helped add to the overall sleek look.When you open up Halo 5 Stats you will see a lot of these implementations - numerous reactive elements, say, futuristic styled paneling.
 
 <center><img src = "/local_controls.jpg" height = 440 width = 520> </center>
 Please give my app a look and enjoy it! Download plots and share with your friends or save a plot as a wallpaper - whatever you enjoy! Here's an example of the previous plot, downloaded.
