@@ -8,7 +8,7 @@
     <language>en-us</language>
     <lastBuildDate>Fri, 21 Sep 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+        <atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -17,7 +17,23 @@
       <pubDate>Fri, 21 Sep 2018 00:00:00 +0000</pubDate>
       
       <guid>/blog/2018-09-21-first-app---halo-5-stats/</guid>
-      <description>“Halo 5 Stats” is my first ever Shiny app, which is themed around the the popular sci-fi shooter Halo 5. It combines beatiful data with Halo’s beautiful graphics - something that Halo fans and data enthusiasts undoubtedly love. You can use my app at https://jjohn9000.shinyapps.io/Halo_5_Stats/ After entering your gamertag, the app will automatically display your online game data using Microsoft’s Halo API and visualize your data with numerous customizable elements such as backdrop and plot colors.</description>
+      <description>&lt;p&gt;“Halo 5 Stats” is my first ever Shiny app, which is themed around the the popular sci-fi shooter Halo 5. It combines beatiful data with Halo’s beautiful graphics - something that Halo fans and data enthusiasts undoubtedly love. You can use my app at &lt;a href=&#34;https://jjohn9000.shinyapps.io/Halo_5_Stats/&#34; class=&#34;uri&#34;&gt;https://jjohn9000.shinyapps.io/Halo_5_Stats/&lt;/a&gt;
+&lt;br&gt;&lt;br&gt;
+After entering your gamertag, the app will automatically display your online game data using Microsoft’s Halo API and visualize your data with numerous customizable elements such as backdrop and plot colors.&lt;/p&gt;
+&lt;p&gt;The app is unlike most others in that it goes beyond simply displaying text-based statistics like leadership standings and kill ratios. After all, one of R’s strengths is that &lt;code&gt;ggplot2&lt;/code&gt; makes data beautiful - &lt;strong&gt;Beautiful data and beautiful Halo graphics, something all Halo fans will love.&lt;/strong&gt;&lt;/p&gt;
+&lt;center&gt;
+&lt;img src = &#34;/Screen1.png&#34; height = &#34;540&#34; width = &#34;620&#34;&gt;
+&lt;/center&gt;
+&lt;p&gt;This was my first ever project in Shiny, and I learned a lot. First, I learned how to implement reactive elements in my app. But I also learned about web design, particularly Bootstrap HTML and CSS. This helped add to the overall sleek look.When you open up Halo 5 Stats you will see a lot of these implementations - numerous reactive elements, say, futuristic styled paneling.&lt;/p&gt;
+&lt;center&gt;
+&lt;img src = &#34;/local_controls.jpg&#34; height = 440 width = 520&gt;
+&lt;/center&gt;
+&lt;p&gt;Please give my app a look and enjoy it! Download plots and share with your friends or save a plot as a wallpaper - whatever you enjoy! Here’s an example of the previous plot, downloaded.&lt;/p&gt;
+&lt;center&gt;
+&lt;img src = &#34;/Screen2.png&#34; height = &#34;640&#34; width = &#34;720&#34;&gt;
+&lt;/center&gt;
+&lt;p&gt;Give the app a try, and if you use it, please share it on social media! You can even look up my own gamertag for fun - (Hairball9000)! Remember, it is located at this web address: &lt;br&gt; &lt;br&gt; &lt;a href=&#34;https://jjohn9000.shinyapps.io/Halo_5_Stats/&#34; class=&#34;uri&#34;&gt;https://jjohn9000.shinyapps.io/Halo_5_Stats/&lt;/a&gt;&lt;/p&gt;
+</description>
     </item>
     
     <item>
@@ -26,8 +42,237 @@
       <pubDate>Fri, 08 Jun 2018 00:00:00 +0000</pubDate>
       
       <guid>/blog/2018-06-08-part-ii-chinese-classics-word/network-plots/</guid>
-      <description>This is a continuation in my series of exploratory text analysis of 3 Chinese classic works. In the previous post, I calculated word counts for each book, and visualized common words using bar charts. This time, I’d like to examine word use across the texts with network visualization. The goal is to help see what’s common and what’s different between the texts regarding word usage.
-Network visualization is particularly helpful for discovering simularities and differences between objects - this is because nodes and edges can form connections and clusters (or stay isolated).</description>
+      <description>&lt;p&gt;This is a continuation in my series of exploratory text analysis of 3 Chinese classic works. In the previous post, I calculated word counts for each book, and visualized common words using bar charts. This time, I’d like to examine word use &lt;strong&gt;across&lt;/strong&gt; the texts with network visualization. The goal is to help see &lt;strong&gt;what’s common&lt;/strong&gt; and &lt;strong&gt;what’s different&lt;/strong&gt; between the texts regarding word usage.&lt;/p&gt;
+&lt;p&gt;Network visualization is particularly helpful for discovering simularities and differences between objects - this is because nodes and edges can form connections and clusters (or stay isolated). Thus, through a network structure we can get an idea of commonalities and differences between the word usages in these 3 works.&lt;/p&gt;
+&lt;p&gt;Disclaimer - the setup of this post is very similar to last time. I’m essentially importing the same data. So just skip past these first 2 code blocks.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)
+library(readr)
+library(stringi)
+library(tidygraph)
+library(ggraph)
+
+
+my_classics &amp;lt;- read_csv(&amp;quot;~/Desktop/anything_data/content/post/my_classics.csv&amp;quot;) %&amp;gt;%
+  select(-1) %&amp;gt;%
+  mutate(book = str_to_title(book))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;simple_bigram &amp;lt;- function(x) {
+  if(length(x) &amp;lt; 2) {
+    return(NA)
+  } else {
+    output_length &amp;lt;- length(x) - 1
+    output &amp;lt;- vector(length = output_length)
+    for(i in 1:output_length) {
+      output[i] &amp;lt;- paste(x[i], x[i+1], sep = &amp;quot; &amp;quot;)
+    }
+    output
+  }
+}
+
+tokenizer &amp;lt;- function(text) {
+  unlist(lapply(stringi::stri_split_boundaries(text), function(x) simple_bigram(x)))
+}
+
+library(tmcn)
+
+stopwordsCN &amp;lt;- data.frame(word = c(tmcn::stopwordsCN(),
+                                   &amp;quot;子曰&amp;quot;, &amp;quot;曰&amp;quot;, &amp;quot;於&amp;quot;, &amp;quot;則&amp;quot;,&amp;quot;吾&amp;quot;, &amp;quot;子&amp;quot;, &amp;quot;不&amp;quot;, &amp;quot;無&amp;quot;, &amp;quot;斯&amp;quot;,&amp;quot;與&amp;quot;, &amp;quot;為&amp;quot;, &amp;quot;必&amp;quot;,
+                                   &amp;quot;使&amp;quot;, &amp;quot;非&amp;quot;,&amp;quot;天下&amp;quot;, &amp;quot;以為&amp;quot;,&amp;quot;上&amp;quot;, &amp;quot;下&amp;quot;, &amp;quot;人&amp;quot;, &amp;quot;天&amp;quot;, &amp;quot;不可&amp;quot;, &amp;quot;謂&amp;quot;, &amp;quot;是以&amp;quot;,
+                                   &amp;quot;而不&amp;quot;, &amp;quot;皆&amp;quot;, &amp;quot;不亦&amp;quot;, &amp;quot;乎&amp;quot;, &amp;quot;之&amp;quot;, &amp;quot;而&amp;quot;, &amp;quot;者&amp;quot;, &amp;quot;本&amp;quot;, &amp;quot;與&amp;quot;, &amp;quot;吾&amp;quot;, &amp;quot;則&amp;quot;,
+                                   &amp;quot;以&amp;quot;, &amp;quot;其&amp;quot;, &amp;quot;為&amp;quot;, &amp;quot;不以&amp;quot;, &amp;quot;不可&amp;quot;, &amp;quot;也&amp;quot;, &amp;quot;矣&amp;quot;, &amp;quot;子&amp;quot;, &amp;quot;由&amp;quot;, &amp;quot;子曰&amp;quot;, &amp;quot;曰&amp;quot;,
+                                   &amp;quot;非其&amp;quot;, &amp;quot;於&amp;quot;, &amp;quot;不能&amp;quot;, &amp;quot;如&amp;quot;, &amp;quot;斯&amp;quot;, &amp;quot;然&amp;quot;, &amp;quot;君&amp;quot;, &amp;quot;亦&amp;quot;, &amp;quot;言&amp;quot;, &amp;quot;聞&amp;quot;, &amp;quot;今&amp;quot;,
+                                   &amp;quot;君&amp;quot;, &amp;quot;不知&amp;quot;, &amp;quot;无&amp;quot;))
+
+##High frequency single-words by chapter
+chapter_words &amp;lt;- my_classics %&amp;gt;%
+  mutate(word = map(word, function(x) unlist(stringi::stri_split_boundaries(x)))) %&amp;gt;%
+  unnest(word) %&amp;gt;%
+  mutate(word = str_replace_all(word, &amp;quot;[「」《》『』,，、。；：？！]&amp;quot;, &amp;quot;&amp;quot;)) %&amp;gt;%
+  filter(!is.na(word), !grepl(&amp;quot;Invald&amp;quot;, word)) %&amp;gt;%
+  anti_join(stopwordsCN) %&amp;gt;%
+  select(word, book, chapter_number) %&amp;gt;% 
+  count(book, chapter_number, word) %&amp;gt;%
+  group_by(book, chapter_number) %&amp;gt;%
+  mutate(frequency = n/sum(n), book_edges = book) %&amp;gt;%
+  filter(frequency &amp;gt; .01) %&amp;gt;% ungroup() %&amp;gt;%
+  select(word, book, n, frequency, book_edges)
+
+book_words &amp;lt;- my_classics %&amp;gt;%
+  mutate(word = map(word, function(x) unlist(stringi::stri_split_boundaries(x)))) %&amp;gt;%
+  unnest(word) %&amp;gt;%
+  mutate(word = str_replace_all(word, &amp;quot;[「」《》『』,，、。；：？！]&amp;quot;, &amp;quot;&amp;quot;)) %&amp;gt;%
+  filter(!is.na(word), !grepl(&amp;quot;Invald&amp;quot;, word)) %&amp;gt;%
+  anti_join(stopwordsCN) %&amp;gt;%
+  select(word, book) %&amp;gt;% 
+  count(book, word) %&amp;gt;%
+  group_by(book) %&amp;gt;%
+  mutate(frequency = n/sum(n), book_edges = book) %&amp;gt;%
+  filter(frequency &amp;gt; .001) &lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Plotting the edges in “arcs” helps avoid any overplotting or tangling that might exist in the case of too much interconnectivity, as we will soon see.&lt;/p&gt;
+&lt;p&gt;I’ve got 2 different ways of visualizing networks using words in these texts. First, let’s look at single word use between each text, one plot showing common words by each chapter/book, another by book.&lt;/p&gt;
+&lt;p&gt;Unfortunatly the blog squishes the plot a bit, so you might want to zoom in on it.&lt;/p&gt;
+&lt;div id=&#34;single-words-by-chapter-and-book&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Single Words by Chapter and Book&lt;/h2&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;knitr::opts_chunk$set(fig.width=16, fig.height=12)
+
+as_tbl_graph(chapter_words, directed = FALSE) %&amp;gt;% ggraph(layout = &amp;quot;fr&amp;quot;) + 
+  geom_edge_arc(aes(edge_width = frequency, color = factor(book_edges), alpha = frequency)) +
+  geom_node_point(color = &amp;quot;black&amp;quot;, alpha = .65, size = 7, show.legend = FALSE) + 
+  geom_node_text(aes(label = name), color = &amp;quot;white&amp;quot;,
+                 family = &amp;quot;HiraKakuProN-W3&amp;quot;, check_overlap = TRUE) +
+  scale_edge_colour_manual(values = c(&amp;quot;#b20047&amp;quot;, &amp;quot;#00b274&amp;quot;, &amp;quot;#FFB52A&amp;quot;)) + 
+  theme(axis.text.x = element_blank()) + 
+  theme(axis.text.y = element_blank()) + 
+  theme(panel.background = element_rect(fill = &amp;quot;#cddbda&amp;quot;),
+        plot.background = element_rect(fill = &amp;quot;#cddbda&amp;quot;),
+        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        plot.margin = margin(0, 0, 0, 0, &amp;quot;cm&amp;quot;)) + 
+  guides(edge_width=FALSE, edge_alpha = FALSE) + 
+  labs(x = NULL, y = NULL,
+       title = &amp;quot;\nCommon Characters\n in the Analects, Mozi, and Zhuangzi\n&amp;quot;) +
+  theme(plot.title = element_text(size = 25, vjust = -10, hjust = 0.5,
+                                  family = &amp;quot;Palatino&amp;quot;, face = &amp;quot;bold.italic&amp;quot;,
+                                  color = &amp;quot;#3d4040&amp;quot;)) + 
+  theme(legend.position = &amp;quot;bottom&amp;quot;, legend.title = element_blank(),
+        legend.key = element_rect(color = &amp;quot;#454444&amp;quot;, fill = &amp;quot;#f5fffe&amp;quot;),
+        legend.text = element_text(size = 12, color = &amp;quot;#3d4040&amp;quot;, family = &amp;quot;Palatino&amp;quot;),
+        legend.key.width = unit(4, &amp;quot;line&amp;quot;),
+        legend.background = element_rect(fill = &amp;quot;#cddbda&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-06-08-part-ii-chinese-classics-word-network-plots_files/figure-html/unnamed-chunk-3-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Compared to the above, doing the frequency counting by book seems to yeild a bit more balanced results. Of course frequency values become much lower that way, here I filter for greater than .001.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;single-words-by-book&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Single Words by Book&lt;/h2&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;as_tbl_graph(book_words, directed = FALSE) %&amp;gt;%
+  ggraph(layout = &amp;quot;fr&amp;quot;) + 
+  geom_edge_arc(aes(edge_width = frequency, color = factor(book_edges), alpha = frequency)) +
+  geom_node_point(color = &amp;quot;black&amp;quot;, alpha = .65, size = 7, show.legend = FALSE) + 
+  geom_node_text(aes(label = name), color = &amp;quot;white&amp;quot;,
+                 family = &amp;quot;HiraKakuProN-W3&amp;quot;, check_overlap = TRUE) +
+  scale_edge_colour_manual(values = c(&amp;quot;#b20047&amp;quot;, &amp;quot;#00b274&amp;quot;, &amp;quot;#FFB52A&amp;quot;)) + 
+  theme(axis.text.x = element_blank()) + 
+  theme(axis.text.y = element_blank()) + 
+  theme(panel.background = element_rect(fill = &amp;quot;#cddbda&amp;quot;),
+        plot.background = element_rect(fill = &amp;quot;#cddbda&amp;quot;),
+        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        plot.margin = margin(0, 0, 0, 0, &amp;quot;cm&amp;quot;)) + 
+  guides(edge_width=FALSE, edge_alpha = FALSE) + 
+  labs(x = NULL, y = NULL,
+       title = &amp;quot;\nCommon Characters\n in the Analects, Mozi, and Zhuangzi\n&amp;quot;, caption = &amp;quot;Per Book, Frequency &amp;gt; .001&amp;quot;) +
+  theme(plot.title = element_text(size = 25, vjust = -10, hjust = 0.5,
+                                  family = &amp;quot;Palatino&amp;quot;, face = &amp;quot;bold.italic&amp;quot;,
+                                  color = &amp;quot;#3d4040&amp;quot;)) + 
+  theme(legend.position = &amp;quot;bottom&amp;quot;, legend.title = element_blank(),
+        legend.key = element_rect(color = &amp;quot;#454444&amp;quot;, fill = &amp;quot;#f5fffe&amp;quot;),
+        legend.text = element_text(size = 12, color = &amp;quot;#3d4040&amp;quot;, family = &amp;quot;Palatino&amp;quot;),
+        legend.key.width = unit(4, &amp;quot;line&amp;quot;),
+        legend.background = element_rect(fill = &amp;quot;#cddbda&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-06-08-part-ii-chinese-classics-word-network-plots_files/figure-html/unnamed-chunk-4-1.png&#34; width=&#34;1536&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Regardless of calculating frequency by chapter and book or just by book, there are plenty of words that fall &lt;strong&gt;in between&lt;/strong&gt; texts.&lt;/p&gt;
+&lt;p&gt;I’m not sure how useful this method of examining “simularity” of word usage is analytically; however, I think it works in a sense. If not for an algorithm, then at least for our general understanding. However, I do suspect that this type of networking does play into clustering, and from the looks of the plots, I imagine that the LDA algorithm might run into confusion distinguishing the books/chapters later.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;now-lets-plot-bigrams&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Now let’s plot bigrams&lt;/h2&gt;
+&lt;p&gt;Here, a bigram is essentially two connected nodes. The connections (edges) between them are colored according to the text they appear in. Again, its a bit subjective on whether to calculate the bigrams by book or by each chapter and book. Conventional wisdom tells me that doing the calculation per chapter makes more sense, however, the Zhuangzi suffers from this operation. (Perhaps it has a greater word diversity per chapter?) So I decide to plot both ways.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;bigrams-by-chapter-and-book&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Bigrams by Chapter and Book&lt;/h2&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;knitr::opts_chunk$set(fig.width=6, fig.height=6, fig.pos = &amp;quot;center&amp;quot;)
+
+bigrams &amp;lt;- my_classics %&amp;gt;%
+  mutate(word = str_replace_all(word, &amp;quot;[「」《》『』,，、。；：？！]&amp;quot;, &amp;quot;&amp;quot;)) %&amp;gt;%
+  mutate(word = map(word, function(x) tokenizer(x))) %&amp;gt;%
+  unnest(word) %&amp;gt;%
+  filter(!is.na(word)) %&amp;gt;%
+  separate(word, into = c(&amp;quot;word1&amp;quot;, &amp;quot;word2&amp;quot;)) %&amp;gt;%
+  filter(!word1 %in% stopwordsCN$word, !word2 %in% stopwordsCN$word) %&amp;gt;%
+  unite(&amp;quot;word&amp;quot;, c(&amp;quot;word1&amp;quot;, &amp;quot;word2&amp;quot;), sep = &amp;quot; &amp;quot;)
+
+chapter_bigrams &amp;lt;- bigrams %&amp;gt;%
+  count(book, chapter_number, word) %&amp;gt;%
+  arrange(book, -n) %&amp;gt;%
+  group_by(book, chapter_number) %&amp;gt;%
+  mutate(frequency = n/sum(n)) %&amp;gt;%
+  ungroup() %&amp;gt;%
+  select(-chapter_number)
+
+
+chapter_bigrams %&amp;gt;%
+  separate(word, into = c(&amp;quot;word1&amp;quot;, &amp;quot;word2&amp;quot;)) %&amp;gt;%
+  select(word1, word2, n, frequency, book) %&amp;gt;%
+  filter(frequency &amp;gt;= .02) %&amp;gt;%
+  as_tbl_graph(directed = FALSE) %&amp;gt;%
+  ggraph(layout = &amp;quot;fr&amp;quot;) + 
+  geom_edge_density() +
+  geom_edge_arc(aes(color = book),
+                alpha = .70, arrow = arrow(length = unit(1.5, &amp;quot;mm&amp;quot;)),
+                start_cap = circle(3, &amp;quot;mm&amp;quot;), end_cap = circle(3, &amp;quot;mm&amp;quot;), edge_width = .75) +
+  geom_node_point(size = 7, color = &amp;quot;black&amp;quot;, alpha = .75) +
+  geom_node_text(aes(label = name), color = &amp;quot;grey&amp;quot;, family = &amp;quot;HiraKakuProN-W3&amp;quot;, check_overlap = TRUE) +
+  scale_edge_colour_manual(values = c(&amp;quot;#b20047&amp;quot;, &amp;quot;#00b274&amp;quot;, &amp;quot;#fdff00&amp;quot;))+
+  theme(axis.text.x = element_blank()) +
+  theme(axis.text.y = element_blank()) +
+  theme(panel.background = element_rect(fill = &amp;quot;#8AE3C2&amp;quot;),
+        plot.background = element_rect(fill = &amp;quot;#8AE3C2&amp;quot;),
+        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        plot.margin = margin(0, 0, 0, 0, &amp;quot;cm&amp;quot;)) + 
+  guides(edge_width=FALSE) +
+  labs(x = NULL, y = NULL, title = &amp;quot;Bigrams in the Analects, Mozi, and Zhuangzi&amp;quot;, caption = &amp;quot;Per chapter, Frequency &amp;gt; .02&amp;quot;) +
+  theme(plot.title = element_text(size = 35, vjust = -10, hjust = 0.5,
+                                  family = &amp;quot;Palatino&amp;quot;, face = &amp;quot;italic&amp;quot;,
+                                  color = &amp;quot;black&amp;quot;)) +
+  theme(legend.position = &amp;quot;bottom&amp;quot;, legend.title = element_blank(),
+        legend.key = element_rect(color = &amp;quot;black&amp;quot;, fill = &amp;quot;#8AE3C2&amp;quot;),
+        legend.text = element_text(size = 12, color = &amp;quot;black&amp;quot;, family = &amp;quot;Palatino&amp;quot;),
+        legend.key.width = unit(4, &amp;quot;line&amp;quot;),
+        legend.background = element_rect(fill = &amp;quot;#8AE3C2&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-06-08-part-ii-chinese-classics-word-network-plots_files/figure-html/unnamed-chunk-5-1.png&#34; width=&#34;1536&#34; /&gt; For the final plot, unfortunately many edges/links don’t show. Perhaps it is because many nodes are positioned so close together that the edges just aren’t drawn.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;bigrams-by-book&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Bigrams by Book&lt;/h2&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;knitr::opts_chunk$set(fig.width=6, fig.height=6, fig.pos = &amp;quot;center&amp;quot;)
+
+book_bigrams &amp;lt;- bigrams %&amp;gt;%
+  count(book, word) %&amp;gt;%
+  arrange(book, -n) %&amp;gt;%
+  group_by(book) %&amp;gt;%
+  mutate(frequency = n/sum(n)) %&amp;gt;%
+  ungroup()
+
+book_bigrams %&amp;gt;%
+  separate(word, into = c(&amp;quot;word1&amp;quot;, &amp;quot;word2&amp;quot;)) %&amp;gt;%
+  select(word1, word2, n, frequency, book) %&amp;gt;%
+  filter(frequency &amp;gt;= .001) %&amp;gt;%
+  as_tbl_graph(directed = FALSE) %&amp;gt;%
+  ggraph(layout = &amp;quot;fr&amp;quot;) + 
+  geom_edge_density() +
+  geom_edge_arc(aes(color = book),
+                alpha = .70, arrow = arrow(length = unit(1.5, &amp;quot;mm&amp;quot;)),
+                start_cap = circle(3, &amp;quot;mm&amp;quot;), end_cap = circle(3, &amp;quot;mm&amp;quot;), edge_width = .75) +
+  geom_node_point(size = 7, color = &amp;quot;black&amp;quot;, alpha = .75) +
+  geom_node_text(aes(label = name), color = &amp;quot;grey&amp;quot;, family = &amp;quot;HiraKakuProN-W3&amp;quot;, check_overlap = TRUE) +
+  scale_edge_colour_manual(values = c(&amp;quot;#b20047&amp;quot;, &amp;quot;#00b274&amp;quot;, &amp;quot;#fdff00&amp;quot;))+
+  theme(axis.text.x = element_blank()) +
+  theme(axis.text.y = element_blank()) +
+  theme(panel.background = element_rect(fill = &amp;quot;#8AE3C2&amp;quot;),
+        plot.background = element_rect(fill = &amp;quot;#8AE3C2&amp;quot;),
+        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        plot.margin = margin(0, 0, 0, 0, &amp;quot;cm&amp;quot;)) + 
+  guides(edge_width=FALSE) +
+  labs(x = NULL, y = NULL, title = &amp;quot;Bigrams in\n the Analects, Mozi, and Zhuangzi&amp;quot;, caption = &amp;quot;Per book, Frequency &amp;gt; .001&amp;quot;) +
+  theme(plot.title = element_text(size = 25, vjust = -10, hjust = 0.5,
+                                  family = &amp;quot;Palatino&amp;quot;, face = &amp;quot;italic&amp;quot;,
+                                  color = &amp;quot;black&amp;quot;)) +
+  theme(legend.position = &amp;quot;bottom&amp;quot;, legend.title = element_blank(),
+        legend.key = element_rect(color = &amp;quot;black&amp;quot;, fill = &amp;quot;#8AE3C2&amp;quot;),
+        legend.text = element_text(size = 12, color = &amp;quot;black&amp;quot;, family = &amp;quot;Palatino&amp;quot;),
+        legend.key.width = unit(4, &amp;quot;line&amp;quot;),
+        legend.background = element_rect(fill = &amp;quot;#8AE3C2&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-06-08-part-ii-chinese-classics-word-network-plots_files/figure-html/unnamed-chunk-6-1.png&#34; width=&#34;576&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;There we have it, two different network plots of words used in these 3 classic works. In the case of the single characters, there is a lot of commonality (as expected). In the case of the bigrams, there is a lot less in common between the works.&lt;/p&gt;
+&lt;p&gt;Before I close, I’d like to comment briefly on the &lt;code&gt;tidygraph&lt;/code&gt; package which made these plots possible. Previously, I used igraph and found it powerful and quite robust, yet not too intuitive or user-friendly. Tidygraph changes all of that and allows network data to be manipulated in a way similar to the tidyverse methodology. I love tidygraph!&lt;/p&gt;
+&lt;p&gt;I hope you enjoyed these two network plots. Until next time!&lt;/p&gt;
+&lt;/div&gt;
+</description>
     </item>
     
     <item>
@@ -36,8 +281,267 @@ Network visualization is particularly helpful for discovering simularities and d
       <pubDate>Fri, 01 Jun 2018 00:00:00 +0000</pubDate>
       
       <guid>/blog/2018-06-01-plotting-word-bigrams-with-3-chinese-classics/</guid>
-      <description>In the last post, we saw frequencies of the most common words in the Analects, Zhuangzi, and Mozi texts. The faceted plot did an excellent job of capturing a generic “theme” of each text. However, I wondered how the results might change when plotting bigrams (2 word combinations of adjacent words) as opposed to single values.
-This is where I ran into a problem with Tidytext – although it worked fine for tokenizing Chinese text into single character tokens, it did not perform as well at separating the text into bigrams.</description>
+      <description>&lt;script src=&#34;/rmarkdown-libs/kePrint/kePrint.js&#34;&gt;&lt;/script&gt;
+
+
+&lt;p&gt;In the last post, we saw frequencies of the most common words in the Analects, Zhuangzi, and Mozi texts. The faceted plot did an excellent job of capturing a generic “theme” of each text. However, I wondered how the results might change when plotting bigrams (2 word combinations of adjacent words) as opposed to single values.&lt;/p&gt;
+&lt;p&gt;This is where I ran into a problem with Tidytext – although it worked fine for tokenizing Chinese text into single character tokens, it did not perform as well at separating the text into bigrams. I felt my only choice was to define my own (crude) function to segment the text better. So I did.&lt;/p&gt;
+&lt;p&gt;To pick up from the last post, I source my data in from a file which I originally downloaded with &lt;code&gt;ctextclassics&lt;/code&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)
+library(readr)
+library(stringr)
+##For Chinese stopwords, pinyin, simplified, traditional Chinese conversions
+library(tmcn)
+##For pretty HTML tables
+library(kableExtra)
+
+
+my_classics &amp;lt;- read_csv(&amp;quot;~/Desktop/anything_data/content/post/my_classics.csv&amp;quot;) %&amp;gt;%
+  select(-1) %&amp;gt;%
+  mutate(book = str_to_title(book))&lt;/code&gt;&lt;/pre&gt;
+&lt;div id=&#34;the-data-look-like-this&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;The data look like this:&lt;/h2&gt;
+&lt;div style=&#34;border: 1px solid #ddd; padding: 5px; overflow-y: scroll; height:350px; overflow-x: scroll; width:100%; &#34;&gt;
+&lt;table class=&#34;table table-responsive&#34; style=&#34;margin-left: auto; margin-right: auto;&#34;&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:left;&#34;&gt;
+book
+&lt;/th&gt;
+&lt;th style=&#34;text-align:left;&#34;&gt;
+chapter
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+chapter_number
+&lt;/th&gt;
+&lt;th style=&#34;text-align:left;&#34;&gt;
+chapter_cn
+&lt;/th&gt;
+&lt;th style=&#34;text-align:left;&#34;&gt;
+word
+&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+Analects
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+xue-er
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+1
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+學而
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+子曰：「學而時習之，不亦說乎？有朋自遠方來，不亦樂乎？人不知而不慍，不亦君子乎？」
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+Analects
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+xue-er
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+1
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+學而
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+有子曰：「其為人也孝弟，而好犯上者，鮮矣；不好犯上，而好作亂者，未之有也。君子務本，本立而道生。孝弟也者，其為仁之本與！」
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+Analects
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+xue-er
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+1
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+學而
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+子曰：「巧言令色，鮮矣仁！」
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+Analects
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+xue-er
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+1
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+學而
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+曾子曰：「吾日三省吾身：為人謀而不忠乎？與朋友交而不信乎？傳不習乎？」
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+Analects
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+xue-er
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+1
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+學而
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+子曰：「道千乘之國：敬事而信，節用而愛人，使民以時。」
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+Analects
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+xue-er
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+1
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+學而
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+子曰：「弟子入則孝，出則弟，謹而信，汎愛眾，而親仁。行有餘力，則以學文。」
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;em&gt;Note, I’m not accustumed to looking at traditional characters.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;So, my workflow for working with bigrams with this dataset is:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;I determine a word as being constituted by one character, since this is usually the case for classical Chinese.&lt;/li&gt;
+&lt;li&gt;I write a simple function to concentate each word with each adjacent word. (ABCD) to (A B, B C, C D)&lt;/li&gt;
+&lt;li&gt;I unnest the resulting list column so there is one value per row (tidy format).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The workflow beyond this point is ultimately the same as before - obtaining the value-count pairs per book and then plotting them. The hope here is that paired words can give us an even deeper undestanding about each book than the single words did.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;##Simple function to concentate a value in a vector with adjacent value
+
+simple_bigram &amp;lt;- function(x) {
+  if(length(x) &amp;lt; 2) {
+    return(NA)
+  } else {
+output_length &amp;lt;- length(x) - 1
+output &amp;lt;- vector(length = output_length)
+for(i in 1:output_length) {
+output[i] &amp;lt;- paste(x[i], x[i+1], sep = &amp;quot; &amp;quot;)
+}
+output
+  }
+}
+
+##Use stringi split_boundaries to split each string into a vector with one value per character.
+##Use the 2 functions with unlist and lapply.
+
+tokenizer &amp;lt;- function(text) {
+unlist(lapply(stringi::stri_split_boundaries(text), function(x) simple_bigram(x)))
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;I would like to add a disclaimer that, my “one character = one word” assumption for classical Chinese used in constructing bigrams here isn’t perfect in all cases. (Ultimately words will have differing lengths, and words will need to be split with a more specialized tool.) However, in the absence of a fine-tuned segmenter, I do think that this method accomplishes the gist of what I’m attempting to get at.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;##Clean out all odd punctuation symbols
+##Apply tokenizing function to create bigrams
+##Filter out stop words
+
+stopwordsCN &amp;lt;- data.frame(word = c(tmcn::stopwordsCN(),
+&amp;quot;子曰&amp;quot;, &amp;quot;曰&amp;quot;, &amp;quot;於&amp;quot;, &amp;quot;則&amp;quot;,&amp;quot;吾&amp;quot;, &amp;quot;子&amp;quot;, &amp;quot;不&amp;quot;, &amp;quot;無&amp;quot;, &amp;quot;斯&amp;quot;,&amp;quot;與&amp;quot;, &amp;quot;為&amp;quot;, &amp;quot;必&amp;quot;,
+&amp;quot;使&amp;quot;, &amp;quot;非&amp;quot;,&amp;quot;天下&amp;quot;, &amp;quot;以為&amp;quot;,&amp;quot;上&amp;quot;, &amp;quot;下&amp;quot;, &amp;quot;人&amp;quot;, &amp;quot;天&amp;quot;, &amp;quot;不可&amp;quot;, &amp;quot;謂&amp;quot;, &amp;quot;是以&amp;quot;,
+&amp;quot;而不&amp;quot;, &amp;quot;皆&amp;quot;, &amp;quot;不亦&amp;quot;, &amp;quot;乎&amp;quot;, &amp;quot;之&amp;quot;, &amp;quot;而&amp;quot;, &amp;quot;者&amp;quot;, &amp;quot;本&amp;quot;, &amp;quot;與&amp;quot;, &amp;quot;吾&amp;quot;, &amp;quot;則&amp;quot;,
+&amp;quot;以&amp;quot;, &amp;quot;其&amp;quot;, &amp;quot;為&amp;quot;, &amp;quot;不以&amp;quot;, &amp;quot;不可&amp;quot;, &amp;quot;也&amp;quot;, &amp;quot;矣&amp;quot;, &amp;quot;子&amp;quot;, &amp;quot;由&amp;quot;, &amp;quot;子曰&amp;quot;, &amp;quot;曰&amp;quot;,
+&amp;quot;非其&amp;quot;, &amp;quot;於&amp;quot;, &amp;quot;不能&amp;quot;, &amp;quot;如&amp;quot;, &amp;quot;斯&amp;quot;, &amp;quot;然&amp;quot;, &amp;quot;君&amp;quot;, &amp;quot;亦&amp;quot;, &amp;quot;言&amp;quot;, &amp;quot;聞&amp;quot;, &amp;quot;今&amp;quot;,
+&amp;quot;君&amp;quot;, &amp;quot;不知&amp;quot;, &amp;quot;无&amp;quot;))
+
+
+bigrams &amp;lt;- my_classics %&amp;gt;%
+  mutate(word = str_replace_all(word, &amp;quot;[「」《》『』,，、。；：？！]&amp;quot;, &amp;quot;&amp;quot;)) %&amp;gt;%
+  mutate(word = map(word, function(x) tokenizer(x))) %&amp;gt;%
+  unnest(word) %&amp;gt;%
+  filter(!is.na(word)) %&amp;gt;%
+  separate(word, into = c(&amp;quot;word1&amp;quot;, &amp;quot;word2&amp;quot;)) %&amp;gt;%
+  filter(!word1 %in% stopwordsCN$word, !word2 %in% stopwordsCN$word) %&amp;gt;%
+  unite(&amp;quot;word&amp;quot;, c(&amp;quot;word1&amp;quot;, &amp;quot;word2&amp;quot;), sep = &amp;quot; &amp;quot;)
+
+
+## Bigram counts per book 
+
+book_bigram_count &amp;lt;- bigrams %&amp;gt;%
+  count(book, word) %&amp;gt;%
+  arrange(book, -n) %&amp;gt;%
+  group_by(book) %&amp;gt;%
+  mutate(frequency = n/sum(n))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;With these counts, we’re almost ready to plot. However, in a minor plot twist, let’s read in a beautiful graphic to use as a background in our plot later. Let’s also set up a color scheme that matches the themes of classical philosophy and calligraphy.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(jpeg)
+library(grid)
+image &amp;lt;- jpeg::readJPEG(&amp;quot;~/Desktop/anything_data/content/post/image.jpg&amp;quot;)
+
+bar_colors &amp;lt;- rev(c(&amp;quot;#271a0c&amp;quot;, &amp;quot;#483030&amp;quot;, &amp;quot;#232528&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;I also wish to provide English labels to go with the terms we’re plotting.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;knitr::opts_chunk$set(fig.width=16, fig.height=12)
+
+## I translated after taking the top 10 bigrams, but I place this vector one step ahead in the workflow in order for the processing to occur in one step.
+
+translations &amp;lt;- c(&amp;quot;Studious&amp;quot;, &amp;quot;(Disciple) Yan Hui&amp;quot;, &amp;quot;3 years’ mourning&amp;quot;, &amp;quot;Great officer&amp;quot;, &amp;quot;(Disciple) Zi Zhang asked&amp;quot;, &amp;quot;Enter politics&amp;quot;, &amp;quot;Have not seen&amp;quot;, &amp;quot;(Disciple) Fan Chi&amp;quot;, &amp;quot;(Disciple) Zi Gong asked&amp;quot;, &amp;quot;Inquired about governance&amp;quot;, &amp;quot;Parents&amp;quot;, &amp;quot;Know Ritual&amp;quot;,&amp;quot; Ritual&amp;quot;, &amp;quot;(Disciple) Lu asked&amp;quot;, &amp;quot;Sage King&amp;quot;, &amp;quot;Ghosts/Spirits&amp;quot;, &amp;quot;Common folk&amp;quot;, &amp;quot;Feudal lords&amp;quot;, &amp;quot;Country&amp;quot;, &amp;quot;Engage in&amp;quot;, &amp;quot;Rulers&amp;quot;, &amp;quot;All people&amp;quot;, &amp;quot;10 Steps&amp;quot;, &amp;quot;Control&amp;quot;, &amp;quot;All Things&amp;quot;, &amp;quot;Confucius&amp;quot;, &amp;quot;Benevolence and\n Righteousness&amp;quot;, &amp;quot;Lao Dan/Laozi&amp;quot;, &amp;quot;Master&amp;quot;, &amp;quot;Never&amp;quot;, &amp;quot;Huang Di&amp;quot;, &amp;quot;The Beginning&amp;quot;, &amp;quot;Zhu Liang&amp;quot;, &amp;quot;Life and\n Death&amp;quot;)
+
+##Filter out 3 &amp;quot;nonsense&amp;quot; values that otherwise show up in top bigrams
+##Calculate top 10 bigrams
+##Include English translations for labelling
+
+top_10_bigrams &amp;lt;- book_bigram_count %&amp;gt;%
+  select(book, word, n, frequency) %&amp;gt;%
+  distinct() %&amp;gt;%
+  filter(!word %in% c(&amp;quot;公 問&amp;quot;, &amp;quot;公 大&amp;quot;, &amp;quot;二 三&amp;quot;)) %&amp;gt;%
+  top_n(10, n) %&amp;gt;%
+  arrange(book, -n) %&amp;gt;%
+  ungroup() %&amp;gt;%
+  mutate(translations = translations)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ggplot(top_10_bigrams, aes(x = reorder(factor(word), frequency), y = n, fill = book)) +
+   annotation_custom(rasterGrob(image, 
+                               width = unit(1,&amp;quot;npc&amp;quot;), 
+                               height = unit(1,&amp;quot;npc&amp;quot;)), 
+                               -Inf, Inf, -Inf, Inf) +
+  geom_col(alpha = .95, color = &amp;quot;black&amp;quot;, show.legend = FALSE) + 
+  geom_text(aes(label = translations), color = &amp;quot;ivory&amp;quot;, position = position_stack(vjust = 0.5)) + 
+  facet_wrap(~book, scales = &amp;quot;free&amp;quot;) + 
+  coord_flip() +
+  scale_fill_manual(values = bar_colors) +
+  theme_dark(base_family= &amp;quot;HiraKakuProN-W3&amp;quot;) + 
+  theme(axis.text.x = element_text(color = &amp;quot;#232528&amp;quot;, angle = 90)) +
+  theme(axis.text.y = element_text(color = &amp;quot;#232528&amp;quot;, size = 12)) +
+  theme(panel.background = element_rect(fill = &amp;quot;#87969B&amp;quot;), plot.background = element_rect(fill = &amp;quot;ivory&amp;quot;), panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + 
+  labs(x = NULL, y = &amp;quot;Count&amp;quot;) +
+  ggtitle(&amp;quot;Top Word Bigrams \n The Analects, Mozi, and Zhuangzi&amp;quot;) +
+  theme(plot.title = element_text(size = 20, color = &amp;quot;#232528&amp;quot;, hjust = 0.5)) &lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-06-01-plotting-word-bigrams-with-3-chinese-classics_files/figure-html/unnamed-chunk-7-1.png&#34; width=&#34;1248&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;did-counting-bigrams-help&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Did Counting Bigrams Help?&lt;/h2&gt;
+&lt;p&gt;This method did yield some new information. Firstly we see that the Analects seems to have a prevalent structure of Confucius’s disciples asking him questions. We also see meaning regarding the concept of Ritual, 3 years’ mourning after the passing of a parent, studying, and parents. These values sound very Confucian (and there were more core themes such as piety, slightly right out of the top 10). Arguably if we filtered out the disciple names we’d see more interesting bigrams.&lt;/p&gt;
+&lt;p&gt;The Zhuangzi is still very cosmological - All Things, Life and Death, The Beginning are all evidence of this.&lt;/p&gt;
+&lt;p&gt;And as for the Mozi, well, it is still hard to identify a core theme through bigrams. (Hint, calculating top bigrams by chapter helps more meaningful themes such as “Universal Love” shine through.)&lt;/p&gt;
+&lt;p&gt;Anyway, that is the conclusion for this post on bigrams!&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;*Apologies regarding the background image in plot; I can’t remember its source…&lt;/p&gt;
+&lt;/div&gt;
+</description>
     </item>
     
     <item>
@@ -46,8 +550,649 @@ This is where I ran into a problem with Tidytext – although it worked fine for
       <pubDate>Tue, 29 May 2018 00:00:00 +0000</pubDate>
       
       <guid>/blog/2018-05-29-a-tidytext-analysis-of-3-chinese-classics/</guid>
-      <description>For a long time I’ve admired the tidytext package and its wonderful companion book Text Mining with R. After reading it I thought, “Why not undertake a project of Chinese text analysis?” I am deeply interested in Chinese philosophy but I decided to keep the analysis narrow by selecting just three works - The Analects, Zhuangzi, and the Mozi.
-Following similar pace with Tidytext, I first download my data. Here I use my package ctextclassics and specifically, the function get_books(c(.</description>
+      <description>&lt;script src=&#34;/rmarkdown-libs/kePrint/kePrint.js&#34;&gt;&lt;/script&gt;
+
+
+&lt;p&gt;For a long time I’ve admired the &lt;code&gt;tidytext&lt;/code&gt; package and its wonderful companion book &lt;a href=&#34;https://www.tidytextmining.com&#34;&gt;&lt;em&gt;Text Mining with R&lt;/em&gt;&lt;/a&gt;. After reading it I thought, “Why not undertake a project of Chinese text analysis?” &lt;strong&gt;I am deeply interested in Chinese philosophy&lt;/strong&gt; but I decided to keep the analysis narrow by selecting just three works - &lt;strong&gt;The Analects, Zhuangzi, and the Mozi&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Following similar pace with Tidytext, I first download my data. Here I use my package &lt;code&gt;ctextclassics&lt;/code&gt; and specifically, the function &lt;code&gt;get_books(c(...))&lt;/code&gt;. But I want to point out the API limit is very low and I had to download my books between two different days. For information on ctextclassics, check out my previous post or type &lt;code&gt;install_github(&amp;quot;Jjohn987/ctextclassics&amp;quot;)&lt;/code&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)
+library(stringr)
+library(ctextclassics)
+library(tmcn)
+library(tidytext)
+library(topicmodels)
+library(readr)
+
+my_classics &amp;lt;- read_csv(&amp;quot;~/Desktop/anything_data/content/post/my_classics.csv&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;With any text analysis, tokenizing the text and filtering out stop words is fundamental. Tidytext segments English quite naturally, considering words are easily separated by spaces. However, I’m not so sure how it performs with Chinese characters.&lt;/p&gt;
+&lt;p&gt;There are specific segementers for Chinese text - one main tool is &lt;code&gt;jiebaR&lt;/code&gt;, which is also included in the &lt;code&gt;tmcn&lt;/code&gt; package.&lt;/p&gt;
+&lt;p&gt;However, when comparing the two methods, I noticed that JiebaR segments text in a way most suitable for &lt;strong&gt;modern&lt;/strong&gt; Chinese (Mostly 2 character words). Since I’m dealing with classical Chinese here, Tidytext’s one character segmentaions are more preferable.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;tidytext_segmented &amp;lt;- my_classics %&amp;gt;% 
+  unnest_tokens(word, word)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;For dealing with stopwords, JiebaR offers a useful stopword list, but obviously more should be added since we’re dealing with classical Chinese. Many of the words I added are amorphous grammar particles, but there’s other low value phrases amongst these works such as “子曰” (“The Master said”), “天下” (Tian Xia, a common but amorphous concept roughly meaning a country, realm, or the world), and more.&lt;/p&gt;
+&lt;p&gt;Let’s filter out those words and make 2 data frames - word frequencies for each book and each chapter.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;stopwordsCN &amp;lt;- data.frame(word = c(tmcn::stopwordsCN(),
+&amp;quot;子曰&amp;quot;, &amp;quot;曰&amp;quot;, &amp;quot;於&amp;quot;, &amp;quot;則&amp;quot;,&amp;quot;吾&amp;quot;, &amp;quot;子&amp;quot;, &amp;quot;不&amp;quot;, &amp;quot;無&amp;quot;, &amp;quot;斯&amp;quot;,&amp;quot;與&amp;quot;, &amp;quot;為&amp;quot;, &amp;quot;必&amp;quot;,
+&amp;quot;使&amp;quot;, &amp;quot;非&amp;quot;,&amp;quot;天下&amp;quot;, &amp;quot;以為&amp;quot;,&amp;quot;上&amp;quot;, &amp;quot;下&amp;quot;, &amp;quot;人&amp;quot;, &amp;quot;天&amp;quot;, &amp;quot;不可&amp;quot;, &amp;quot;謂&amp;quot;, &amp;quot;是以&amp;quot;,
+&amp;quot;而不&amp;quot;, &amp;quot;皆&amp;quot;, &amp;quot;不亦&amp;quot;, &amp;quot;乎&amp;quot;, &amp;quot;之&amp;quot;, &amp;quot;而&amp;quot;, &amp;quot;者&amp;quot;, &amp;quot;本&amp;quot;, &amp;quot;與&amp;quot;, &amp;quot;吾&amp;quot;, &amp;quot;則&amp;quot;,
+&amp;quot;以&amp;quot;, &amp;quot;其&amp;quot;, &amp;quot;為&amp;quot;, &amp;quot;不以&amp;quot;, &amp;quot;不可&amp;quot;, &amp;quot;也&amp;quot;, &amp;quot;矣&amp;quot;, &amp;quot;子&amp;quot;, &amp;quot;由&amp;quot;, &amp;quot;子曰&amp;quot;, &amp;quot;曰&amp;quot;,
+&amp;quot;非其&amp;quot;, &amp;quot;於&amp;quot;, &amp;quot;不能&amp;quot;, &amp;quot;如&amp;quot;, &amp;quot;斯&amp;quot;, &amp;quot;然&amp;quot;, &amp;quot;君&amp;quot;, &amp;quot;亦&amp;quot;, &amp;quot;言&amp;quot;, &amp;quot;聞&amp;quot;, &amp;quot;今&amp;quot;,
+&amp;quot;君&amp;quot;, &amp;quot;不知&amp;quot;, &amp;quot;无&amp;quot;))
+
+## Add a column that converts traditional Chinese to simplified Chinese
+## Count words by book, then word frequency to account for different book lengths. 
+
+counts_by_book &amp;lt;- tidytext_segmented %&amp;gt;%
+  ungroup() %&amp;gt;%
+  mutate(simplified = tmcn::toTrad(word, rev = TRUE), pinyin = tmcn::toPinyin(word)) %&amp;gt;%
+  anti_join(stopwordsCN) %&amp;gt;%
+  count(book, word, pinyin, simplified) %&amp;gt;%
+  group_by(book) %&amp;gt;%
+  mutate(word_freq = `n`/sum(`n`)) %&amp;gt;%
+  arrange(-n) %&amp;gt;%
+  ungroup()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Warning: Column `word` joining character vector and factor, coercing into
+## character vector&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now let’s do the familiar ritual of examining the top 10 words in each book (e.g, counts_by_book) and plot them.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;book_top_words &amp;lt;- counts_by_book %&amp;gt;%
+  ungroup() %&amp;gt;%
+  group_by(book) %&amp;gt;%
+  top_n(10) %&amp;gt;%
+  ungroup()
+
+##format the above dataframe for a pretty display with kable
+formatted_words &amp;lt;- book_top_words %&amp;gt;%
+  group_by(book) %&amp;gt;%
+  transmute(word, simplified, n, word_freq, order = 1:n()) %&amp;gt;%
+  arrange(book, -word_freq) %&amp;gt;%
+  select(-order)
+
+##Set format for kable 
+options(knitr.table.format = &amp;quot;html&amp;quot;) 
+
+knitr::kable(formatted_words) %&amp;gt;%
+  kableExtra::kable_styling(font_size = 15, full_width = T) %&amp;gt;% kableExtra::row_spec(1:10, color = &amp;quot;white&amp;quot;, background = &amp;quot;#232528&amp;quot;) %&amp;gt;% kableExtra::row_spec(11:20, color = &amp;quot;white&amp;quot;, background = &amp;quot;#6A656B&amp;quot;) %&amp;gt;% kableExtra::row_spec(21:30, color = &amp;quot;white&amp;quot;, background = &amp;quot;#454d4c&amp;quot;) %&amp;gt;%
+kableExtra::row_spec(0, bold = F, color = &amp;quot;black&amp;quot;, background = &amp;quot;white&amp;quot;)  %&amp;gt;% kableExtra::scroll_box(width = &amp;quot;100%&amp;quot;, height = &amp;quot;350px&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;div style=&#34;border: 1px solid #ddd; padding: 5px; overflow-y: scroll; height:350px; overflow-x: scroll; width:100%; &#34;&gt;
+&lt;table class=&#34;table&#34; style=&#34;font-size: 15px; margin-left: auto; margin-right: auto;&#34;&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:left;color: black;background-color: white;&#34;&gt;
+book
+&lt;/th&gt;
+&lt;th style=&#34;text-align:left;color: black;background-color: white;&#34;&gt;
+word
+&lt;/th&gt;
+&lt;th style=&#34;text-align:left;color: black;background-color: white;&#34;&gt;
+simplified
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;color: black;background-color: white;&#34;&gt;
+n
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;color: black;background-color: white;&#34;&gt;
+word_freq
+&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+analects
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+問
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+问
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+110
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+0.0154321
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+analects
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+君子
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+君子
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+108
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+0.0151515
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+analects
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+仁
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+仁
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+76
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+0.0106622
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+analects
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+孔子
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+孔子
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+68
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+0.0095398
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+analects
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+行
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+行
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+57
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+0.0079966
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+analects
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+知
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+知
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+54
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+0.0075758
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+analects
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+路
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+路
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+52
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+0.0072952
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+analects
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+見
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+见
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+51
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+0.0071549
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+analects
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+民
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+民
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+45
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+0.0063131
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+analects
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+子貢
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+子贡
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+44
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+0.0061728
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+mozi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+民
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+民
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+257
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+0.0068141
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+mozi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+治
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+治
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+229
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+0.0060717
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+mozi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+利
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+利
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+227
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+0.0060187
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+mozi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+墨
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+墨
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+207
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+0.0054884
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+mozi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+知
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+知
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+200
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+0.0053028
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+mozi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+說
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+说
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+197
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+0.0052232
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+mozi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+行
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+行
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+192
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+0.0050907
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+mozi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+欲
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+欲
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+190
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+0.0050376
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+mozi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+長
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+长
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+189
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+0.0050111
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+mozi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+國
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+国
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+175
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+0.0046399
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+zhuangzi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+夫
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+夫
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+313
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+0.0099356
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+zhuangzi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+知
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+知
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+302
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+0.0095864
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+zhuangzi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+見
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+见
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+222
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+0.0070469
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+zhuangzi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+物
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+物
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+217
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+0.0068882
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+zhuangzi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+大
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+大
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+204
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+0.0064756
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+zhuangzi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+行
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+行
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+176
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+0.0055868
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+zhuangzi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+邪
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+邪
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+165
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+0.0052376
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+zhuangzi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+德
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+德
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+164
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+0.0052059
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+zhuangzi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+道
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+道
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+164
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+0.0052059
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+zhuangzi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+心
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+心
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+142
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+0.0045075
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;p&gt;So far so good - these results are very intuitive. Of course, plotting them can accomplish this in even greater detail. Let’s plot the top 10 words and their respective frequencies from each of these texts, in calligraphy inspired colors!&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ink_colors &amp;lt;- rev(c(&amp;quot;ivory&amp;quot;, &amp;quot;#454d4c&amp;quot;, &amp;quot;#6A656B&amp;quot;, &amp;quot;#232528&amp;quot;))
+
+ggplot(book_top_words, aes(x = reorder(word, word_freq), y = word_freq, fill = book)) +
+  geom_col(show.legend = FALSE) + 
+  geom_text(aes(label = pinyin), color = &amp;quot;white&amp;quot;, position = position_stack(vjust = 0.5)) + 
+  facet_wrap(~book, scales = &amp;quot;free&amp;quot;, labeller = labeller(labels)) + 
+  coord_flip() +
+  scale_fill_manual(values = ink_colors) +
+  theme_dark(base_family= &amp;quot;HiraKakuProN-W3&amp;quot;) + 
+  theme(axis.text.x = element_text(color = &amp;quot;#232528&amp;quot;, angle = 90)) +
+  theme(axis.text.y = element_text(color = &amp;quot;#232528&amp;quot;, size = 15)) +
+  theme(panel.background = element_rect(fill = &amp;quot;#87969B&amp;quot;), plot.background = element_rect(fill = &amp;quot;ivory&amp;quot;), panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + 
+  labs(x = NULL, y = NULL) +
+  ggtitle(&amp;quot;Word Frequencies&amp;quot;) +
+  theme(plot.title = element_text(size = 20, color = &amp;quot;#232528&amp;quot;, hjust = 0.5))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-05-29-tidytext-analysis-of-3-chinese-classics_files/figure-html/unnamed-chunk-5-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;div id=&#34;summary&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Summary&lt;/h2&gt;
+&lt;p&gt;In this post, I…&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Used ctextclassics to download classic Chinese texts&lt;/li&gt;
+&lt;li&gt;Split the text into character tokens of 1&lt;/li&gt;
+&lt;li&gt;Filtered out common stop words&lt;/li&gt;
+&lt;li&gt;Grouped the data by book and word, calculating total words and word frequencies&lt;/li&gt;
+&lt;li&gt;Made a (calligraphy inspired) bar plot of the top 10 most frequent words in each text.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div id=&#34;conclusion&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;These word frequencies are very pleasing!&lt;/p&gt;
+&lt;p&gt;The Analects has prevalant usage of words such as “Benevolence” (仁), “Gentleman” (君子) and “Confucius” (孔子). (I capitalize these terms to show they are uniquely different from contemporary English equivalents.)&lt;/p&gt;
+&lt;p&gt;The Zhuangzi, a Taoist text, mentions cosmological concepts such as the Tao(道), morality (德), and evil(邪).&lt;/p&gt;
+&lt;p&gt;The Mozi seems to have terms that are mostly civic related, such as country (国), citizen (民) and govern（治).&lt;/p&gt;
+&lt;p&gt;These frequencies do a good job of capturing the context of the works - e.g., regarding the Analects, Benevolence and the Gentleman are often mentioned - one examplary sentence may be:&lt;/p&gt;
+&lt;p&gt;“君子而不仁者有矣夫。未有小人而仁者也.” My own (shorthand) translation:&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Of Gentlemen, there are some who do not possess Benevolence; but of Villians, there is not a single one that possesses it.&lt;/em&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;next-post&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Next Post&lt;/h2&gt;
+&lt;p&gt;In my next post, I would like to either &lt;strong&gt;follow the same procedure but with bigrams&lt;/strong&gt;, and/or &lt;strong&gt;apply LDA (Latent Dirichlet Allocation)&lt;/strong&gt; to see whether chapters can be distinguished from one another.&lt;/p&gt;
+&lt;p&gt;Although frequent words are very different among texts, I’m not so sure that each book can be completely distinguished from others (There are many shared words - Dao isn’t solely mentioned in Taoist texts, and each text includes civic related concepts related to proper governance, plus, the Mozi is likely authored by different people!)&lt;/p&gt;
+&lt;p&gt;On that note, to be continued!&lt;/p&gt;
+&lt;/div&gt;
+</description>
     </item>
     
     <item>
@@ -56,8 +1201,68 @@ Following similar pace with Tidytext, I first download my data. Here I use my pa
       <pubDate>Thu, 17 May 2018 00:00:00 +0000</pubDate>
       
       <guid>/blog/2018-05-17-ctextclassics-my-first-package/</guid>
-      <description>My latest update is a milestone! I have authored my first ever R package which is an API caller for ctext.org. Ctext hosts numerous pre-modern Chinese texts and my package makes them available to you. The scope is broad, but think philosophical works in Confucianism, Daoism, Legalism, military doctrines, history compilations, works in medicine, and many more.
-The three main functions of ctextclassics are get_chapter(&amp;quot;book&amp;quot;, &amp;quot;chapter&amp;quot;) ,get_chapters(&amp;quot;book&amp;quot;, chapters), get_books(&amp;quot;book&amp;quot;) and the internal dataframe book_list which shows the available texts.</description>
+      <description>&lt;p&gt;My latest update is a milestone! I have authored my first ever R package which is an API caller for ctext.org. Ctext hosts numerous pre-modern Chinese texts and my package makes them available to you. The scope is broad, but think philosophical works in Confucianism, Daoism, Legalism, military doctrines, history compilations, works in medicine, and many more.&lt;/p&gt;
+&lt;p&gt;The three main functions of ctextclassics are &lt;code&gt;get_chapter(&amp;quot;book&amp;quot;, &amp;quot;chapter&amp;quot;)&lt;/code&gt; ,&lt;code&gt;get_chapters(&amp;quot;book&amp;quot;, chapters)&lt;/code&gt;, &lt;code&gt;get_books(&amp;quot;book&amp;quot;)&lt;/code&gt; and the internal dataframe &lt;code&gt;book_list&lt;/code&gt; which shows the available texts. So perhaps try something like: &lt;br&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(ctextclassics)
+head(unique(book_list$book), n = 5)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;analects&amp;quot;        &amp;quot;art-of-war&amp;quot;      &amp;quot;bai-hu-tong&amp;quot;     &amp;quot;baopuzi&amp;quot;        
+## [5] &amp;quot;book-of-changes&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;knitr::kable(head(get_books(&amp;quot;analects&amp;quot;)))&lt;/code&gt;&lt;/pre&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th align=&#34;left&#34;&gt;book&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;chapter&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;word&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;chapter_cn&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;analects&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;xue-er&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;子曰：「學而時習之，不亦說乎？有朋自遠方來，不亦樂乎？人不知而不慍，不亦君子乎？」&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;學而&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;analects&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;xue-er&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;有子曰：「其為人也孝弟，而好犯上者，鮮矣；不好犯上，而好作亂者，未之有也。君子務本，本立而道生。孝弟也者，其為仁之本與！」&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;學而&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;analects&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;xue-er&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;子曰：「巧言令色，鮮矣仁！」&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;學而&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;analects&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;xue-er&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;曾子曰：「吾日三省吾身：為人謀而不忠乎？與朋友交而不信乎？傳不習乎？」&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;學而&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;analects&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;xue-er&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;子曰：「道千乘之國：敬事而信，節用而愛人，使民以時。」&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;學而&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;analects&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;xue-er&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;子曰：「弟子入則孝，出則弟，謹而信，汎愛眾，而親仁。行有餘力，則以學文。」&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;學而&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;Just be careful, the API limit is around 60-ish. Which means you can get about 3 books on average before my download functions start spitting out NA values.&lt;/p&gt;
+&lt;p&gt;The API indexes its book and chapter names differently. Some are in English (e.g., “analects”) whereas others are written in Pinyin (e.g., “mengzi”). Some chapter titles use the word “the” whereas others don’t. So eventually I’ll consider the need to make the function calls more robust and help users avoid those inconsistencies. There’s a lot that can be improved here, be it adding authentication, a way to keep track of API call count, or anything else - but I’m looking forward to it!&lt;/p&gt;
+&lt;p&gt;So, what’s my ultimate goal? It is to use &lt;code&gt;ctextclassics&lt;/code&gt; for text analysis on Chinese classic texts - Similar to how we see the &lt;strong&gt;amazing Tidytext&lt;/strong&gt; and gutenbergr packages used! &lt;strong&gt;Quite ambitious, I know.&lt;/strong&gt; At any rate, I’m enjoying reading this classical Chinese.&lt;/p&gt;
+&lt;p&gt;To cap off this post, you can use my package by typing &lt;code&gt;devtools::install_github(&amp;quot;Jjohn987/ctextclassics&amp;quot;)&lt;/code&gt; and remember to check out the documentation of the functions for a better explanation.&lt;/p&gt;
+&lt;p&gt;If you want to contribute, please do so! You can comment here, fork my Github, or post an issue.&lt;/p&gt;
+</description>
     </item>
     
     <item>
@@ -66,7 +1271,97 @@ The three main functions of ctextclassics are get_chapter(&amp;quot;book&amp;quo
       <pubDate>Tue, 08 May 2018 00:00:00 +0000</pubDate>
       
       <guid>/blog/2018-05-08-scraping-for-a-booklist-of-the-chinese-classics/</guid>
-      <description>Last week I was considering a project that would be interesting and unique. I decided I would like to do a text analysis on classical Chinese texts, but wasn’t sure what kind of analysis regarding which texts. I decided to keep it small - and use five of the “core” Chinese classics - The Analects, The Mengzi, Dao De Jing, Zhuangzi, and Mozi. While there are many books in Confucianism, Daoism, and Moism, these texts are often used as the most representative examples of each “genre”.</description>
+      <description>&lt;p&gt;Last week I was considering a project that would be interesting and unique. I decided I would like to do a text analysis on classical Chinese texts, but wasn’t sure what kind of analysis regarding which texts. I decided to keep it small - and use five of the “core” Chinese classics - The Analects, The Mengzi, Dao De Jing, Zhuangzi, and Mozi. While there are many books in Confucianism, Daoism, and Moism, these texts are often used as the most representative examples of each “genre”.&lt;/p&gt;
+&lt;p&gt;Of course, the first key question was, &lt;strong&gt;from where can I get the data?&lt;/strong&gt; One website with a rich amount of Chinese text data regarding the classics is &lt;a href=&#34;https://ctext.org/&#34;&gt;ctext.org&lt;/a&gt;.&lt;/p&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;/img/ctextscreen.png&#34; alt=&#34;A screenshot of Ctext.org&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;A screenshot of Ctext.org&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;But when looking at the site design, I wondered “How can I get this in R?” Scraping wasn’t entirely feasible due to the terms outlawing this practice. Secondly, scraping is a bit of a delicate operation - if text isn’t formated uniformly across pages then you might be in for a headache. You also don’t want to give the server unnecessary stress. In the end, if you opt for it, you’ll have to make your functions work with the site structure - and as evidenced by the screenshot, it seemed a bit… messy. (Well, it turns out that actually it wasn’t.)&lt;/p&gt;
+&lt;p&gt;To get the text of the Chinese classics into R, the solution was to build an API. There is an API avaialble on ctext.org’s website, but it’s made in Python. I’ve never built an API or proto-API functions before, but the latter was easier than I thought. Right now I’ll save that for a future post.&lt;/p&gt;
+&lt;p&gt;To wrap up this post - Many of the key functions in the site API revolve around passing a book or chapter as the args. So, it turned out scraping was a necessary evil. Therefore I kept it limited and not too demanding.&lt;/p&gt;
+&lt;p&gt;Without ado, here is the (very limited) scraping I did to create a book list with chapters, which I put to use later in my homemade API.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)
+library(rvest)
+library(stringr)&lt;/code&gt;&lt;/pre&gt;
+&lt;div id=&#34;first-scrape&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;First Scrape&lt;/h2&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;## 1st Scrape - Get list of books available on ctext website. 
+url &amp;lt;- &amp;quot;https://ctext.org/&amp;quot;
+
+path &amp;lt;- read_html(url)
+genre_data &amp;lt;- path %&amp;gt;%
+  html_nodes(css = &amp;quot;.container &amp;gt; .etext&amp;quot;) %&amp;gt;%
+  html_attr(&amp;quot;href&amp;quot;)
+
+##Delete first observation which is not a genre
+genre_data &amp;lt;- genre_data[-1] %&amp;gt;% tibble(&amp;quot;genre&amp;quot; = .)
+##Append the base url to the sub-links
+genre_data &amp;lt;- genre_data %&amp;gt;%
+  mutate(genre_links = paste(&amp;quot;https://ctext.org&amp;quot;, &amp;quot;/&amp;quot;, genre_data[[1]], sep = &amp;quot;&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Warning: package &amp;#39;bindrcpp&amp;#39; was built under R version 3.3.2&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Next I set up a scraping function which needs to iterate over each book from the “genre_data” dataframe just created. Note the “Sys.sleep” call at the end to avoid overloading the server and play nicely with the website.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;function---preparing-for-the-2nd-scrape&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Function - Preparing for the 2nd scrape&lt;/h2&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;##2nd Scrape - Make function to apply to each book, to get chapters
+scraping_function &amp;lt;- function(genre, genre_links) {
+  url &amp;lt;- genre_links[[1]]
+  path &amp;lt;- read_html(url)
+  
+  data &amp;lt;- path %&amp;gt;%
+    html_nodes(css = &amp;quot;#content3 &amp;gt; a&amp;quot;) %&amp;gt;%
+    html_attr(&amp;quot;href&amp;quot;)
+  
+  genre &amp;lt;- genre
+  data &amp;lt;- data_frame(data, genre)
+  
+  ##Some string cleaning with stringr and mutate commands
+  data &amp;lt;- data %&amp;gt;% mutate(book = str_extract(data, &amp;quot;^[a-z].*[\\/]&amp;quot;)) %&amp;gt;%
+    mutate(book = str_replace(book, &amp;quot;\\/&amp;quot;, &amp;quot;&amp;quot;))
+  data &amp;lt;- data %&amp;gt;%
+    mutate(chapter = str_extract(data, &amp;quot;[\\/].*$&amp;quot;)) %&amp;gt;%
+    mutate(chapter = str_replace(chapter, &amp;quot;/&amp;quot;, &amp;quot;&amp;quot;))
+  data &amp;lt;- data %&amp;gt;%
+    mutate(links = paste(&amp;quot;https://ctext.org/&amp;quot;, book, &amp;quot;/&amp;quot;, chapter, sep = &amp;quot;&amp;quot;))
+  data &amp;lt;- data %&amp;gt;% select(-data) %&amp;gt;%
+    filter(complete.cases(.))
+
+  Sys.sleep(2.5)
+  data
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;If there was one takeaway from writing that function, it was that I should deepen my proficiency in regex. Finding the right regular expressions to capture the book and chapter names wasn’t HARD, but I did have to make several attempts before getting it all right. Previously web content was clean enough that I didn’t have to do this. Anyway, let’s apply the hard work to our original genre dataframe so that we can get a dataframe of books and their chapters. It’s going to be a big one.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;apply-the-function-and-get-the-data..-i-have-come-to-love-purrr-for-this.&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Apply the function and get the data.. I have come to love &lt;code&gt;purrr&lt;/code&gt; for this.&lt;/h2&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;##Apply function to genre_data dataframe, create a data frame of books and chapters
+
+all_works &amp;lt;- map2(genre_data$genre, genre_data$genre_links, ~ scraping_function(..1, ..2))
+
+book_list &amp;lt;- all_works %&amp;gt;% do.call(rbind, .)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And here it is. The final variable “book_list” is a collection of books and chapters of each book, as listed on Ctext.org.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;head(book_list)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 6 x 4
+##          genre     book       chapter
+##          &amp;lt;chr&amp;gt;    &amp;lt;chr&amp;gt;         &amp;lt;chr&amp;gt;
+## 1 confucianism analects        xue-er
+## 2 confucianism analects     wei-zheng
+## 3 confucianism analects         ba-yi
+## 4 confucianism analects        li-ren
+## 5 confucianism analects gong-ye-chang
+## 6 confucianism analects       yong-ye
+## # ... with 1 more variables: links &amp;lt;chr&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;It is clearly in long format (convenient but not necessary, in fact this more a side effect of my scraping)&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;str(book_list)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Classes &amp;#39;tbl_df&amp;#39;, &amp;#39;tbl&amp;#39; and &amp;#39;data.frame&amp;#39;:    5869 obs. of  4 variables:
+##  $ genre  : chr  &amp;quot;confucianism&amp;quot; &amp;quot;confucianism&amp;quot; &amp;quot;confucianism&amp;quot; &amp;quot;confucianism&amp;quot; ...
+##  $ book   : chr  &amp;quot;analects&amp;quot; &amp;quot;analects&amp;quot; &amp;quot;analects&amp;quot; &amp;quot;analects&amp;quot; ...
+##  $ chapter: chr  &amp;quot;xue-er&amp;quot; &amp;quot;wei-zheng&amp;quot; &amp;quot;ba-yi&amp;quot; &amp;quot;li-ren&amp;quot; ...
+##  $ links  : chr  &amp;quot;https://ctext.org/analects/xue-er&amp;quot; &amp;quot;https://ctext.org/analects/wei-zheng&amp;quot; &amp;quot;https://ctext.org/analects/ba-yi&amp;quot; &amp;quot;https://ctext.org/analects/li-ren&amp;quot; ...&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;It is quite lengthy at nearly 6,000 rows and 130 different books. And this is an important dataframe which I will use in my API that I make, to pull textual data into R from Ctext.org.&lt;/p&gt;
+&lt;p&gt;Next post, I plan on sharing the process and results of my Chinese Classics text analysis.&lt;/p&gt;
+&lt;/div&gt;
+</description>
     </item>
     
     <item>
@@ -75,9 +1370,28 @@ The three main functions of ctextclassics are get_chapter(&amp;quot;book&amp;quo
       <pubDate>Sun, 06 May 2018 00:00:00 +0000</pubDate>
       
       <guid>/blog/2018-05-06-on-relocating-to-github/netlify/</guid>
-      <description>Deep, labored breathing
-Hello everyone, this is the opening post on my new blog, which I’m relocating from Wordpress to GitHub Pages and Netlify. It’s so nice I’ve given it a name - because nice things have names!
-But, why was I panting? The relocation effort wasn’t easy. Why did I follow through with it? Becuase it is worth the effort. This post is evidence of my victory. Now please, let me explain.</description>
+      <description>&lt;p&gt;&lt;strong&gt;Deep, labored breathing&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Hello everyone, this is the opening post on my new blog, which I’m relocating from Wordpress to GitHub Pages and Netlify. It’s so nice I’ve given it a name - because nice things have names!&lt;/p&gt;
+&lt;p&gt;But, why was I &lt;strong&gt;panting&lt;/strong&gt;? The relocation effort wasn’t easy. Why did I follow through with it? Becuase it is &lt;strong&gt;worth the effort&lt;/strong&gt;. This post is evidence of my victory. Now please, let me explain.&lt;/p&gt;
+&lt;p&gt;A few months ago, when I explored options for creating a blog to help me keep track of my learning, and to display my progress (and creativity) to the world, I decided on Wordpress. It was convenient, quick to set up, and easy to forget about.&lt;/p&gt;
+&lt;p&gt;But Wordpress didn’t:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Display R code very well.&lt;/li&gt;
+&lt;li&gt;Highlight or display code in code blocks.&lt;/li&gt;
+&lt;li&gt;Provide &lt;strong&gt;exposure&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The main purpose of a blog is to be seen, but my page at Wordpress was more of a hideout than a open facing space. I did some googling and found Blogdown. It is great, but in all honesty, migrating over was a &lt;strong&gt;struggle&lt;/strong&gt;. I tried &lt;a href=&#34;https://tclavelle.github.io/blog/blogdown_github/&#34;&gt;this process&lt;/a&gt;, but ultimately found &lt;a href=&#34;https://youtu.be/syWAKaj-4ck&#34;&gt;this You Tube tutorial&lt;/a&gt; the best. The general workflow was&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;&lt;p&gt;Create GitHub account and Repo&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Create new R Version Control Project (same name as repo I think)&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Use &lt;code&gt;blogdown::new_site(theme = &amp;quot;&amp;quot;)&lt;/code&gt; to create a new site in R, and edit the config.toml file to change up some of the blog paramaters to your liking.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Use &lt;code&gt;blogdown::build_site&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Commit/push to GitHub, then point to Netlify. (You’ll need to edit settings for repo to be a GitHub Page, for more details refer to John Muschelli’s tutorial on You Tube.)&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Now, it was all definitely &lt;strong&gt;FRUSTRATING&lt;/strong&gt;. I had no experience with GitHub and found it very unintuitive. While wrangling my config.toml file (to change blog appearance), I experienced merge conflicts between my local files and my GitHub repo, and had no idea what to do. So, in the ultimate paradox of things, I was on a version control site wrestling against verson control paramaters. But I got my blog up and I’m very happy with the end result. I know that I can easily avoid future frustrations simply by learning about GitHub. Secondly, if I ever want to switch a layout, well, switching Hugo Themes seems very easy.&lt;/p&gt;
+&lt;p&gt;Yeah, I’ve seen lots of complaints about blogdown already. But, the best thing is that when you use it, &lt;strong&gt;you won’t ever have to manually update a blog again&lt;/strong&gt; and you can simply stay in R, where the action is.&lt;/p&gt;
+&lt;p&gt;Next – I should probably migrate my old posts from the Wordpress grave.&lt;/p&gt;
+</description>
     </item>
     
     <item>
@@ -86,8 +1400,93 @@ But, why was I panting? The relocation effort wasn’t easy. Why did I follow th
       <pubDate>Sun, 01 Apr 2018 00:00:00 +0000</pubDate>
       
       <guid>/blog/2018-04-01-visualizing-european-ww1-defense-treaties-with-igraph/</guid>
-      <description>I suddenly got bit by a bug to learn about network analysis. So I recalled the Correlates of War Project having a dataset about alliances. I decided to revisit them and download the data for this new project, which you can do too.
-To start small, I decided to visualize a certain topic, e.g., European Defense Treaties relating to World War I. For that purpose I filtered the dataset for treaties that occured between 1878 and 1914.</description>
+      <description>&lt;p&gt;I suddenly got bit by a bug to learn about network analysis. So I recalled the &lt;a href=&#34;http://www.correlatesofwar.org/data-sets/formal-alliances&#34;&gt;Correlates of War Project&lt;/a&gt; having a dataset about alliances. I decided to revisit them and download the data for this new project, which you can do too.&lt;/p&gt;
+&lt;p&gt;To start small, I decided to visualize a certain topic, e.g., European Defense Treaties relating to World War I. For that purpose I filtered the dataset &lt;strong&gt;for treaties that occured between 1878 and 1914.&lt;/strong&gt; As usual there’s a lot of cleaning to be done before anything else can be done.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)
+library(lubridate)
+library(scales)
+library(igraph)
+
+##import data
+Alliances &amp;lt;- read_csv(&amp;quot;alliance_v4.1_by_directed.csv&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;div id=&#34;data-cleaning&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Data cleaning&lt;/h2&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;## Create an interval object using Lubridate package to find time intervals for treaties.
+Beginning &amp;lt;- ymd(1878, truncated = 2L)
+End &amp;lt;- ymd(1914, truncated = 2L)
+Alliance_Timeline &amp;lt;- interval(Beginning, End)
+
+##Change the column names to a &amp;quot;From&amp;quot; and &amp;quot;To&amp;quot; network analysis node format, get date columns set up.
+Tidy_Alliances &amp;lt;- Alliances %&amp;gt;% select(ID = version4id, CC1 = ccode1, CC2 = ccode2, From = state_name1, To = state_name2, contains(&amp;quot;dyad&amp;quot;), defense, neutrality, nonaggression,entente) %&amp;gt;%
+  unite(Start_Date, c(&amp;quot;dyad_st_month&amp;quot;, &amp;quot;dyad_st_day&amp;quot;, &amp;quot;dyad_st_year&amp;quot;), sep = &amp;quot;-&amp;quot;) %&amp;gt;%
+  unite(End_Date, c(&amp;quot;dyad_end_month&amp;quot;, &amp;quot;dyad_end_day&amp;quot;, &amp;quot;dyad_end_year&amp;quot;), sep = &amp;quot;-&amp;quot;) %&amp;gt;% 
+  mutate(Start_Date = mdy(Start_Date), End_Date = mdy(End_Date)) 
+
+##Filter for the specific years stated above, and only select European countries. 
+Key_Treaties &amp;lt;- Tidy_Alliances %&amp;gt;% filter(Start_Date %within% Alliance_Timeline, End_Date %within% Alliance_Timeline) %&amp;gt;%
+  distinct(From) %&amp;gt;%
+  filter(!From %in% c(&amp;quot;Brazil&amp;quot;, &amp;quot;Argentina&amp;quot;, &amp;quot;Uruguay&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now that’s the basic data frame which I’m going to use to create my node and edge dataframes. This is essentially the workflow that I prefer in iGraph - processing with tidyverse tools and then passing the appropriate peices to iGraph to put it all together in its own objects. We will need an Edge list and a Node list, so let’s set ’em up.&lt;/p&gt;
+&lt;p&gt;Also it’s good to have “attributes” which can be used to make the network graph more visually informative - like edge weights, node colors, etc. I am interested in the strength of connections between nodes (aka, the edges, and I define this as number of treaties made between 2 countries for the time period) and the sides they fought on in the conflict (a node attribute).&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;##Create Edge data frame
+Edges &amp;lt;- Tidy_Alliances %&amp;gt;%
+  filter(Start_Date %within% Alliance_Timeline, End_Date %within% Alliance_Timeline, From %in% Key_Treaties$From) %&amp;gt;%
+  group_by(From, To) %&amp;gt;%
+  select(From, To) %&amp;gt;%
+  mutate(width = n()) %&amp;gt;%
+  distinct()
+
+##Create Vertices data frame
+Vertices_Weights &amp;lt;- Edges %&amp;gt;%
+  select(From, To) %&amp;gt;%
+  gather(Key, Country) %&amp;gt;%
+  group_by(Country) %&amp;gt;%
+  mutate(size = n()) %&amp;gt;% 
+  ungroup() %&amp;gt;%
+  select(Country, size) %&amp;gt;%
+  distinct()
+
+##Create node attribute &amp;quot;Sides&amp;quot; to differentiate the factions
+
+Sides &amp;lt;- c(&amp;quot;Austria-Hungary&amp;quot; = &amp;quot;Central Powers&amp;quot;, &amp;quot;Bulgaria&amp;quot; = &amp;quot;Central Powers&amp;quot;, &amp;quot;China&amp;quot; = &amp;quot;Allies&amp;quot;, &amp;quot;France&amp;quot; = &amp;quot;Allies&amp;quot;, &amp;quot;Germany&amp;quot; = &amp;quot;Central Powers&amp;quot;, &amp;quot;Greece&amp;quot; = &amp;quot;Neutral&amp;quot;, &amp;quot;Italy&amp;quot; = &amp;quot;Central Powers&amp;quot;, &amp;quot;Japan&amp;quot; = &amp;quot;NA&amp;quot;,
+           &amp;quot;Korea&amp;quot; = &amp;quot;NA&amp;quot;, &amp;quot;Russia&amp;quot; = &amp;quot;Allies&amp;quot;, &amp;quot;Spain&amp;quot; = &amp;quot;Neutral&amp;quot;, &amp;quot;Turkey&amp;quot; = &amp;quot;Central Powers&amp;quot;, &amp;quot;United Kingdom&amp;quot; = &amp;quot;Allies&amp;quot;, &amp;quot;United States of America&amp;quot; = &amp;quot;Allies&amp;quot;, &amp;quot;Yugoslavia&amp;quot; = &amp;quot;Allies&amp;quot;)
+
+Vertices &amp;lt;- data.frame(Country = Edges$From, Side = Sides[Edges$From], stringsAsFactors = FALSE) %&amp;gt;% distinct()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now it’s time to pass the dataframes to igraph, and do the final processing there.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;##Create our igraph object
+Treaty_igraph &amp;lt;- graph_from_data_frame(d = Edges, vertices = Vertices, directed = F)
+
+V(Treaty_igraph)$size &amp;lt;- Vertices_Weights$size
+V(Treaty_igraph)$sides &amp;lt;- Sides[vertex_attr(Treaty_igraph)$name]
+V(Treaty_igraph)$color &amp;lt;- ifelse(V(Treaty_igraph)$sides == &amp;quot;Allies&amp;quot;, &amp;quot;cornflowerblue&amp;quot;, ifelse(V(Treaty_igraph)$sides == &amp;quot;Central Powers&amp;quot;, &amp;quot;olivedrab&amp;quot;, &amp;quot;gainsboro&amp;quot;))
+V(Treaty_igraph)$size &amp;lt;- rescale(V(Treaty_igraph)$size, to = c(10, 20))
+
+E(Treaty_igraph)$arrow.mode &amp;lt;- 0
+
+Treaty_igraph &amp;lt;- delete.vertices(Treaty_igraph, V(Treaty_igraph)$name[V(Treaty_igraph)$name == &amp;quot;United States of America&amp;quot;|V(Treaty_igraph)$name == &amp;quot;Korea&amp;quot;|V(Treaty_igraph)$name == &amp;quot;Japan&amp;quot;])&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;I rescaled the node sizes with “rescale” and I deleted the United States, Korea, and Japan nodes and edges with “delete.vertices” because they were isolated and didn’t seem relevant to any time before 1914. I’d have also deleted China for the same reason, where it not for its sole connection to Russia.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;##plot our graph
+par(bg=&amp;quot;snow2&amp;quot;)
+plot(Treaty_igraph, rescale = TRUE, displaylabels = TRUE, remove.multiple = TRUE,
+     vertex.label.dist = 1.75, vertex.label.cex = .8, vertex.label = V(Treaty_igraph)$name, label.cex = 2, edge.curved = .2,
+     vertex.frame.color = &amp;quot;black&amp;quot;, vertex.col = V(Treaty_igraph)$color, vertex.label.color = &amp;quot;black&amp;quot;,
+     arrow.mode = E(Treaty_igraph)$arrow.mode, edge.color = &amp;quot;darkgoldenrod2&amp;quot;, edge.weight = E(Treaty_igraph)$width, main = &amp;quot;European Treaties 1878-1914&amp;quot;, sub = &amp;quot;Defense Pacts and Ententes&amp;quot;)
+legend(x=-1.5, y=-1.1, c(&amp;quot;Allies&amp;quot;,&amp;quot;Central Powers&amp;quot;, &amp;quot;Neutral&amp;quot;), 
+       col=&amp;quot;#777777&amp;quot;, c(&amp;quot;cornflowerblue&amp;quot;, &amp;quot;olivedrab&amp;quot;, &amp;quot;grey&amp;quot;), pt.cex=1, cex=1, bty=&amp;quot;n&amp;quot;, ncol=1)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-05-06-visualizing-european-ww1-defense-treaties-with-igraph_files/figure-html/unnamed-chunk-3-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;closing&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Closing&lt;/h2&gt;
+&lt;p&gt;And there is my World War I network plot. We can easily see that Austria-Hungary, Germany, and Russia were the major players in power and diplomacy at the time.&lt;/p&gt;
+&lt;p&gt;I mainly wanted to get aquainted with igraph plotting (technicality) as opposed to analytical concepts (which I didn’t use here). I feel like I accomplished that goal. Of course I’d love to get more analytical with this dataset in the future. For now this will suffice, I’m sure I’ll return to this dataset though. I might even use other network analysis tools in R like &lt;code&gt;tidygraph&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;That being said, I feel that network analysis is quite exciting and the possibilities are quite rich. I close by saying that I hope everybody enjoyed this entry and that they may find it useful or inspiring to check out igraph and other network tools in R.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Citations&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Gibler, Douglas M. 2009. International military alliances, 1648-2008 (Version 4.1). CQ Press.&lt;br /&gt;
+Zweig, K. A. (2013). Network analysis literacy: A practical approach to network analysis project design. Vienna: Springer Verlag GmbH.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://kateto.net/networks-r-igraph&#34;&gt;This igraph tutorial&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;This post was Migrated over from my Word Press&lt;/em&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
     </item>
     
     <item>
@@ -96,8 +1495,140 @@ To start small, I decided to visualize a certain topic, e.g., European Defense T
       <pubDate>Mon, 29 Jan 2018 00:00:00 +0000</pubDate>
       
       <guid>/blog/2018-01-29-plotting-fortune-500-hqs-in-r/</guid>
-      <description>Today I’d like to work a little on geospatial mapping in R, so I’ve chosen a small dataset (only 256 kb) that can be plotted on a map. It the location information of Fortune 500 company headquarters in the US. You can download it from here.
-R has several choices for plotting geospatial information. Here I use ggmap, however in the future I’ll check out the raster and sp packages. Anyway, let’s get started by loading in and cleaning the data.</description>
+      <description>&lt;p&gt;Today I’d like to work a little on geospatial mapping in R, so I’ve chosen a small dataset (only 256 kb) that can be plotted on a map. It the location information of Fortune 500 company headquarters in the US. You can download it from &lt;a href=&#34;https://hifld-geoplatform.opendata.arcgis.com/datasets/a4d813c396934fc09d0b801a0c491852_0?geometry=-140.445%2C24.931%2C-21.881%2C49.099&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;R has several choices for plotting geospatial information. Here I use &lt;code&gt;ggmap&lt;/code&gt;, however in the future I’ll check out the &lt;code&gt;raster&lt;/code&gt; and &lt;code&gt;sp&lt;/code&gt; packages. Anyway, let’s get started by loading in and cleaning the data.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)
+library(ggmap)
+library(RJSONIO)
+
+Fortune_500s &amp;lt;- read_csv(&amp;quot;Fortune_500_Corporate_Headquarters.csv&amp;quot;) 
+##Change case of relevant columns to lowercase, per convention
+Fortune_500s &amp;lt;- Fortune_500s %&amp;gt;% select(NAME, X, Y, ADDRESS, CITY, STATE, ZIP, COUNTY) %&amp;gt;% rename(name = NAME, x = X, y = Y, address = ADDRESS, city = CITY, state = STATE, zip = ZIP, county = COUNTY)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;I prefer to keep column names lowercase, so I made sure to select and rename the relevant columns. Especially important are the “x” and “y” variables, which are the geographic coordinates I will use to plot to the US map later.&lt;/p&gt;
+&lt;p&gt;Before getting into the Google Maps part, let me add two new columns-total count of HQ’s by city, and total count by city &lt;em&gt;and&lt;/em&gt; state.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;Fortune_500s &amp;lt;- Fortune_500s %&amp;gt;%
+  group_by(city, state, county) %&amp;gt;%
+  mutate(city.total = n()) %&amp;gt;%
+  ungroup() %&amp;gt;%
+  group_by(state) %&amp;gt;%
+  mutate(state.total = n())&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Let’s take a quick peak at three cities and states with the most Fortune 500 HQ’s.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;Fortune_500s %&amp;gt;% ungroup() %&amp;gt;%
+  distinct(city, state, city.total) %&amp;gt;%
+  top_n(3, city.total)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Warning: package &amp;#39;bindrcpp&amp;#39; was built under R version 3.3.2&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 3 x 3
+##       city state city.total
+##      &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt;      &amp;lt;int&amp;gt;
+## 1  HOUSTON    TX         23
+## 2 NEW YORK    NY         40
+## 3   DALLAS    TX         11&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;Fortune_500s %&amp;gt;% ungroup() %&amp;gt;%
+  distinct(state, state.total) %&amp;gt;%
+  top_n(3, state.total)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 3 x 2
+##   state state.total
+##   &amp;lt;chr&amp;gt;       &amp;lt;int&amp;gt;
+## 1    CA          52
+## 2    TX          56
+## 3    NY          53&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;So the top 3 states with the most Fortune 500 HQ’s are Texas at 56 HQ’s, California at 52, and New York at 53. For individual cities, NYC has 40, Houston 23, and Dallas 11. Makes sense.&lt;/p&gt;
+&lt;p&gt;Now let’s get to the mapping part. Interestingly, with Google Maps, you can customize many elements regarding the appearance. Be sure to choose only what is necessary - mapping too many words or features would be overcubersome. It is actually pretty convenient to specialize the JSON paramaters- simply use Google Maps tool &lt;a href=&#34;https://mapstyle.withgoogle.com/&#34;&gt;here&lt;/a&gt;. JSON looks unintelligable at first, but after a lot of tinkering, I promise you’ll be able to make sense of it, as I eventually started typing the paramaters into the browser instead of using the point and click tool.&lt;/p&gt;
+&lt;p&gt;Below I used a function to untangle the JSON and and feed it back into the API to download the map. The function does all of the heavy lifting which I kindly borrowed from &lt;a href=&#34;https://www.r-bloggers.com/creating-styled-google-maps-in-ggmap&#34;&gt;this blog&lt;/a&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;style &amp;lt;- &amp;#39;[{&amp;quot;featureType&amp;quot;:&amp;quot;administrative.country&amp;quot;,&amp;quot;elementType&amp;quot;:&amp;quot;geometry&amp;quot;,&amp;quot;stylers&amp;quot;:[{&amp;quot;visibility&amp;quot;:&amp;quot;on&amp;quot;},{&amp;quot;color&amp;quot;:&amp;quot;#FFFFFF&amp;quot;},{&amp;quot;weight&amp;quot;:1}]},{&amp;quot;featureType&amp;quot;:&amp;quot;landscape&amp;quot;,&amp;quot;elementType&amp;quot;:&amp;quot;geometry.fill&amp;quot;,&amp;quot;stylers&amp;quot;:[{&amp;quot;visibility&amp;quot;:&amp;quot;on&amp;quot;},{&amp;quot;color&amp;quot;:&amp;quot;#5f9aba&amp;quot;},{&amp;quot;weight&amp;quot;:0.1}]},{&amp;quot;featureType&amp;quot;:&amp;quot;administrative.province&amp;quot;,&amp;quot;elementType&amp;quot;:&amp;quot;labels.text&amp;quot;,&amp;quot;stylers&amp;quot;:[{&amp;quot;visibility&amp;quot;:&amp;quot;off&amp;quot;},{&amp;quot;color&amp;quot;:&amp;quot;#000000&amp;quot;}]},{&amp;quot;featureType&amp;quot;:&amp;quot;all&amp;quot;,&amp;quot;elementType&amp;quot;:&amp;quot;labels&amp;quot;,&amp;quot;stylers&amp;quot;:[{&amp;quot;visibility&amp;quot;:&amp;quot;off&amp;quot;}]},{&amp;quot;featureType&amp;quot;:&amp;quot;administrative.province&amp;quot;,&amp;quot;elementType&amp;quot;:&amp;quot;geometry.stroke&amp;quot;,&amp;quot;stylers&amp;quot;:[{&amp;quot;visibility&amp;quot;:&amp;quot;on&amp;quot;},{&amp;quot;color&amp;quot;:&amp;quot;#FFFFFF&amp;quot;},{&amp;quot;weight&amp;quot;:1}]},{&amp;quot;featureType&amp;quot;:&amp;quot;water&amp;quot;,&amp;quot;elementType&amp;quot;:&amp;quot;geometry.fill&amp;quot;,&amp;quot;stylers&amp;quot;:[{&amp;quot;color&amp;quot;:&amp;quot;#020c17&amp;quot;},{&amp;quot;lightness&amp;quot;:-20}]}]&amp;#39;
+
+style_list &amp;lt;- fromJSON(style)
+
+
+style &amp;lt;- &amp;#39;[
+  {
+    &amp;quot;stylers&amp;quot;: [
+      { &amp;quot;saturation&amp;quot;: -100 },
+      { &amp;quot;gamma&amp;quot;: 0.5 }
+    ]
+  },{
+    &amp;quot;featureType&amp;quot;: &amp;quot;poi.park&amp;quot;,
+    &amp;quot;stylers&amp;quot;: [
+      { &amp;quot;color&amp;quot;: &amp;quot;#ff0000&amp;quot; }
+    ]
+  }
+]&amp;#39;
+style_list &amp;lt;- fromJSON(style, asText=TRUE)
+
+create_style_string&amp;lt;- function(style_list){
+  style_string &amp;lt;- &amp;quot;&amp;quot;
+  for(i in 1:length(style_list)){
+    if(&amp;quot;featureType&amp;quot; %in% names(style_list[[i]])){
+      style_string &amp;lt;- paste0(style_string, &amp;quot;feature:&amp;quot;, 
+                             style_list[[i]]$featureType, &amp;quot;|&amp;quot;)      
+    }
+    elements &amp;lt;- style_list[[i]]$stylers
+    a &amp;lt;- lapply(elements, function(x)paste0(names(x), &amp;quot;:&amp;quot;, x)) %&amp;gt;%
+           unlist() %&amp;gt;%
+           paste0(collapse=&amp;quot;|&amp;quot;)
+    style_string &amp;lt;- paste0(style_string, a)
+    if(i &amp;lt; length(style_list)){
+      style_string &amp;lt;- paste0(style_string, &amp;quot;&amp;amp;style=&amp;quot;)       
+    }
+  }  
+  # google wants 0xff0000 not #ff0000
+  style_string &amp;lt;- gsub(&amp;quot;#&amp;quot;, &amp;quot;0x&amp;quot;, style_string)
+  return(style_string)
+}
+style_string &amp;lt;- create_style_string(style_list)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Here’s another style string with different paramaters for experimentation later.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;style_string1 &amp;lt;- &amp;quot;style=feature:administrative.country|visibility:on|color:0xFFFFFF|weight:1&amp;amp;style=feature:landscape|visibility:on|color:0x126063|weight:0.1&amp;amp;style=feature:administrative.province|visibility:off|color:0x000000&amp;amp;style=feature:administrative.province|visibility:on|color:0xFFFFFF|weight:1&amp;amp;style=feature:water|color:0x17151c|lightness:-20&amp;amp;style=feature:all|element:labels|visibility:off&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now its simply a matter of calling &lt;code&gt;get_googlemap&lt;/code&gt; and specifying the coordinates. You could either look up exact coords and feed them in, or simply guesstimate and experiment. Just be sure you don’t run into your API call limit!&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;mymap &amp;lt;- get_googlemap(center = c(lon = -96.5, lat = 39.50), zoom = 4, style = style_string1)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now let’s &lt;strong&gt;FINALLY&lt;/strong&gt; plot the HQ locations of the Fortune 500 companies to our map.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;Fortune_500_Plot &amp;lt;- ggmap(mymap) +
+  geom_point(data = Fortune_500s, aes(x = x, y = y, color = city.total, size = city.total), alpha = .6) + scale_color_continuous(low = &amp;quot;#ff7700&amp;quot;, high = &amp;quot;red3&amp;quot;, guide = &amp;quot;legend&amp;quot;) +
+  ggtitle(&amp;quot;Fortune 500&amp;#39;s&amp;quot;, subtitle = &amp;quot;|Headquarters by Location|&amp;quot;) +
+  theme(plot.title = element_text(size = 20, color = &amp;quot;dark orange&amp;quot;, face = &amp;quot;bold&amp;quot;)) +
+  theme(axis.text.x = element_text(angle = -90, hjust = .5, vjust = 0.5, color = &amp;quot;black&amp;quot;, size = 11, face = &amp;quot;italic&amp;quot;),
+        axis.text.y = element_text(angle = -55, hjust = 1, vjust = 0.5, color = &amp;quot;black&amp;quot;, size = 11, face = &amp;quot;italic&amp;quot;)) +
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_blank()) +
+guides(fill=guide_legend(title=&amp;quot;HQs&amp;quot;)) +
+  theme(axis.ticks.x = element_line(color = &amp;quot;#126063&amp;quot;, size = 2),
+        axis.ticks.y = element_line(color = &amp;quot;#126063&amp;quot;, size = 2)) +
+  theme(legend.background = element_rect(fill = &amp;quot;#187d80&amp;quot;, linetype = &amp;quot;solid&amp;quot;, color = &amp;quot;#17151c&amp;quot;), legend.text = element_text(color = &amp;quot;#f08809&amp;quot;, face = &amp;quot;bold&amp;quot;), legend.title = element_text(color = &amp;quot;orange&amp;quot;, face = &amp;quot;bold&amp;quot;)) +
+  theme(legend.key = element_blank())
+
+## Let&amp;#39;s add the geographic center of the US mainland for kicks
+
+Fortune_500_Plot + 
+  geom_point(aes(x = -96.5, y = 39.50), color = &amp;quot;red&amp;quot;, alpha = 0.5, shape = 21) + geom_text(aes(label = &amp;quot;Lebanon, Kansas&amp;quot;), color = &amp;quot;white&amp;quot;, x = -98, y = 38.5, size = 2.5, alpha = .3)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-05-07-plotting-fortune-500-hq-s-in-r_files/figure-html/unnamed-chunk-6-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;The above map is pretty nice, no?&lt;/p&gt;
+&lt;p&gt;Many times it can be useful to overlay a heat element to show the density of your data. Many tutorials do this when mapping density of crime activity, for instance.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;Fortune_500_Plot2 &amp;lt;- ggmap(mymap) +
+scale_color_gradient(low = &amp;quot;#ffb700&amp;quot;, high = &amp;quot;#ff7700&amp;quot;) +
+stat_density_2d(data = Fortune_500s, aes(x = x, y = y, fill = ..level.., alpha = ..level..), geom = &amp;quot;polygon&amp;quot;) +
+scale_fill_gradient(low = &amp;quot;chartreuse&amp;quot;, high = &amp;quot;yellow&amp;quot;) +
+scale_alpha(range = c(0, .5)) +
+geom_point(data = Fortune_500s, aes(x = x, y = y), color = &amp;quot;#FF6600&amp;quot;, alpha = 0.5) +
+theme(legend.background = element_rect(fill = &amp;quot;#187d80&amp;quot;, linetype = &amp;quot;solid&amp;quot;, color = &amp;quot;#17151c&amp;quot;), legend.text = element_text(color = &amp;quot;tan&amp;quot;, face = &amp;quot;bold&amp;quot;), legend.title = element_text(color = &amp;quot;tan&amp;quot;, face = &amp;quot;bold&amp;quot;)) +
+theme(legend.key = element_blank()) +
+guides(color = guide_legend(&amp;quot;Total HQ’s&amp;quot;), fill = guide_legend(&amp;quot;Total HQ’s&amp;quot;), alpha = guide_legend(&amp;quot;Total HQ’s&amp;quot;)) + 
+ggtitle(&amp;quot;Fortune 500 Companies&amp;quot;, subtitle = &amp;quot;|Headquarters Throughout America&amp;quot;) +
+theme(plot.title = element_text(size = 20, color = &amp;quot;peru&amp;quot;, face = &amp;quot;bold&amp;quot;)) +
+theme(axis.text.x = element_text(angle = -90, hjust = .5, vjust = 0.5, color = &amp;quot;black&amp;quot;, size = 11, face = &amp;quot;italic&amp;quot;),
+axis.text.y = element_text(angle = -55, hjust = 1, vjust = 0.5, color = &amp;quot;black&amp;quot;, size = 11, face = &amp;quot;italic&amp;quot;)) +
+theme(axis.title.x = element_blank(), axis.title.y = element_blank()) +
+theme(axis.ticks.x = element_line(color = &amp;quot;#126063&amp;quot;, size = 2),
+axis.ticks.y = element_line(color = &amp;quot;#126063&amp;quot;, size = 2))
+
+cities &amp;lt;- data_frame(X = c(-74.00597, -95.3698, -87.6298, -122.4194), Y = c(40.71278, 29.76043, 41.87811, 37.77493), City = c(&amp;quot;New York&amp;quot;, &amp;quot;Houston&amp;quot;, &amp;quot;Chicago&amp;quot;, &amp;quot;San Francisco&amp;quot;))
+
+Fortune_500_Plot2 +
+geom_point(data = cities, aes(x = X, y = Y), color = &amp;quot;red&amp;quot;, alpha = 0.75) + geom_text(data = cities, aes(label = City, x = X, y = Y + -.75), size = 2.5, alpha = .7, color = &amp;quot;red&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-05-07-plotting-fortune-500-hq-s-in-r_files/figure-html/unnamed-chunk-7-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;And that is it! Which map do you prefer more? My favorite is the first one due to how quickly we can make out the cities with most Fortune 500 headquarters based simply by the size of the mapping points.&lt;/p&gt;
+&lt;p&gt;As far as the second plot is concerned, I think that in most cases a heat density function would be better applied on a smaller scale, such the municipal level.&lt;/p&gt;
+&lt;p&gt;Anyway, this was my first experience in &lt;code&gt;ggmap&lt;/code&gt; and it was definitely a good one!&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Migrated over from my original Wordpress blog&lt;/em&gt;&lt;/p&gt;
+</description>
     </item>
     
     <item>
@@ -106,9 +1637,138 @@ R has several choices for plotting geospatial information. Here I use ggmap, how
       <pubDate>Sat, 01 Jul 2017 00:00:00 +0000</pubDate>
       
       <guid>/blog/2017-07-01-top-mba-programs-by-us-news/</guid>
-      <description>Somebody once asked me for reccomendations on MBA programs based on rank and tuition. I didn’t have any information on hand, but knew how toget it. Webscraping.
-Webscraping is an immensly useful tool for gathering data from webpages, when it isn’t hosted on an API or stored in a file somewhere. R’s best tool for webscraping is Rvest.
-So I decided to scrape information on the US News website for university rankings, which has at least 20 pages of MBA probrams available.</description>
+      <description>&lt;p&gt;Somebody once asked me for reccomendations on MBA programs based on rank and tuition. I didn’t have any information on hand, but knew how toget it. Webscraping.&lt;/p&gt;
+&lt;p&gt;Webscraping is an immensly useful tool for gathering data from webpages, when it isn’t hosted on an API or stored in a file somewhere. R’s best tool for webscraping is &lt;strong&gt;Rvest.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;So I decided to scrape information on the US News website for university rankings, which has at least 20 pages of MBA probrams available. To copy and paste that much data into a spreadsheet would be annoying and quite an eye strain.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)
+library(stringr)
+library(rvest)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Of course, before writing a scraper, one needs to code it according to the page layout.&lt;/p&gt;
+&lt;p&gt;I find that:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;There are 19 pages of information I need.&lt;/li&gt;
+&lt;li&gt;Everything is directly available on those pages, no need to iterate over additional, internal links.&lt;/li&gt;
+&lt;li&gt;Xpath selectors perform better than CSS selectors in this particular example.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I will use lapply to run through all 19 pages, with the sprintf function to help paste the new page number in each time, for each new iteration.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;## 19 pages of MBA programs on US News website.
+pages &amp;lt;- 1:19
+
+get_usnews_mbas &amp;lt;- function(x) {
+  website1 &amp;lt;- &amp;#39;https://www.usnews.com/best-graduate-schools/top-business-schools/mba-rankings/page+%s&amp;#39;
+  url &amp;lt;- sprintf(website1, x, collapse = &amp;quot;&amp;quot;)
+  website &amp;lt;- read_html(url)
+  base_url &amp;lt;- &amp;#39;http://www.usnews.com&amp;#39;
+  
+  University &amp;lt;- website %&amp;gt;%
+    html_nodes(&amp;#39;.school-name&amp;#39;) %&amp;gt;%
+    html_text()
+ 
+   Location &amp;lt;- website %&amp;gt;%
+    html_nodes(xpath = &amp;#39;//*[@id=&amp;quot;article&amp;quot;]/table/tbody/tr/td[2]/p&amp;#39;) %&amp;gt;%
+    html_text()
+ 
+    Link &amp;lt;- website %&amp;gt;%
+    html_nodes(xpath = &amp;#39;//*[@id=&amp;quot;article&amp;quot;]/table/tbody/tr/td[2]/a&amp;#39;) %&amp;gt;%
+    html_attr(&amp;quot;href&amp;quot;) %&amp;gt;%
+    str_trim(side = &amp;quot;both&amp;quot;)
+ 
+     Tuition &amp;lt;- website %&amp;gt;%
+    html_nodes(xpath = &amp;#39;//*[@id=&amp;quot;article&amp;quot;]/table/tbody/tr/td[3]&amp;#39;) %&amp;gt;%
+    str_replace_all(&amp;quot;\n&amp;quot;, &amp;quot;&amp;quot;) %&amp;gt;%
+    str_replace_all(&amp;quot;,&amp;quot;, &amp;quot;&amp;quot;) %&amp;gt;%
+    str_extract(&amp;quot;\\d+&amp;quot;) %&amp;gt;%
+    as.integer()
+  
+  ##Combine vectors into data frame
+  data_frame(University,
+             Location,
+             Tuition,
+             Link)
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;div id=&#34;apply-the-function-get-the-data&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Apply the function, get the data!&lt;/h2&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;USNEWS_MBAS &amp;lt;- do.call(rbind, lapply(pages, get_usnews_mbas))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Rvest made this feel almost like magic - Pulling it into R without having to do any manual clicking, copying, and pasting. As I said, web scraping is very powerful!&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;clean-the-data&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Clean the Data&lt;/h2&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;##Split location into City and State.
+
+USNEWS_MBAS &amp;lt;- USNEWS_MBAS %&amp;gt;%
+  separate(Location, c(&amp;quot;City&amp;quot;, &amp;quot;State&amp;quot;), sep = &amp;quot;,&amp;quot;)
+
+##Create column for rankings... 
+
+USNEWS_MBAS &amp;lt;- USNEWS_MBAS %&amp;gt;%
+  mutate(Rank = 1: n())
+
+##The URL&amp;#39;s didnt scrape 100% correctly. But it is easy to paste the base URL onto each branch.
+base_url &amp;lt;- &amp;#39;www.usnews.com&amp;#39;
+
+USNEWS_MBAS &amp;lt;- USNEWS_MBAS %&amp;gt;%
+  mutate(base_url = base_url) %&amp;gt;%
+  unite(Links, base_url, Link, sep = &amp;quot;&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;That’s enough data cleaning, but adding a variable to segment or classify the schools into brackets of ten could be useful when visualizing them in terms of rank and tuition cost later.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;USNEWS_MBAS &amp;lt;- USNEWS_MBAS %&amp;gt;%
+  mutate(Tier = cut(Rank, breaks = seq(0, 400, by = 10))) %&amp;gt;%
+  mutate(Tier = str_replace(Tier, &amp;quot;,&amp;quot;, &amp;quot;-&amp;quot;)) %&amp;gt;% 
+  mutate(Tier = str_replace_all(Tier, &amp;quot;[^0-9-]&amp;quot;, &amp;quot;&amp;quot;))
+
+##Convert intervals into factors  
+
+USNEWS_MBAS$Tier &amp;lt;- factor(USNEWS_MBAS$Tier, levels = c(&amp;quot;0-10&amp;quot;, &amp;quot;10-20&amp;quot;, &amp;quot;20-30&amp;quot;, &amp;quot;30-40&amp;quot;, &amp;quot;40-50&amp;quot;, &amp;quot;50-60&amp;quot;, &amp;quot;60-70&amp;quot;, &amp;quot;70-80&amp;quot;, &amp;quot;80-90&amp;quot;, &amp;quot;90-100&amp;quot;, &amp;quot;Out of Top 100&amp;quot;))
+
+USNEWS_MBAS %&amp;gt;%
+  select(University, City, State, Tuition, Rank, Tier, Links)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 475 x 7
+##    University        City   State Tuition  Rank Tier  Links               
+##    &amp;lt;chr&amp;gt;             &amp;lt;chr&amp;gt;  &amp;lt;chr&amp;gt;   &amp;lt;int&amp;gt; &amp;lt;int&amp;gt; &amp;lt;fct&amp;gt; &amp;lt;chr&amp;gt;               
+##  1 Harvard Universi… Boston &amp;quot; MA&amp;quot;   72000     1 0-10  www.usnews.com/best…
+##  2 University of Ch… Chica… &amp;quot; IL&amp;quot;   69200     2 0-10  www.usnews.com/best…
+##  3 University of Pe… Phila… &amp;quot; PA&amp;quot;   70200     3 0-10  www.usnews.com/best…
+##  4 Stanford Univers… Stanf… &amp;quot; CA&amp;quot;   68868     4 0-10  www.usnews.com/best…
+##  5 Massachusetts In… Cambr… &amp;quot; MA&amp;quot;   71000     5 0-10  www.usnews.com/best…
+##  6 Northwestern Uni… Evans… &amp;quot; IL&amp;quot;   68955     6 0-10  www.usnews.com/best…
+##  7 University of Ca… Berke… &amp;quot; CA&amp;quot;   58794     7 0-10  www.usnews.com/best…
+##  8 University of Mi… Ann A… &amp;quot; MI&amp;quot;   62300     8 0-10  www.usnews.com/best…
+##  9 Columbia Univers… New Y… &amp;quot; NY&amp;quot;   71544     9 0-10  www.usnews.com/best…
+## 10 Dartmouth Colleg… Hanov… &amp;quot; NH&amp;quot;   68910    10 0-10  www.usnews.com/best…
+## # ... with 465 more rows&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Let’s filter the schools and grab only the top 100.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;USNEWS_MBAS %&amp;gt;%
+  filter(Rank &amp;lt;= 100) %&amp;gt;%
+  ggplot(aes(x = Rank, y = Tuition, color = Tier)) + geom_point() +
+  ggtitle(&amp;quot;American MBA Programs&amp;quot;, subtitle = &amp;quot;By Rank and Tuition&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-05-06-top-mba-programs-by-us-news_files/figure-html/unnamed-chunk-6-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Some top 20-30 schools look to be a good deal in terms of high rank and (relatively) lower tuition. But if one goes for schools ranked in the 30-40 range, then the tuition gets even lower.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;a-more-detailed-look&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;A more detailed look&lt;/h2&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;USNEWS_MBAS %&amp;gt;%
+  select(University, Rank, Tuition, Tier) %&amp;gt;%
+  arrange(Rank, Tuition) %&amp;gt;%
+  group_by(Tier) %&amp;gt;%
+  top_n(-3, Tuition) %&amp;gt;%
+  ggplot(aes(x = reorder(University, -Rank), y = Tuition, fill = Tier)) +
+  geom_bar(stat = &amp;quot;identity&amp;quot;) + 
+coord_flip() +
+  ggtitle(&amp;quot;Three &amp;#39;Cheapest&amp;#39; Schools per Tier&amp;quot;, subtitle = &amp;quot;MBA Programs&amp;quot;) +
+  xlab(&amp;quot;University&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-05-06-top-mba-programs-by-us-news_files/figure-html/unnamed-chunk-7-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Up above, I selected 3 institutions from each “Tier” of rankings with the lowest tuition and plotted them. Some universities have suspiciously low tuition, which is likely due to documentation error on the US News website.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;some-observations&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Some Observations&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;MBA programs are very expensive for any institution ranked from 1-30.&lt;/li&gt;
+&lt;li&gt;Programs become affordable from ranks 30-50 and onward&lt;/li&gt;
+&lt;li&gt;Anything that appears especially low is probably an inconsistency in US News’ tuition data.&lt;/li&gt;
+&lt;li&gt;It’d be better to compare school rankings across a certain program instead of comprehensively&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;em&gt;Migrated from my original Wordpress blog&lt;/em&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
     </item>
     
   </channel>

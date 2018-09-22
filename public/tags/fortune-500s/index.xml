@@ -8,7 +8,7 @@
     <language>en-us</language>
     <lastBuildDate>Mon, 29 Jan 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/fortune-500s/index.xml" rel="self" type="application/rss+xml" />
+        <atom:link href="/tags/fortune-500s/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -17,8 +17,140 @@
       <pubDate>Mon, 29 Jan 2018 00:00:00 +0000</pubDate>
       
       <guid>/blog/2018-01-29-plotting-fortune-500-hqs-in-r/</guid>
-      <description>Today I’d like to work a little on geospatial mapping in R, so I’ve chosen a small dataset (only 256 kb) that can be plotted on a map. It the location information of Fortune 500 company headquarters in the US. You can download it from here.
-R has several choices for plotting geospatial information. Here I use ggmap, however in the future I’ll check out the raster and sp packages. Anyway, let’s get started by loading in and cleaning the data.</description>
+      <description>&lt;p&gt;Today I’d like to work a little on geospatial mapping in R, so I’ve chosen a small dataset (only 256 kb) that can be plotted on a map. It the location information of Fortune 500 company headquarters in the US. You can download it from &lt;a href=&#34;https://hifld-geoplatform.opendata.arcgis.com/datasets/a4d813c396934fc09d0b801a0c491852_0?geometry=-140.445%2C24.931%2C-21.881%2C49.099&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;R has several choices for plotting geospatial information. Here I use &lt;code&gt;ggmap&lt;/code&gt;, however in the future I’ll check out the &lt;code&gt;raster&lt;/code&gt; and &lt;code&gt;sp&lt;/code&gt; packages. Anyway, let’s get started by loading in and cleaning the data.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)
+library(ggmap)
+library(RJSONIO)
+
+Fortune_500s &amp;lt;- read_csv(&amp;quot;Fortune_500_Corporate_Headquarters.csv&amp;quot;) 
+##Change case of relevant columns to lowercase, per convention
+Fortune_500s &amp;lt;- Fortune_500s %&amp;gt;% select(NAME, X, Y, ADDRESS, CITY, STATE, ZIP, COUNTY) %&amp;gt;% rename(name = NAME, x = X, y = Y, address = ADDRESS, city = CITY, state = STATE, zip = ZIP, county = COUNTY)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;I prefer to keep column names lowercase, so I made sure to select and rename the relevant columns. Especially important are the “x” and “y” variables, which are the geographic coordinates I will use to plot to the US map later.&lt;/p&gt;
+&lt;p&gt;Before getting into the Google Maps part, let me add two new columns-total count of HQ’s by city, and total count by city &lt;em&gt;and&lt;/em&gt; state.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;Fortune_500s &amp;lt;- Fortune_500s %&amp;gt;%
+  group_by(city, state, county) %&amp;gt;%
+  mutate(city.total = n()) %&amp;gt;%
+  ungroup() %&amp;gt;%
+  group_by(state) %&amp;gt;%
+  mutate(state.total = n())&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Let’s take a quick peak at three cities and states with the most Fortune 500 HQ’s.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;Fortune_500s %&amp;gt;% ungroup() %&amp;gt;%
+  distinct(city, state, city.total) %&amp;gt;%
+  top_n(3, city.total)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Warning: package &amp;#39;bindrcpp&amp;#39; was built under R version 3.3.2&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 3 x 3
+##       city state city.total
+##      &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt;      &amp;lt;int&amp;gt;
+## 1  HOUSTON    TX         23
+## 2 NEW YORK    NY         40
+## 3   DALLAS    TX         11&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;Fortune_500s %&amp;gt;% ungroup() %&amp;gt;%
+  distinct(state, state.total) %&amp;gt;%
+  top_n(3, state.total)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 3 x 2
+##   state state.total
+##   &amp;lt;chr&amp;gt;       &amp;lt;int&amp;gt;
+## 1    CA          52
+## 2    TX          56
+## 3    NY          53&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;So the top 3 states with the most Fortune 500 HQ’s are Texas at 56 HQ’s, California at 52, and New York at 53. For individual cities, NYC has 40, Houston 23, and Dallas 11. Makes sense.&lt;/p&gt;
+&lt;p&gt;Now let’s get to the mapping part. Interestingly, with Google Maps, you can customize many elements regarding the appearance. Be sure to choose only what is necessary - mapping too many words or features would be overcubersome. It is actually pretty convenient to specialize the JSON paramaters- simply use Google Maps tool &lt;a href=&#34;https://mapstyle.withgoogle.com/&#34;&gt;here&lt;/a&gt;. JSON looks unintelligable at first, but after a lot of tinkering, I promise you’ll be able to make sense of it, as I eventually started typing the paramaters into the browser instead of using the point and click tool.&lt;/p&gt;
+&lt;p&gt;Below I used a function to untangle the JSON and and feed it back into the API to download the map. The function does all of the heavy lifting which I kindly borrowed from &lt;a href=&#34;https://www.r-bloggers.com/creating-styled-google-maps-in-ggmap&#34;&gt;this blog&lt;/a&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;style &amp;lt;- &amp;#39;[{&amp;quot;featureType&amp;quot;:&amp;quot;administrative.country&amp;quot;,&amp;quot;elementType&amp;quot;:&amp;quot;geometry&amp;quot;,&amp;quot;stylers&amp;quot;:[{&amp;quot;visibility&amp;quot;:&amp;quot;on&amp;quot;},{&amp;quot;color&amp;quot;:&amp;quot;#FFFFFF&amp;quot;},{&amp;quot;weight&amp;quot;:1}]},{&amp;quot;featureType&amp;quot;:&amp;quot;landscape&amp;quot;,&amp;quot;elementType&amp;quot;:&amp;quot;geometry.fill&amp;quot;,&amp;quot;stylers&amp;quot;:[{&amp;quot;visibility&amp;quot;:&amp;quot;on&amp;quot;},{&amp;quot;color&amp;quot;:&amp;quot;#5f9aba&amp;quot;},{&amp;quot;weight&amp;quot;:0.1}]},{&amp;quot;featureType&amp;quot;:&amp;quot;administrative.province&amp;quot;,&amp;quot;elementType&amp;quot;:&amp;quot;labels.text&amp;quot;,&amp;quot;stylers&amp;quot;:[{&amp;quot;visibility&amp;quot;:&amp;quot;off&amp;quot;},{&amp;quot;color&amp;quot;:&amp;quot;#000000&amp;quot;}]},{&amp;quot;featureType&amp;quot;:&amp;quot;all&amp;quot;,&amp;quot;elementType&amp;quot;:&amp;quot;labels&amp;quot;,&amp;quot;stylers&amp;quot;:[{&amp;quot;visibility&amp;quot;:&amp;quot;off&amp;quot;}]},{&amp;quot;featureType&amp;quot;:&amp;quot;administrative.province&amp;quot;,&amp;quot;elementType&amp;quot;:&amp;quot;geometry.stroke&amp;quot;,&amp;quot;stylers&amp;quot;:[{&amp;quot;visibility&amp;quot;:&amp;quot;on&amp;quot;},{&amp;quot;color&amp;quot;:&amp;quot;#FFFFFF&amp;quot;},{&amp;quot;weight&amp;quot;:1}]},{&amp;quot;featureType&amp;quot;:&amp;quot;water&amp;quot;,&amp;quot;elementType&amp;quot;:&amp;quot;geometry.fill&amp;quot;,&amp;quot;stylers&amp;quot;:[{&amp;quot;color&amp;quot;:&amp;quot;#020c17&amp;quot;},{&amp;quot;lightness&amp;quot;:-20}]}]&amp;#39;
+
+style_list &amp;lt;- fromJSON(style)
+
+
+style &amp;lt;- &amp;#39;[
+  {
+    &amp;quot;stylers&amp;quot;: [
+      { &amp;quot;saturation&amp;quot;: -100 },
+      { &amp;quot;gamma&amp;quot;: 0.5 }
+    ]
+  },{
+    &amp;quot;featureType&amp;quot;: &amp;quot;poi.park&amp;quot;,
+    &amp;quot;stylers&amp;quot;: [
+      { &amp;quot;color&amp;quot;: &amp;quot;#ff0000&amp;quot; }
+    ]
+  }
+]&amp;#39;
+style_list &amp;lt;- fromJSON(style, asText=TRUE)
+
+create_style_string&amp;lt;- function(style_list){
+  style_string &amp;lt;- &amp;quot;&amp;quot;
+  for(i in 1:length(style_list)){
+    if(&amp;quot;featureType&amp;quot; %in% names(style_list[[i]])){
+      style_string &amp;lt;- paste0(style_string, &amp;quot;feature:&amp;quot;, 
+                             style_list[[i]]$featureType, &amp;quot;|&amp;quot;)      
+    }
+    elements &amp;lt;- style_list[[i]]$stylers
+    a &amp;lt;- lapply(elements, function(x)paste0(names(x), &amp;quot;:&amp;quot;, x)) %&amp;gt;%
+           unlist() %&amp;gt;%
+           paste0(collapse=&amp;quot;|&amp;quot;)
+    style_string &amp;lt;- paste0(style_string, a)
+    if(i &amp;lt; length(style_list)){
+      style_string &amp;lt;- paste0(style_string, &amp;quot;&amp;amp;style=&amp;quot;)       
+    }
+  }  
+  # google wants 0xff0000 not #ff0000
+  style_string &amp;lt;- gsub(&amp;quot;#&amp;quot;, &amp;quot;0x&amp;quot;, style_string)
+  return(style_string)
+}
+style_string &amp;lt;- create_style_string(style_list)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Here’s another style string with different paramaters for experimentation later.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;style_string1 &amp;lt;- &amp;quot;style=feature:administrative.country|visibility:on|color:0xFFFFFF|weight:1&amp;amp;style=feature:landscape|visibility:on|color:0x126063|weight:0.1&amp;amp;style=feature:administrative.province|visibility:off|color:0x000000&amp;amp;style=feature:administrative.province|visibility:on|color:0xFFFFFF|weight:1&amp;amp;style=feature:water|color:0x17151c|lightness:-20&amp;amp;style=feature:all|element:labels|visibility:off&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now its simply a matter of calling &lt;code&gt;get_googlemap&lt;/code&gt; and specifying the coordinates. You could either look up exact coords and feed them in, or simply guesstimate and experiment. Just be sure you don’t run into your API call limit!&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;mymap &amp;lt;- get_googlemap(center = c(lon = -96.5, lat = 39.50), zoom = 4, style = style_string1)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now let’s &lt;strong&gt;FINALLY&lt;/strong&gt; plot the HQ locations of the Fortune 500 companies to our map.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;Fortune_500_Plot &amp;lt;- ggmap(mymap) +
+  geom_point(data = Fortune_500s, aes(x = x, y = y, color = city.total, size = city.total), alpha = .6) + scale_color_continuous(low = &amp;quot;#ff7700&amp;quot;, high = &amp;quot;red3&amp;quot;, guide = &amp;quot;legend&amp;quot;) +
+  ggtitle(&amp;quot;Fortune 500&amp;#39;s&amp;quot;, subtitle = &amp;quot;|Headquarters by Location|&amp;quot;) +
+  theme(plot.title = element_text(size = 20, color = &amp;quot;dark orange&amp;quot;, face = &amp;quot;bold&amp;quot;)) +
+  theme(axis.text.x = element_text(angle = -90, hjust = .5, vjust = 0.5, color = &amp;quot;black&amp;quot;, size = 11, face = &amp;quot;italic&amp;quot;),
+        axis.text.y = element_text(angle = -55, hjust = 1, vjust = 0.5, color = &amp;quot;black&amp;quot;, size = 11, face = &amp;quot;italic&amp;quot;)) +
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_blank()) +
+guides(fill=guide_legend(title=&amp;quot;HQs&amp;quot;)) +
+  theme(axis.ticks.x = element_line(color = &amp;quot;#126063&amp;quot;, size = 2),
+        axis.ticks.y = element_line(color = &amp;quot;#126063&amp;quot;, size = 2)) +
+  theme(legend.background = element_rect(fill = &amp;quot;#187d80&amp;quot;, linetype = &amp;quot;solid&amp;quot;, color = &amp;quot;#17151c&amp;quot;), legend.text = element_text(color = &amp;quot;#f08809&amp;quot;, face = &amp;quot;bold&amp;quot;), legend.title = element_text(color = &amp;quot;orange&amp;quot;, face = &amp;quot;bold&amp;quot;)) +
+  theme(legend.key = element_blank())
+
+## Let&amp;#39;s add the geographic center of the US mainland for kicks
+
+Fortune_500_Plot + 
+  geom_point(aes(x = -96.5, y = 39.50), color = &amp;quot;red&amp;quot;, alpha = 0.5, shape = 21) + geom_text(aes(label = &amp;quot;Lebanon, Kansas&amp;quot;), color = &amp;quot;white&amp;quot;, x = -98, y = 38.5, size = 2.5, alpha = .3)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-05-07-plotting-fortune-500-hq-s-in-r_files/figure-html/unnamed-chunk-6-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;The above map is pretty nice, no?&lt;/p&gt;
+&lt;p&gt;Many times it can be useful to overlay a heat element to show the density of your data. Many tutorials do this when mapping density of crime activity, for instance.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;Fortune_500_Plot2 &amp;lt;- ggmap(mymap) +
+scale_color_gradient(low = &amp;quot;#ffb700&amp;quot;, high = &amp;quot;#ff7700&amp;quot;) +
+stat_density_2d(data = Fortune_500s, aes(x = x, y = y, fill = ..level.., alpha = ..level..), geom = &amp;quot;polygon&amp;quot;) +
+scale_fill_gradient(low = &amp;quot;chartreuse&amp;quot;, high = &amp;quot;yellow&amp;quot;) +
+scale_alpha(range = c(0, .5)) +
+geom_point(data = Fortune_500s, aes(x = x, y = y), color = &amp;quot;#FF6600&amp;quot;, alpha = 0.5) +
+theme(legend.background = element_rect(fill = &amp;quot;#187d80&amp;quot;, linetype = &amp;quot;solid&amp;quot;, color = &amp;quot;#17151c&amp;quot;), legend.text = element_text(color = &amp;quot;tan&amp;quot;, face = &amp;quot;bold&amp;quot;), legend.title = element_text(color = &amp;quot;tan&amp;quot;, face = &amp;quot;bold&amp;quot;)) +
+theme(legend.key = element_blank()) +
+guides(color = guide_legend(&amp;quot;Total HQ’s&amp;quot;), fill = guide_legend(&amp;quot;Total HQ’s&amp;quot;), alpha = guide_legend(&amp;quot;Total HQ’s&amp;quot;)) + 
+ggtitle(&amp;quot;Fortune 500 Companies&amp;quot;, subtitle = &amp;quot;|Headquarters Throughout America&amp;quot;) +
+theme(plot.title = element_text(size = 20, color = &amp;quot;peru&amp;quot;, face = &amp;quot;bold&amp;quot;)) +
+theme(axis.text.x = element_text(angle = -90, hjust = .5, vjust = 0.5, color = &amp;quot;black&amp;quot;, size = 11, face = &amp;quot;italic&amp;quot;),
+axis.text.y = element_text(angle = -55, hjust = 1, vjust = 0.5, color = &amp;quot;black&amp;quot;, size = 11, face = &amp;quot;italic&amp;quot;)) +
+theme(axis.title.x = element_blank(), axis.title.y = element_blank()) +
+theme(axis.ticks.x = element_line(color = &amp;quot;#126063&amp;quot;, size = 2),
+axis.ticks.y = element_line(color = &amp;quot;#126063&amp;quot;, size = 2))
+
+cities &amp;lt;- data_frame(X = c(-74.00597, -95.3698, -87.6298, -122.4194), Y = c(40.71278, 29.76043, 41.87811, 37.77493), City = c(&amp;quot;New York&amp;quot;, &amp;quot;Houston&amp;quot;, &amp;quot;Chicago&amp;quot;, &amp;quot;San Francisco&amp;quot;))
+
+Fortune_500_Plot2 +
+geom_point(data = cities, aes(x = X, y = Y), color = &amp;quot;red&amp;quot;, alpha = 0.75) + geom_text(data = cities, aes(label = City, x = X, y = Y + -.75), size = 2.5, alpha = .7, color = &amp;quot;red&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-05-07-plotting-fortune-500-hq-s-in-r_files/figure-html/unnamed-chunk-7-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;And that is it! Which map do you prefer more? My favorite is the first one due to how quickly we can make out the cities with most Fortune 500 headquarters based simply by the size of the mapping points.&lt;/p&gt;
+&lt;p&gt;As far as the second plot is concerned, I think that in most cases a heat density function would be better applied on a smaller scale, such the municipal level.&lt;/p&gt;
+&lt;p&gt;Anyway, this was my first experience in &lt;code&gt;ggmap&lt;/code&gt; and it was definitely a good one!&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Migrated over from my original Wordpress blog&lt;/em&gt;&lt;/p&gt;
+</description>
     </item>
     
   </channel>

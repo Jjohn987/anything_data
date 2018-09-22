@@ -8,7 +8,7 @@
     <language>en-us</language>
     <lastBuildDate>Fri, 01 Jun 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/ctextclassics/index.xml" rel="self" type="application/rss+xml" />
+        <atom:link href="/tags/ctextclassics/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -17,8 +17,267 @@
       <pubDate>Fri, 01 Jun 2018 00:00:00 +0000</pubDate>
       
       <guid>/blog/2018-06-01-plotting-word-bigrams-with-3-chinese-classics/</guid>
-      <description>In the last post, we saw frequencies of the most common words in the Analects, Zhuangzi, and Mozi texts. The faceted plot did an excellent job of capturing a generic “theme” of each text. However, I wondered how the results might change when plotting bigrams (2 word combinations of adjacent words) as opposed to single values.
-This is where I ran into a problem with Tidytext – although it worked fine for tokenizing Chinese text into single character tokens, it did not perform as well at separating the text into bigrams.</description>
+      <description>&lt;script src=&#34;/rmarkdown-libs/kePrint/kePrint.js&#34;&gt;&lt;/script&gt;
+
+
+&lt;p&gt;In the last post, we saw frequencies of the most common words in the Analects, Zhuangzi, and Mozi texts. The faceted plot did an excellent job of capturing a generic “theme” of each text. However, I wondered how the results might change when plotting bigrams (2 word combinations of adjacent words) as opposed to single values.&lt;/p&gt;
+&lt;p&gt;This is where I ran into a problem with Tidytext – although it worked fine for tokenizing Chinese text into single character tokens, it did not perform as well at separating the text into bigrams. I felt my only choice was to define my own (crude) function to segment the text better. So I did.&lt;/p&gt;
+&lt;p&gt;To pick up from the last post, I source my data in from a file which I originally downloaded with &lt;code&gt;ctextclassics&lt;/code&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)
+library(readr)
+library(stringr)
+##For Chinese stopwords, pinyin, simplified, traditional Chinese conversions
+library(tmcn)
+##For pretty HTML tables
+library(kableExtra)
+
+
+my_classics &amp;lt;- read_csv(&amp;quot;~/Desktop/anything_data/content/post/my_classics.csv&amp;quot;) %&amp;gt;%
+  select(-1) %&amp;gt;%
+  mutate(book = str_to_title(book))&lt;/code&gt;&lt;/pre&gt;
+&lt;div id=&#34;the-data-look-like-this&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;The data look like this:&lt;/h2&gt;
+&lt;div style=&#34;border: 1px solid #ddd; padding: 5px; overflow-y: scroll; height:350px; overflow-x: scroll; width:100%; &#34;&gt;
+&lt;table class=&#34;table table-responsive&#34; style=&#34;margin-left: auto; margin-right: auto;&#34;&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:left;&#34;&gt;
+book
+&lt;/th&gt;
+&lt;th style=&#34;text-align:left;&#34;&gt;
+chapter
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+chapter_number
+&lt;/th&gt;
+&lt;th style=&#34;text-align:left;&#34;&gt;
+chapter_cn
+&lt;/th&gt;
+&lt;th style=&#34;text-align:left;&#34;&gt;
+word
+&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+Analects
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+xue-er
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+1
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+學而
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+子曰：「學而時習之，不亦說乎？有朋自遠方來，不亦樂乎？人不知而不慍，不亦君子乎？」
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+Analects
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+xue-er
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+1
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+學而
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+有子曰：「其為人也孝弟，而好犯上者，鮮矣；不好犯上，而好作亂者，未之有也。君子務本，本立而道生。孝弟也者，其為仁之本與！」
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+Analects
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+xue-er
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+1
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+學而
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+子曰：「巧言令色，鮮矣仁！」
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+Analects
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+xue-er
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+1
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+學而
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+曾子曰：「吾日三省吾身：為人謀而不忠乎？與朋友交而不信乎？傳不習乎？」
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+Analects
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+xue-er
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+1
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+學而
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+子曰：「道千乘之國：敬事而信，節用而愛人，使民以時。」
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+Analects
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+xue-er
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+1
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+學而
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+子曰：「弟子入則孝，出則弟，謹而信，汎愛眾，而親仁。行有餘力，則以學文。」
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;em&gt;Note, I’m not accustumed to looking at traditional characters.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;So, my workflow for working with bigrams with this dataset is:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;I determine a word as being constituted by one character, since this is usually the case for classical Chinese.&lt;/li&gt;
+&lt;li&gt;I write a simple function to concentate each word with each adjacent word. (ABCD) to (A B, B C, C D)&lt;/li&gt;
+&lt;li&gt;I unnest the resulting list column so there is one value per row (tidy format).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The workflow beyond this point is ultimately the same as before - obtaining the value-count pairs per book and then plotting them. The hope here is that paired words can give us an even deeper undestanding about each book than the single words did.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;##Simple function to concentate a value in a vector with adjacent value
+
+simple_bigram &amp;lt;- function(x) {
+  if(length(x) &amp;lt; 2) {
+    return(NA)
+  } else {
+output_length &amp;lt;- length(x) - 1
+output &amp;lt;- vector(length = output_length)
+for(i in 1:output_length) {
+output[i] &amp;lt;- paste(x[i], x[i+1], sep = &amp;quot; &amp;quot;)
+}
+output
+  }
+}
+
+##Use stringi split_boundaries to split each string into a vector with one value per character.
+##Use the 2 functions with unlist and lapply.
+
+tokenizer &amp;lt;- function(text) {
+unlist(lapply(stringi::stri_split_boundaries(text), function(x) simple_bigram(x)))
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;I would like to add a disclaimer that, my “one character = one word” assumption for classical Chinese used in constructing bigrams here isn’t perfect in all cases. (Ultimately words will have differing lengths, and words will need to be split with a more specialized tool.) However, in the absence of a fine-tuned segmenter, I do think that this method accomplishes the gist of what I’m attempting to get at.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;##Clean out all odd punctuation symbols
+##Apply tokenizing function to create bigrams
+##Filter out stop words
+
+stopwordsCN &amp;lt;- data.frame(word = c(tmcn::stopwordsCN(),
+&amp;quot;子曰&amp;quot;, &amp;quot;曰&amp;quot;, &amp;quot;於&amp;quot;, &amp;quot;則&amp;quot;,&amp;quot;吾&amp;quot;, &amp;quot;子&amp;quot;, &amp;quot;不&amp;quot;, &amp;quot;無&amp;quot;, &amp;quot;斯&amp;quot;,&amp;quot;與&amp;quot;, &amp;quot;為&amp;quot;, &amp;quot;必&amp;quot;,
+&amp;quot;使&amp;quot;, &amp;quot;非&amp;quot;,&amp;quot;天下&amp;quot;, &amp;quot;以為&amp;quot;,&amp;quot;上&amp;quot;, &amp;quot;下&amp;quot;, &amp;quot;人&amp;quot;, &amp;quot;天&amp;quot;, &amp;quot;不可&amp;quot;, &amp;quot;謂&amp;quot;, &amp;quot;是以&amp;quot;,
+&amp;quot;而不&amp;quot;, &amp;quot;皆&amp;quot;, &amp;quot;不亦&amp;quot;, &amp;quot;乎&amp;quot;, &amp;quot;之&amp;quot;, &amp;quot;而&amp;quot;, &amp;quot;者&amp;quot;, &amp;quot;本&amp;quot;, &amp;quot;與&amp;quot;, &amp;quot;吾&amp;quot;, &amp;quot;則&amp;quot;,
+&amp;quot;以&amp;quot;, &amp;quot;其&amp;quot;, &amp;quot;為&amp;quot;, &amp;quot;不以&amp;quot;, &amp;quot;不可&amp;quot;, &amp;quot;也&amp;quot;, &amp;quot;矣&amp;quot;, &amp;quot;子&amp;quot;, &amp;quot;由&amp;quot;, &amp;quot;子曰&amp;quot;, &amp;quot;曰&amp;quot;,
+&amp;quot;非其&amp;quot;, &amp;quot;於&amp;quot;, &amp;quot;不能&amp;quot;, &amp;quot;如&amp;quot;, &amp;quot;斯&amp;quot;, &amp;quot;然&amp;quot;, &amp;quot;君&amp;quot;, &amp;quot;亦&amp;quot;, &amp;quot;言&amp;quot;, &amp;quot;聞&amp;quot;, &amp;quot;今&amp;quot;,
+&amp;quot;君&amp;quot;, &amp;quot;不知&amp;quot;, &amp;quot;无&amp;quot;))
+
+
+bigrams &amp;lt;- my_classics %&amp;gt;%
+  mutate(word = str_replace_all(word, &amp;quot;[「」《》『』,，、。；：？！]&amp;quot;, &amp;quot;&amp;quot;)) %&amp;gt;%
+  mutate(word = map(word, function(x) tokenizer(x))) %&amp;gt;%
+  unnest(word) %&amp;gt;%
+  filter(!is.na(word)) %&amp;gt;%
+  separate(word, into = c(&amp;quot;word1&amp;quot;, &amp;quot;word2&amp;quot;)) %&amp;gt;%
+  filter(!word1 %in% stopwordsCN$word, !word2 %in% stopwordsCN$word) %&amp;gt;%
+  unite(&amp;quot;word&amp;quot;, c(&amp;quot;word1&amp;quot;, &amp;quot;word2&amp;quot;), sep = &amp;quot; &amp;quot;)
+
+
+## Bigram counts per book 
+
+book_bigram_count &amp;lt;- bigrams %&amp;gt;%
+  count(book, word) %&amp;gt;%
+  arrange(book, -n) %&amp;gt;%
+  group_by(book) %&amp;gt;%
+  mutate(frequency = n/sum(n))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;With these counts, we’re almost ready to plot. However, in a minor plot twist, let’s read in a beautiful graphic to use as a background in our plot later. Let’s also set up a color scheme that matches the themes of classical philosophy and calligraphy.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(jpeg)
+library(grid)
+image &amp;lt;- jpeg::readJPEG(&amp;quot;~/Desktop/anything_data/content/post/image.jpg&amp;quot;)
+
+bar_colors &amp;lt;- rev(c(&amp;quot;#271a0c&amp;quot;, &amp;quot;#483030&amp;quot;, &amp;quot;#232528&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;I also wish to provide English labels to go with the terms we’re plotting.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;knitr::opts_chunk$set(fig.width=16, fig.height=12)
+
+## I translated after taking the top 10 bigrams, but I place this vector one step ahead in the workflow in order for the processing to occur in one step.
+
+translations &amp;lt;- c(&amp;quot;Studious&amp;quot;, &amp;quot;(Disciple) Yan Hui&amp;quot;, &amp;quot;3 years’ mourning&amp;quot;, &amp;quot;Great officer&amp;quot;, &amp;quot;(Disciple) Zi Zhang asked&amp;quot;, &amp;quot;Enter politics&amp;quot;, &amp;quot;Have not seen&amp;quot;, &amp;quot;(Disciple) Fan Chi&amp;quot;, &amp;quot;(Disciple) Zi Gong asked&amp;quot;, &amp;quot;Inquired about governance&amp;quot;, &amp;quot;Parents&amp;quot;, &amp;quot;Know Ritual&amp;quot;,&amp;quot; Ritual&amp;quot;, &amp;quot;(Disciple) Lu asked&amp;quot;, &amp;quot;Sage King&amp;quot;, &amp;quot;Ghosts/Spirits&amp;quot;, &amp;quot;Common folk&amp;quot;, &amp;quot;Feudal lords&amp;quot;, &amp;quot;Country&amp;quot;, &amp;quot;Engage in&amp;quot;, &amp;quot;Rulers&amp;quot;, &amp;quot;All people&amp;quot;, &amp;quot;10 Steps&amp;quot;, &amp;quot;Control&amp;quot;, &amp;quot;All Things&amp;quot;, &amp;quot;Confucius&amp;quot;, &amp;quot;Benevolence and\n Righteousness&amp;quot;, &amp;quot;Lao Dan/Laozi&amp;quot;, &amp;quot;Master&amp;quot;, &amp;quot;Never&amp;quot;, &amp;quot;Huang Di&amp;quot;, &amp;quot;The Beginning&amp;quot;, &amp;quot;Zhu Liang&amp;quot;, &amp;quot;Life and\n Death&amp;quot;)
+
+##Filter out 3 &amp;quot;nonsense&amp;quot; values that otherwise show up in top bigrams
+##Calculate top 10 bigrams
+##Include English translations for labelling
+
+top_10_bigrams &amp;lt;- book_bigram_count %&amp;gt;%
+  select(book, word, n, frequency) %&amp;gt;%
+  distinct() %&amp;gt;%
+  filter(!word %in% c(&amp;quot;公 問&amp;quot;, &amp;quot;公 大&amp;quot;, &amp;quot;二 三&amp;quot;)) %&amp;gt;%
+  top_n(10, n) %&amp;gt;%
+  arrange(book, -n) %&amp;gt;%
+  ungroup() %&amp;gt;%
+  mutate(translations = translations)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ggplot(top_10_bigrams, aes(x = reorder(factor(word), frequency), y = n, fill = book)) +
+   annotation_custom(rasterGrob(image, 
+                               width = unit(1,&amp;quot;npc&amp;quot;), 
+                               height = unit(1,&amp;quot;npc&amp;quot;)), 
+                               -Inf, Inf, -Inf, Inf) +
+  geom_col(alpha = .95, color = &amp;quot;black&amp;quot;, show.legend = FALSE) + 
+  geom_text(aes(label = translations), color = &amp;quot;ivory&amp;quot;, position = position_stack(vjust = 0.5)) + 
+  facet_wrap(~book, scales = &amp;quot;free&amp;quot;) + 
+  coord_flip() +
+  scale_fill_manual(values = bar_colors) +
+  theme_dark(base_family= &amp;quot;HiraKakuProN-W3&amp;quot;) + 
+  theme(axis.text.x = element_text(color = &amp;quot;#232528&amp;quot;, angle = 90)) +
+  theme(axis.text.y = element_text(color = &amp;quot;#232528&amp;quot;, size = 12)) +
+  theme(panel.background = element_rect(fill = &amp;quot;#87969B&amp;quot;), plot.background = element_rect(fill = &amp;quot;ivory&amp;quot;), panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + 
+  labs(x = NULL, y = &amp;quot;Count&amp;quot;) +
+  ggtitle(&amp;quot;Top Word Bigrams \n The Analects, Mozi, and Zhuangzi&amp;quot;) +
+  theme(plot.title = element_text(size = 20, color = &amp;quot;#232528&amp;quot;, hjust = 0.5)) &lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-06-01-plotting-word-bigrams-with-3-chinese-classics_files/figure-html/unnamed-chunk-7-1.png&#34; width=&#34;1248&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;did-counting-bigrams-help&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Did Counting Bigrams Help?&lt;/h2&gt;
+&lt;p&gt;This method did yield some new information. Firstly we see that the Analects seems to have a prevalent structure of Confucius’s disciples asking him questions. We also see meaning regarding the concept of Ritual, 3 years’ mourning after the passing of a parent, studying, and parents. These values sound very Confucian (and there were more core themes such as piety, slightly right out of the top 10). Arguably if we filtered out the disciple names we’d see more interesting bigrams.&lt;/p&gt;
+&lt;p&gt;The Zhuangzi is still very cosmological - All Things, Life and Death, The Beginning are all evidence of this.&lt;/p&gt;
+&lt;p&gt;And as for the Mozi, well, it is still hard to identify a core theme through bigrams. (Hint, calculating top bigrams by chapter helps more meaningful themes such as “Universal Love” shine through.)&lt;/p&gt;
+&lt;p&gt;Anyway, that is the conclusion for this post on bigrams!&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;*Apologies regarding the background image in plot; I can’t remember its source…&lt;/p&gt;
+&lt;/div&gt;
+</description>
     </item>
     
     <item>
@@ -27,8 +286,649 @@ This is where I ran into a problem with Tidytext – although it worked fine for
       <pubDate>Tue, 29 May 2018 00:00:00 +0000</pubDate>
       
       <guid>/blog/2018-05-29-a-tidytext-analysis-of-3-chinese-classics/</guid>
-      <description>For a long time I’ve admired the tidytext package and its wonderful companion book Text Mining with R. After reading it I thought, “Why not undertake a project of Chinese text analysis?” I am deeply interested in Chinese philosophy but I decided to keep the analysis narrow by selecting just three works - The Analects, Zhuangzi, and the Mozi.
-Following similar pace with Tidytext, I first download my data. Here I use my package ctextclassics and specifically, the function get_books(c(.</description>
+      <description>&lt;script src=&#34;/rmarkdown-libs/kePrint/kePrint.js&#34;&gt;&lt;/script&gt;
+
+
+&lt;p&gt;For a long time I’ve admired the &lt;code&gt;tidytext&lt;/code&gt; package and its wonderful companion book &lt;a href=&#34;https://www.tidytextmining.com&#34;&gt;&lt;em&gt;Text Mining with R&lt;/em&gt;&lt;/a&gt;. After reading it I thought, “Why not undertake a project of Chinese text analysis?” &lt;strong&gt;I am deeply interested in Chinese philosophy&lt;/strong&gt; but I decided to keep the analysis narrow by selecting just three works - &lt;strong&gt;The Analects, Zhuangzi, and the Mozi&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Following similar pace with Tidytext, I first download my data. Here I use my package &lt;code&gt;ctextclassics&lt;/code&gt; and specifically, the function &lt;code&gt;get_books(c(...))&lt;/code&gt;. But I want to point out the API limit is very low and I had to download my books between two different days. For information on ctextclassics, check out my previous post or type &lt;code&gt;install_github(&amp;quot;Jjohn987/ctextclassics&amp;quot;)&lt;/code&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)
+library(stringr)
+library(ctextclassics)
+library(tmcn)
+library(tidytext)
+library(topicmodels)
+library(readr)
+
+my_classics &amp;lt;- read_csv(&amp;quot;~/Desktop/anything_data/content/post/my_classics.csv&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;With any text analysis, tokenizing the text and filtering out stop words is fundamental. Tidytext segments English quite naturally, considering words are easily separated by spaces. However, I’m not so sure how it performs with Chinese characters.&lt;/p&gt;
+&lt;p&gt;There are specific segementers for Chinese text - one main tool is &lt;code&gt;jiebaR&lt;/code&gt;, which is also included in the &lt;code&gt;tmcn&lt;/code&gt; package.&lt;/p&gt;
+&lt;p&gt;However, when comparing the two methods, I noticed that JiebaR segments text in a way most suitable for &lt;strong&gt;modern&lt;/strong&gt; Chinese (Mostly 2 character words). Since I’m dealing with classical Chinese here, Tidytext’s one character segmentaions are more preferable.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;tidytext_segmented &amp;lt;- my_classics %&amp;gt;% 
+  unnest_tokens(word, word)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;For dealing with stopwords, JiebaR offers a useful stopword list, but obviously more should be added since we’re dealing with classical Chinese. Many of the words I added are amorphous grammar particles, but there’s other low value phrases amongst these works such as “子曰” (“The Master said”), “天下” (Tian Xia, a common but amorphous concept roughly meaning a country, realm, or the world), and more.&lt;/p&gt;
+&lt;p&gt;Let’s filter out those words and make 2 data frames - word frequencies for each book and each chapter.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;stopwordsCN &amp;lt;- data.frame(word = c(tmcn::stopwordsCN(),
+&amp;quot;子曰&amp;quot;, &amp;quot;曰&amp;quot;, &amp;quot;於&amp;quot;, &amp;quot;則&amp;quot;,&amp;quot;吾&amp;quot;, &amp;quot;子&amp;quot;, &amp;quot;不&amp;quot;, &amp;quot;無&amp;quot;, &amp;quot;斯&amp;quot;,&amp;quot;與&amp;quot;, &amp;quot;為&amp;quot;, &amp;quot;必&amp;quot;,
+&amp;quot;使&amp;quot;, &amp;quot;非&amp;quot;,&amp;quot;天下&amp;quot;, &amp;quot;以為&amp;quot;,&amp;quot;上&amp;quot;, &amp;quot;下&amp;quot;, &amp;quot;人&amp;quot;, &amp;quot;天&amp;quot;, &amp;quot;不可&amp;quot;, &amp;quot;謂&amp;quot;, &amp;quot;是以&amp;quot;,
+&amp;quot;而不&amp;quot;, &amp;quot;皆&amp;quot;, &amp;quot;不亦&amp;quot;, &amp;quot;乎&amp;quot;, &amp;quot;之&amp;quot;, &amp;quot;而&amp;quot;, &amp;quot;者&amp;quot;, &amp;quot;本&amp;quot;, &amp;quot;與&amp;quot;, &amp;quot;吾&amp;quot;, &amp;quot;則&amp;quot;,
+&amp;quot;以&amp;quot;, &amp;quot;其&amp;quot;, &amp;quot;為&amp;quot;, &amp;quot;不以&amp;quot;, &amp;quot;不可&amp;quot;, &amp;quot;也&amp;quot;, &amp;quot;矣&amp;quot;, &amp;quot;子&amp;quot;, &amp;quot;由&amp;quot;, &amp;quot;子曰&amp;quot;, &amp;quot;曰&amp;quot;,
+&amp;quot;非其&amp;quot;, &amp;quot;於&amp;quot;, &amp;quot;不能&amp;quot;, &amp;quot;如&amp;quot;, &amp;quot;斯&amp;quot;, &amp;quot;然&amp;quot;, &amp;quot;君&amp;quot;, &amp;quot;亦&amp;quot;, &amp;quot;言&amp;quot;, &amp;quot;聞&amp;quot;, &amp;quot;今&amp;quot;,
+&amp;quot;君&amp;quot;, &amp;quot;不知&amp;quot;, &amp;quot;无&amp;quot;))
+
+## Add a column that converts traditional Chinese to simplified Chinese
+## Count words by book, then word frequency to account for different book lengths. 
+
+counts_by_book &amp;lt;- tidytext_segmented %&amp;gt;%
+  ungroup() %&amp;gt;%
+  mutate(simplified = tmcn::toTrad(word, rev = TRUE), pinyin = tmcn::toPinyin(word)) %&amp;gt;%
+  anti_join(stopwordsCN) %&amp;gt;%
+  count(book, word, pinyin, simplified) %&amp;gt;%
+  group_by(book) %&amp;gt;%
+  mutate(word_freq = `n`/sum(`n`)) %&amp;gt;%
+  arrange(-n) %&amp;gt;%
+  ungroup()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Warning: Column `word` joining character vector and factor, coercing into
+## character vector&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now let’s do the familiar ritual of examining the top 10 words in each book (e.g, counts_by_book) and plot them.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;book_top_words &amp;lt;- counts_by_book %&amp;gt;%
+  ungroup() %&amp;gt;%
+  group_by(book) %&amp;gt;%
+  top_n(10) %&amp;gt;%
+  ungroup()
+
+##format the above dataframe for a pretty display with kable
+formatted_words &amp;lt;- book_top_words %&amp;gt;%
+  group_by(book) %&amp;gt;%
+  transmute(word, simplified, n, word_freq, order = 1:n()) %&amp;gt;%
+  arrange(book, -word_freq) %&amp;gt;%
+  select(-order)
+
+##Set format for kable 
+options(knitr.table.format = &amp;quot;html&amp;quot;) 
+
+knitr::kable(formatted_words) %&amp;gt;%
+  kableExtra::kable_styling(font_size = 15, full_width = T) %&amp;gt;% kableExtra::row_spec(1:10, color = &amp;quot;white&amp;quot;, background = &amp;quot;#232528&amp;quot;) %&amp;gt;% kableExtra::row_spec(11:20, color = &amp;quot;white&amp;quot;, background = &amp;quot;#6A656B&amp;quot;) %&amp;gt;% kableExtra::row_spec(21:30, color = &amp;quot;white&amp;quot;, background = &amp;quot;#454d4c&amp;quot;) %&amp;gt;%
+kableExtra::row_spec(0, bold = F, color = &amp;quot;black&amp;quot;, background = &amp;quot;white&amp;quot;)  %&amp;gt;% kableExtra::scroll_box(width = &amp;quot;100%&amp;quot;, height = &amp;quot;350px&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;div style=&#34;border: 1px solid #ddd; padding: 5px; overflow-y: scroll; height:350px; overflow-x: scroll; width:100%; &#34;&gt;
+&lt;table class=&#34;table&#34; style=&#34;font-size: 15px; margin-left: auto; margin-right: auto;&#34;&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:left;color: black;background-color: white;&#34;&gt;
+book
+&lt;/th&gt;
+&lt;th style=&#34;text-align:left;color: black;background-color: white;&#34;&gt;
+word
+&lt;/th&gt;
+&lt;th style=&#34;text-align:left;color: black;background-color: white;&#34;&gt;
+simplified
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;color: black;background-color: white;&#34;&gt;
+n
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;color: black;background-color: white;&#34;&gt;
+word_freq
+&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+analects
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+問
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+问
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+110
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+0.0154321
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+analects
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+君子
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+君子
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+108
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+0.0151515
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+analects
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+仁
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+仁
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+76
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+0.0106622
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+analects
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+孔子
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+孔子
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+68
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+0.0095398
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+analects
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+行
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+行
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+57
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+0.0079966
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+analects
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+知
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+知
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+54
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+0.0075758
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+analects
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+路
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+路
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+52
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+0.0072952
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+analects
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+見
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+见
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+51
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+0.0071549
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+analects
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+民
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+民
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+45
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+0.0063131
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+analects
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+子貢
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+子贡
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+44
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+0.0061728
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+mozi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+民
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+民
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+257
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+0.0068141
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+mozi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+治
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+治
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+229
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+0.0060717
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+mozi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+利
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+利
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+227
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+0.0060187
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+mozi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+墨
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+墨
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+207
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+0.0054884
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+mozi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+知
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+知
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+200
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+0.0053028
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+mozi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+說
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+说
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+197
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+0.0052232
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+mozi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+行
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+行
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+192
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+0.0050907
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+mozi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+欲
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+欲
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+190
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+0.0050376
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+mozi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+長
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+长
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+189
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+0.0050111
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+mozi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+國
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+国
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+175
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+0.0046399
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+zhuangzi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+夫
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+夫
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+313
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+0.0099356
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+zhuangzi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+知
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+知
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+302
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+0.0095864
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+zhuangzi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+見
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+见
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+222
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+0.0070469
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+zhuangzi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+物
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+物
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+217
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+0.0068882
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+zhuangzi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+大
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+大
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+204
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+0.0064756
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+zhuangzi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+行
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+行
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+176
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+0.0055868
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+zhuangzi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+邪
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+邪
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+165
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+0.0052376
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+zhuangzi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+德
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+德
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+164
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+0.0052059
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+zhuangzi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+道
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+道
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+164
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+0.0052059
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+zhuangzi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+心
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+心
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+142
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+0.0045075
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;p&gt;So far so good - these results are very intuitive. Of course, plotting them can accomplish this in even greater detail. Let’s plot the top 10 words and their respective frequencies from each of these texts, in calligraphy inspired colors!&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ink_colors &amp;lt;- rev(c(&amp;quot;ivory&amp;quot;, &amp;quot;#454d4c&amp;quot;, &amp;quot;#6A656B&amp;quot;, &amp;quot;#232528&amp;quot;))
+
+ggplot(book_top_words, aes(x = reorder(word, word_freq), y = word_freq, fill = book)) +
+  geom_col(show.legend = FALSE) + 
+  geom_text(aes(label = pinyin), color = &amp;quot;white&amp;quot;, position = position_stack(vjust = 0.5)) + 
+  facet_wrap(~book, scales = &amp;quot;free&amp;quot;, labeller = labeller(labels)) + 
+  coord_flip() +
+  scale_fill_manual(values = ink_colors) +
+  theme_dark(base_family= &amp;quot;HiraKakuProN-W3&amp;quot;) + 
+  theme(axis.text.x = element_text(color = &amp;quot;#232528&amp;quot;, angle = 90)) +
+  theme(axis.text.y = element_text(color = &amp;quot;#232528&amp;quot;, size = 15)) +
+  theme(panel.background = element_rect(fill = &amp;quot;#87969B&amp;quot;), plot.background = element_rect(fill = &amp;quot;ivory&amp;quot;), panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + 
+  labs(x = NULL, y = NULL) +
+  ggtitle(&amp;quot;Word Frequencies&amp;quot;) +
+  theme(plot.title = element_text(size = 20, color = &amp;quot;#232528&amp;quot;, hjust = 0.5))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-05-29-tidytext-analysis-of-3-chinese-classics_files/figure-html/unnamed-chunk-5-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;div id=&#34;summary&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Summary&lt;/h2&gt;
+&lt;p&gt;In this post, I…&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Used ctextclassics to download classic Chinese texts&lt;/li&gt;
+&lt;li&gt;Split the text into character tokens of 1&lt;/li&gt;
+&lt;li&gt;Filtered out common stop words&lt;/li&gt;
+&lt;li&gt;Grouped the data by book and word, calculating total words and word frequencies&lt;/li&gt;
+&lt;li&gt;Made a (calligraphy inspired) bar plot of the top 10 most frequent words in each text.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div id=&#34;conclusion&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;These word frequencies are very pleasing!&lt;/p&gt;
+&lt;p&gt;The Analects has prevalant usage of words such as “Benevolence” (仁), “Gentleman” (君子) and “Confucius” (孔子). (I capitalize these terms to show they are uniquely different from contemporary English equivalents.)&lt;/p&gt;
+&lt;p&gt;The Zhuangzi, a Taoist text, mentions cosmological concepts such as the Tao(道), morality (德), and evil(邪).&lt;/p&gt;
+&lt;p&gt;The Mozi seems to have terms that are mostly civic related, such as country (国), citizen (民) and govern（治).&lt;/p&gt;
+&lt;p&gt;These frequencies do a good job of capturing the context of the works - e.g., regarding the Analects, Benevolence and the Gentleman are often mentioned - one examplary sentence may be:&lt;/p&gt;
+&lt;p&gt;“君子而不仁者有矣夫。未有小人而仁者也.” My own (shorthand) translation:&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Of Gentlemen, there are some who do not possess Benevolence; but of Villians, there is not a single one that possesses it.&lt;/em&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;next-post&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Next Post&lt;/h2&gt;
+&lt;p&gt;In my next post, I would like to either &lt;strong&gt;follow the same procedure but with bigrams&lt;/strong&gt;, and/or &lt;strong&gt;apply LDA (Latent Dirichlet Allocation)&lt;/strong&gt; to see whether chapters can be distinguished from one another.&lt;/p&gt;
+&lt;p&gt;Although frequent words are very different among texts, I’m not so sure that each book can be completely distinguished from others (There are many shared words - Dao isn’t solely mentioned in Taoist texts, and each text includes civic related concepts related to proper governance, plus, the Mozi is likely authored by different people!)&lt;/p&gt;
+&lt;p&gt;On that note, to be continued!&lt;/p&gt;
+&lt;/div&gt;
+</description>
     </item>
     
     <item>
@@ -37,8 +937,68 @@ Following similar pace with Tidytext, I first download my data. Here I use my pa
       <pubDate>Thu, 17 May 2018 00:00:00 +0000</pubDate>
       
       <guid>/blog/2018-05-17-ctextclassics-my-first-package/</guid>
-      <description>My latest update is a milestone! I have authored my first ever R package which is an API caller for ctext.org. Ctext hosts numerous pre-modern Chinese texts and my package makes them available to you. The scope is broad, but think philosophical works in Confucianism, Daoism, Legalism, military doctrines, history compilations, works in medicine, and many more.
-The three main functions of ctextclassics are get_chapter(&amp;quot;book&amp;quot;, &amp;quot;chapter&amp;quot;) ,get_chapters(&amp;quot;book&amp;quot;, chapters), get_books(&amp;quot;book&amp;quot;) and the internal dataframe book_list which shows the available texts.</description>
+      <description>&lt;p&gt;My latest update is a milestone! I have authored my first ever R package which is an API caller for ctext.org. Ctext hosts numerous pre-modern Chinese texts and my package makes them available to you. The scope is broad, but think philosophical works in Confucianism, Daoism, Legalism, military doctrines, history compilations, works in medicine, and many more.&lt;/p&gt;
+&lt;p&gt;The three main functions of ctextclassics are &lt;code&gt;get_chapter(&amp;quot;book&amp;quot;, &amp;quot;chapter&amp;quot;)&lt;/code&gt; ,&lt;code&gt;get_chapters(&amp;quot;book&amp;quot;, chapters)&lt;/code&gt;, &lt;code&gt;get_books(&amp;quot;book&amp;quot;)&lt;/code&gt; and the internal dataframe &lt;code&gt;book_list&lt;/code&gt; which shows the available texts. So perhaps try something like: &lt;br&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(ctextclassics)
+head(unique(book_list$book), n = 5)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;analects&amp;quot;        &amp;quot;art-of-war&amp;quot;      &amp;quot;bai-hu-tong&amp;quot;     &amp;quot;baopuzi&amp;quot;        
+## [5] &amp;quot;book-of-changes&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;knitr::kable(head(get_books(&amp;quot;analects&amp;quot;)))&lt;/code&gt;&lt;/pre&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th align=&#34;left&#34;&gt;book&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;chapter&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;word&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;chapter_cn&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;analects&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;xue-er&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;子曰：「學而時習之，不亦說乎？有朋自遠方來，不亦樂乎？人不知而不慍，不亦君子乎？」&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;學而&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;analects&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;xue-er&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;有子曰：「其為人也孝弟，而好犯上者，鮮矣；不好犯上，而好作亂者，未之有也。君子務本，本立而道生。孝弟也者，其為仁之本與！」&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;學而&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;analects&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;xue-er&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;子曰：「巧言令色，鮮矣仁！」&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;學而&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;analects&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;xue-er&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;曾子曰：「吾日三省吾身：為人謀而不忠乎？與朋友交而不信乎？傳不習乎？」&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;學而&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;analects&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;xue-er&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;子曰：「道千乘之國：敬事而信，節用而愛人，使民以時。」&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;學而&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;analects&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;xue-er&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;子曰：「弟子入則孝，出則弟，謹而信，汎愛眾，而親仁。行有餘力，則以學文。」&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;學而&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;Just be careful, the API limit is around 60-ish. Which means you can get about 3 books on average before my download functions start spitting out NA values.&lt;/p&gt;
+&lt;p&gt;The API indexes its book and chapter names differently. Some are in English (e.g., “analects”) whereas others are written in Pinyin (e.g., “mengzi”). Some chapter titles use the word “the” whereas others don’t. So eventually I’ll consider the need to make the function calls more robust and help users avoid those inconsistencies. There’s a lot that can be improved here, be it adding authentication, a way to keep track of API call count, or anything else - but I’m looking forward to it!&lt;/p&gt;
+&lt;p&gt;So, what’s my ultimate goal? It is to use &lt;code&gt;ctextclassics&lt;/code&gt; for text analysis on Chinese classic texts - Similar to how we see the &lt;strong&gt;amazing Tidytext&lt;/strong&gt; and gutenbergr packages used! &lt;strong&gt;Quite ambitious, I know.&lt;/strong&gt; At any rate, I’m enjoying reading this classical Chinese.&lt;/p&gt;
+&lt;p&gt;To cap off this post, you can use my package by typing &lt;code&gt;devtools::install_github(&amp;quot;Jjohn987/ctextclassics&amp;quot;)&lt;/code&gt; and remember to check out the documentation of the functions for a better explanation.&lt;/p&gt;
+&lt;p&gt;If you want to contribute, please do so! You can comment here, fork my Github, or post an issue.&lt;/p&gt;
+</description>
     </item>
     
   </channel>

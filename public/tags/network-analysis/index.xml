@@ -8,7 +8,7 @@
     <language>en-us</language>
     <lastBuildDate>Sun, 01 Apr 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/network-analysis/index.xml" rel="self" type="application/rss+xml" />
+        <atom:link href="/tags/network-analysis/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -17,8 +17,93 @@
       <pubDate>Sun, 01 Apr 2018 00:00:00 +0000</pubDate>
       
       <guid>/blog/2018-04-01-visualizing-european-ww1-defense-treaties-with-igraph/</guid>
-      <description>I suddenly got bit by a bug to learn about network analysis. So I recalled the Correlates of War Project having a dataset about alliances. I decided to revisit them and download the data for this new project, which you can do too.
-To start small, I decided to visualize a certain topic, e.g., European Defense Treaties relating to World War I. For that purpose I filtered the dataset for treaties that occured between 1878 and 1914.</description>
+      <description>&lt;p&gt;I suddenly got bit by a bug to learn about network analysis. So I recalled the &lt;a href=&#34;http://www.correlatesofwar.org/data-sets/formal-alliances&#34;&gt;Correlates of War Project&lt;/a&gt; having a dataset about alliances. I decided to revisit them and download the data for this new project, which you can do too.&lt;/p&gt;
+&lt;p&gt;To start small, I decided to visualize a certain topic, e.g., European Defense Treaties relating to World War I. For that purpose I filtered the dataset &lt;strong&gt;for treaties that occured between 1878 and 1914.&lt;/strong&gt; As usual there’s a lot of cleaning to be done before anything else can be done.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)
+library(lubridate)
+library(scales)
+library(igraph)
+
+##import data
+Alliances &amp;lt;- read_csv(&amp;quot;alliance_v4.1_by_directed.csv&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;div id=&#34;data-cleaning&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Data cleaning&lt;/h2&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;## Create an interval object using Lubridate package to find time intervals for treaties.
+Beginning &amp;lt;- ymd(1878, truncated = 2L)
+End &amp;lt;- ymd(1914, truncated = 2L)
+Alliance_Timeline &amp;lt;- interval(Beginning, End)
+
+##Change the column names to a &amp;quot;From&amp;quot; and &amp;quot;To&amp;quot; network analysis node format, get date columns set up.
+Tidy_Alliances &amp;lt;- Alliances %&amp;gt;% select(ID = version4id, CC1 = ccode1, CC2 = ccode2, From = state_name1, To = state_name2, contains(&amp;quot;dyad&amp;quot;), defense, neutrality, nonaggression,entente) %&amp;gt;%
+  unite(Start_Date, c(&amp;quot;dyad_st_month&amp;quot;, &amp;quot;dyad_st_day&amp;quot;, &amp;quot;dyad_st_year&amp;quot;), sep = &amp;quot;-&amp;quot;) %&amp;gt;%
+  unite(End_Date, c(&amp;quot;dyad_end_month&amp;quot;, &amp;quot;dyad_end_day&amp;quot;, &amp;quot;dyad_end_year&amp;quot;), sep = &amp;quot;-&amp;quot;) %&amp;gt;% 
+  mutate(Start_Date = mdy(Start_Date), End_Date = mdy(End_Date)) 
+
+##Filter for the specific years stated above, and only select European countries. 
+Key_Treaties &amp;lt;- Tidy_Alliances %&amp;gt;% filter(Start_Date %within% Alliance_Timeline, End_Date %within% Alliance_Timeline) %&amp;gt;%
+  distinct(From) %&amp;gt;%
+  filter(!From %in% c(&amp;quot;Brazil&amp;quot;, &amp;quot;Argentina&amp;quot;, &amp;quot;Uruguay&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now that’s the basic data frame which I’m going to use to create my node and edge dataframes. This is essentially the workflow that I prefer in iGraph - processing with tidyverse tools and then passing the appropriate peices to iGraph to put it all together in its own objects. We will need an Edge list and a Node list, so let’s set ’em up.&lt;/p&gt;
+&lt;p&gt;Also it’s good to have “attributes” which can be used to make the network graph more visually informative - like edge weights, node colors, etc. I am interested in the strength of connections between nodes (aka, the edges, and I define this as number of treaties made between 2 countries for the time period) and the sides they fought on in the conflict (a node attribute).&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;##Create Edge data frame
+Edges &amp;lt;- Tidy_Alliances %&amp;gt;%
+  filter(Start_Date %within% Alliance_Timeline, End_Date %within% Alliance_Timeline, From %in% Key_Treaties$From) %&amp;gt;%
+  group_by(From, To) %&amp;gt;%
+  select(From, To) %&amp;gt;%
+  mutate(width = n()) %&amp;gt;%
+  distinct()
+
+##Create Vertices data frame
+Vertices_Weights &amp;lt;- Edges %&amp;gt;%
+  select(From, To) %&amp;gt;%
+  gather(Key, Country) %&amp;gt;%
+  group_by(Country) %&amp;gt;%
+  mutate(size = n()) %&amp;gt;% 
+  ungroup() %&amp;gt;%
+  select(Country, size) %&amp;gt;%
+  distinct()
+
+##Create node attribute &amp;quot;Sides&amp;quot; to differentiate the factions
+
+Sides &amp;lt;- c(&amp;quot;Austria-Hungary&amp;quot; = &amp;quot;Central Powers&amp;quot;, &amp;quot;Bulgaria&amp;quot; = &amp;quot;Central Powers&amp;quot;, &amp;quot;China&amp;quot; = &amp;quot;Allies&amp;quot;, &amp;quot;France&amp;quot; = &amp;quot;Allies&amp;quot;, &amp;quot;Germany&amp;quot; = &amp;quot;Central Powers&amp;quot;, &amp;quot;Greece&amp;quot; = &amp;quot;Neutral&amp;quot;, &amp;quot;Italy&amp;quot; = &amp;quot;Central Powers&amp;quot;, &amp;quot;Japan&amp;quot; = &amp;quot;NA&amp;quot;,
+           &amp;quot;Korea&amp;quot; = &amp;quot;NA&amp;quot;, &amp;quot;Russia&amp;quot; = &amp;quot;Allies&amp;quot;, &amp;quot;Spain&amp;quot; = &amp;quot;Neutral&amp;quot;, &amp;quot;Turkey&amp;quot; = &amp;quot;Central Powers&amp;quot;, &amp;quot;United Kingdom&amp;quot; = &amp;quot;Allies&amp;quot;, &amp;quot;United States of America&amp;quot; = &amp;quot;Allies&amp;quot;, &amp;quot;Yugoslavia&amp;quot; = &amp;quot;Allies&amp;quot;)
+
+Vertices &amp;lt;- data.frame(Country = Edges$From, Side = Sides[Edges$From], stringsAsFactors = FALSE) %&amp;gt;% distinct()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now it’s time to pass the dataframes to igraph, and do the final processing there.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;##Create our igraph object
+Treaty_igraph &amp;lt;- graph_from_data_frame(d = Edges, vertices = Vertices, directed = F)
+
+V(Treaty_igraph)$size &amp;lt;- Vertices_Weights$size
+V(Treaty_igraph)$sides &amp;lt;- Sides[vertex_attr(Treaty_igraph)$name]
+V(Treaty_igraph)$color &amp;lt;- ifelse(V(Treaty_igraph)$sides == &amp;quot;Allies&amp;quot;, &amp;quot;cornflowerblue&amp;quot;, ifelse(V(Treaty_igraph)$sides == &amp;quot;Central Powers&amp;quot;, &amp;quot;olivedrab&amp;quot;, &amp;quot;gainsboro&amp;quot;))
+V(Treaty_igraph)$size &amp;lt;- rescale(V(Treaty_igraph)$size, to = c(10, 20))
+
+E(Treaty_igraph)$arrow.mode &amp;lt;- 0
+
+Treaty_igraph &amp;lt;- delete.vertices(Treaty_igraph, V(Treaty_igraph)$name[V(Treaty_igraph)$name == &amp;quot;United States of America&amp;quot;|V(Treaty_igraph)$name == &amp;quot;Korea&amp;quot;|V(Treaty_igraph)$name == &amp;quot;Japan&amp;quot;])&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;I rescaled the node sizes with “rescale” and I deleted the United States, Korea, and Japan nodes and edges with “delete.vertices” because they were isolated and didn’t seem relevant to any time before 1914. I’d have also deleted China for the same reason, where it not for its sole connection to Russia.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;##plot our graph
+par(bg=&amp;quot;snow2&amp;quot;)
+plot(Treaty_igraph, rescale = TRUE, displaylabels = TRUE, remove.multiple = TRUE,
+     vertex.label.dist = 1.75, vertex.label.cex = .8, vertex.label = V(Treaty_igraph)$name, label.cex = 2, edge.curved = .2,
+     vertex.frame.color = &amp;quot;black&amp;quot;, vertex.col = V(Treaty_igraph)$color, vertex.label.color = &amp;quot;black&amp;quot;,
+     arrow.mode = E(Treaty_igraph)$arrow.mode, edge.color = &amp;quot;darkgoldenrod2&amp;quot;, edge.weight = E(Treaty_igraph)$width, main = &amp;quot;European Treaties 1878-1914&amp;quot;, sub = &amp;quot;Defense Pacts and Ententes&amp;quot;)
+legend(x=-1.5, y=-1.1, c(&amp;quot;Allies&amp;quot;,&amp;quot;Central Powers&amp;quot;, &amp;quot;Neutral&amp;quot;), 
+       col=&amp;quot;#777777&amp;quot;, c(&amp;quot;cornflowerblue&amp;quot;, &amp;quot;olivedrab&amp;quot;, &amp;quot;grey&amp;quot;), pt.cex=1, cex=1, bty=&amp;quot;n&amp;quot;, ncol=1)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-05-06-visualizing-european-ww1-defense-treaties-with-igraph_files/figure-html/unnamed-chunk-3-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;closing&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Closing&lt;/h2&gt;
+&lt;p&gt;And there is my World War I network plot. We can easily see that Austria-Hungary, Germany, and Russia were the major players in power and diplomacy at the time.&lt;/p&gt;
+&lt;p&gt;I mainly wanted to get aquainted with igraph plotting (technicality) as opposed to analytical concepts (which I didn’t use here). I feel like I accomplished that goal. Of course I’d love to get more analytical with this dataset in the future. For now this will suffice, I’m sure I’ll return to this dataset though. I might even use other network analysis tools in R like &lt;code&gt;tidygraph&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;That being said, I feel that network analysis is quite exciting and the possibilities are quite rich. I close by saying that I hope everybody enjoyed this entry and that they may find it useful or inspiring to check out igraph and other network tools in R.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Citations&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Gibler, Douglas M. 2009. International military alliances, 1648-2008 (Version 4.1). CQ Press.&lt;br /&gt;
+Zweig, K. A. (2013). Network analysis literacy: A practical approach to network analysis project design. Vienna: Springer Verlag GmbH.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://kateto.net/networks-r-igraph&#34;&gt;This igraph tutorial&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;This post was Migrated over from my Word Press&lt;/em&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
     </item>
     
   </channel>
