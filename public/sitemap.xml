@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>/blog/2018-09-21-first-app---halo-5-stats/</loc>
+    <lastmod>2018-09-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/blog/2018-06-08-part-ii-chinese-classics-word/network-plots/</loc>
     <lastmod>2018-06-08T00:00:00+00:00</lastmod>
   </url>
@@ -48,24 +53,19 @@
   </url>
   
   <url>
-    <loc>/blog/2017-01-24-international-organization-growth-trend/</loc>
-    <lastmod>2017-01-24T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>/</loc>
-    <lastmod>2018-06-08T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/categories/api/</loc>
-    <lastmod>2018-05-17T00:00:00+00:00</lastmod>
+    <lastmod>2018-09-21T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/tags/api/</loc>
+    <lastmod>2018-05-17T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/categories/api/</loc>
     <lastmod>2018-05-17T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
@@ -107,14 +107,14 @@
   </url>
   
   <url>
-    <loc>/categories/chinese-text-analysis/</loc>
-    <lastmod>2018-05-29T00:00:00+00:00</lastmod>
+    <loc>/tags/chinese-text-analysis/</loc>
+    <lastmod>2018-06-08T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/tags/chinese-text-analysis/</loc>
-    <lastmod>2018-06-08T00:00:00+00:00</lastmod>
+    <loc>/categories/chinese-text-analysis/</loc>
+    <lastmod>2018-05-29T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -137,18 +137,6 @@
   </url>
   
   <url>
-    <loc>/categories/data-visualization/</loc>
-    <lastmod>2017-01-24T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/categories/data-wrangling/</loc>
-    <lastmod>2017-01-24T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>/tags/fortune-500s/</loc>
     <lastmod>2018-01-29T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -163,6 +151,12 @@
   <url>
     <loc>/tags/ggmap/</loc>
     <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/ggplot2/</loc>
+    <lastmod>2018-09-21T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -185,6 +179,12 @@
   </url>
   
   <url>
+    <loc>/tags/halo/</loc>
+    <lastmod>2018-09-21T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/tags/httr/</loc>
     <lastmod>2018-05-17T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -197,8 +197,8 @@
   </url>
   
   <url>
-    <loc>/tags/international-organizations/</loc>
-    <lastmod>2017-01-24T00:00:00+00:00</lastmod>
+    <loc>/tags/microsoft-halo-5-api/</loc>
+    <lastmod>2018-09-21T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -209,14 +209,14 @@
   </url>
   
   <url>
-    <loc>/categories/network-analysis/</loc>
-    <lastmod>2018-06-08T00:00:00+00:00</lastmod>
+    <loc>/tags/network-analysis/</loc>
+    <lastmod>2018-04-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/tags/network-analysis/</loc>
-    <lastmod>2018-04-01T00:00:00+00:00</lastmod>
+    <loc>/categories/network-analysis/</loc>
+    <lastmod>2018-06-08T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -228,18 +228,12 @@
   
   <url>
     <loc>/post/</loc>
-    <lastmod>2018-06-08T00:00:00+00:00</lastmod>
+    <lastmod>2018-09-21T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/tags/rvest/</loc>
-    <lastmod>2018-05-08T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/categories/scraping/</loc>
     <lastmod>2018-05-08T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
@@ -251,7 +245,31 @@
   </url>
   
   <url>
+    <loc>/categories/scraping/</loc>
+    <lastmod>2018-05-08T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/shiny/</loc>
+    <lastmod>2018-09-21T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/categories/shiny/</loc>
+    <lastmod>2018-09-21T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/tags/</loc>
+    <lastmod>2018-05-17T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/text-analysis/</loc>
     <lastmod>2018-05-17T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
@@ -263,20 +281,8 @@
   </url>
   
   <url>
-    <loc>/tags/text-analysis/</loc>
-    <lastmod>2018-05-17T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>/tags/tidygraph/</loc>
     <lastmod>2018-06-08T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/tidyr/</loc>
-    <lastmod>2017-01-24T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -306,7 +312,7 @@
   
   <url>
     <loc>/categories/visualization/</loc>
-    <lastmod>2018-05-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-09-21T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

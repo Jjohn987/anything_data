@@ -102,6 +102,15 @@
     </item>
     
     <item>
+      <title>Ggplot2</title>
+      <link>/tags/ggplot2/</link>
+      <pubDate>Fri, 21 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/ggplot2/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Ggraph</title>
       <link>/tags/ggraph/</link>
       <pubDate>Fri, 08 Jun 2018 00:00:00 +0000</pubDate>
@@ -129,6 +138,15 @@
     </item>
     
     <item>
+      <title>Halo</title>
+      <link>/tags/halo/</link>
+      <pubDate>Fri, 21 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/halo/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Httr</title>
       <link>/tags/httr/</link>
       <pubDate>Thu, 17 May 2018 00:00:00 +0000</pubDate>
@@ -147,11 +165,11 @@
     </item>
     
     <item>
-      <title>International Organizations</title>
-      <link>/tags/international-organizations/</link>
-      <pubDate>Tue, 24 Jan 2017 00:00:00 +0000</pubDate>
+      <title>Microsoft Halo 5 Api</title>
+      <link>/tags/microsoft-halo-5-api/</link>
+      <pubDate>Fri, 21 Sep 2018 00:00:00 +0000</pubDate>
       
-      <guid>/tags/international-organizations/</guid>
+      <guid>/tags/microsoft-halo-5-api/</guid>
       <description></description>
     </item>
     
@@ -201,6 +219,15 @@
     </item>
     
     <item>
+      <title>Shiny</title>
+      <link>/tags/shiny/</link>
+      <pubDate>Fri, 21 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/shiny/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Text Analysis</title>
       <link>/tags/text-analysis/</link>
       <pubDate>Thu, 17 May 2018 00:00:00 +0000</pubDate>
@@ -215,15 +242,6 @@
       <pubDate>Fri, 08 Jun 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/tidygraph/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Tidyr</title>
-      <link>/tags/tidyr/</link>
-      <pubDate>Tue, 24 Jan 2017 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/tidyr/</guid>
       <description></description>
     </item>
     
