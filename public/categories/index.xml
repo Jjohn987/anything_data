@@ -8,7 +8,7 @@
     <language>en-us</language>
     <lastBuildDate>Thu, 17 May 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
+        <atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -39,27 +39,27 @@
     </item>
     
     <item>
-      <title>Data Visualization</title>
-      <link>/categories/data-visualization/</link>
-      <pubDate>Tue, 24 Jan 2017 00:00:00 +0000</pubDate>
+      <title>Chinese Text Analysis</title>
+      <link>/categories/chinese-text-analysis/</link>
+      <pubDate>Tue, 29 May 2018 00:00:00 +0000</pubDate>
       
-      <guid>/categories/data-visualization/</guid>
+      <guid>/categories/chinese-text-analysis/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Data Wrangling</title>
-      <link>/categories/data-wrangling/</link>
-      <pubDate>Tue, 24 Jan 2017 00:00:00 +0000</pubDate>
+      <title>Geospatial Mapping</title>
+      <link>/categories/geospatial-mapping/</link>
+      <pubDate>Mon, 29 Jan 2018 00:00:00 +0000</pubDate>
       
-      <guid>/categories/data-wrangling/</guid>
+      <guid>/categories/geospatial-mapping/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Network Analysis</title>
       <link>/categories/network-analysis/</link>
-      <pubDate>Sun, 01 Apr 2018 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 08 Jun 2018 00:00:00 +0000</pubDate>
       
       <guid>/categories/network-analysis/</guid>
       <description></description>
@@ -75,11 +75,29 @@
     </item>
     
     <item>
+      <title>Shiny</title>
+      <link>/categories/shiny/</link>
+      <pubDate>Fri, 21 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/shiny/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Text Analysis</title>
       <link>/categories/text-analysis/</link>
-      <pubDate>Thu, 17 May 2018 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 08 Jun 2018 00:00:00 +0000</pubDate>
       
       <guid>/categories/text-analysis/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Visualization</title>
+      <link>/categories/visualization/</link>
+      <pubDate>Fri, 21 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/visualization/</guid>
       <description></description>
     </item>
     

@@ -48,7 +48,7 @@ post = "/blog/:year-:month-:day-:title/" # change the post URL to look like the 
   stackoverflow = "https://stackexchange.com/users/11094434/superball10000"
   linkedin = "https://www.linkedin.com/in/jeremy-johnson-09016a112"
   
-  subtitle = "Centered around the investigation of things, ... in R!"
+  subtitle = "The investigation of things..."
   author = "Jeremy Johnson"
 
 defaultDescription = "My R blog, with projects in analytics, text analysis, data mining, and visualization. I might occasionally include Chinese text."

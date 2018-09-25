@@ -8,7 +8,7 @@
     <language>en-us</language>
     <lastBuildDate>Sat, 01 Jul 2017 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/us-news-rankings/index.xml" rel="self" type="application/rss+xml" />
+        <atom:link href="/tags/us-news-rankings/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -17,9 +17,138 @@
       <pubDate>Sat, 01 Jul 2017 00:00:00 +0000</pubDate>
       
       <guid>/blog/2017-07-01-top-mba-programs-by-us-news/</guid>
-      <description>Somebody once asked me for reccomendations on MBA programs based on rank and tuition. I didn’t have any information on hand, but knew how toget it. Webscraping.
-Webscraping is an immensly useful tool for gathering data from webpages, when it isn’t hosted on an API or stored in a file somewhere. R’s best tool for webscraping is Rvest.
-So I decided to scrape information on the US News website for university rankings, which has at least 20 pages of MBA probrams available.</description>
+      <description>&lt;p&gt;Somebody once asked me for reccomendations on MBA programs based on rank and tuition. I didn’t have any information on hand, but knew how toget it. Webscraping.&lt;/p&gt;
+&lt;p&gt;Webscraping is an immensly useful tool for gathering data from webpages, when it isn’t hosted on an API or stored in a file somewhere. R’s best tool for webscraping is &lt;strong&gt;Rvest.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;So I decided to scrape information on the US News website for university rankings, which has at least 20 pages of MBA probrams available. To copy and paste that much data into a spreadsheet would be annoying and quite an eye strain.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)
+library(stringr)
+library(rvest)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Of course, before writing a scraper, one needs to code it according to the page layout.&lt;/p&gt;
+&lt;p&gt;I find that:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;There are 19 pages of information I need.&lt;/li&gt;
+&lt;li&gt;Everything is directly available on those pages, no need to iterate over additional, internal links.&lt;/li&gt;
+&lt;li&gt;Xpath selectors perform better than CSS selectors in this particular example.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I will use lapply to run through all 19 pages, with the sprintf function to help paste the new page number in each time, for each new iteration.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;## 19 pages of MBA programs on US News website.
+pages &amp;lt;- 1:19
+
+get_usnews_mbas &amp;lt;- function(x) {
+  website1 &amp;lt;- &amp;#39;https://www.usnews.com/best-graduate-schools/top-business-schools/mba-rankings/page+%s&amp;#39;
+  url &amp;lt;- sprintf(website1, x, collapse = &amp;quot;&amp;quot;)
+  website &amp;lt;- read_html(url)
+  base_url &amp;lt;- &amp;#39;http://www.usnews.com&amp;#39;
+  
+  University &amp;lt;- website %&amp;gt;%
+    html_nodes(&amp;#39;.school-name&amp;#39;) %&amp;gt;%
+    html_text()
+ 
+   Location &amp;lt;- website %&amp;gt;%
+    html_nodes(xpath = &amp;#39;//*[@id=&amp;quot;article&amp;quot;]/table/tbody/tr/td[2]/p&amp;#39;) %&amp;gt;%
+    html_text()
+ 
+    Link &amp;lt;- website %&amp;gt;%
+    html_nodes(xpath = &amp;#39;//*[@id=&amp;quot;article&amp;quot;]/table/tbody/tr/td[2]/a&amp;#39;) %&amp;gt;%
+    html_attr(&amp;quot;href&amp;quot;) %&amp;gt;%
+    str_trim(side = &amp;quot;both&amp;quot;)
+ 
+     Tuition &amp;lt;- website %&amp;gt;%
+    html_nodes(xpath = &amp;#39;//*[@id=&amp;quot;article&amp;quot;]/table/tbody/tr/td[3]&amp;#39;) %&amp;gt;%
+    str_replace_all(&amp;quot;\n&amp;quot;, &amp;quot;&amp;quot;) %&amp;gt;%
+    str_replace_all(&amp;quot;,&amp;quot;, &amp;quot;&amp;quot;) %&amp;gt;%
+    str_extract(&amp;quot;\\d+&amp;quot;) %&amp;gt;%
+    as.integer()
+  
+  ##Combine vectors into data frame
+  data_frame(University,
+             Location,
+             Tuition,
+             Link)
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;div id=&#34;apply-the-function-get-the-data&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Apply the function, get the data!&lt;/h2&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;USNEWS_MBAS &amp;lt;- do.call(rbind, lapply(pages, get_usnews_mbas))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Rvest made this feel almost like magic - Pulling it into R without having to do any manual clicking, copying, and pasting. As I said, web scraping is very powerful!&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;clean-the-data&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Clean the Data&lt;/h2&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;##Split location into City and State.
+
+USNEWS_MBAS &amp;lt;- USNEWS_MBAS %&amp;gt;%
+  separate(Location, c(&amp;quot;City&amp;quot;, &amp;quot;State&amp;quot;), sep = &amp;quot;,&amp;quot;)
+
+##Create column for rankings... 
+
+USNEWS_MBAS &amp;lt;- USNEWS_MBAS %&amp;gt;%
+  mutate(Rank = 1: n())
+
+##The URL&amp;#39;s didnt scrape 100% correctly. But it is easy to paste the base URL onto each branch.
+base_url &amp;lt;- &amp;#39;www.usnews.com&amp;#39;
+
+USNEWS_MBAS &amp;lt;- USNEWS_MBAS %&amp;gt;%
+  mutate(base_url = base_url) %&amp;gt;%
+  unite(Links, base_url, Link, sep = &amp;quot;&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;That’s enough data cleaning, but adding a variable to segment or classify the schools into brackets of ten could be useful when visualizing them in terms of rank and tuition cost later.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;USNEWS_MBAS &amp;lt;- USNEWS_MBAS %&amp;gt;%
+  mutate(Tier = cut(Rank, breaks = seq(0, 400, by = 10))) %&amp;gt;%
+  mutate(Tier = str_replace(Tier, &amp;quot;,&amp;quot;, &amp;quot;-&amp;quot;)) %&amp;gt;% 
+  mutate(Tier = str_replace_all(Tier, &amp;quot;[^0-9-]&amp;quot;, &amp;quot;&amp;quot;))
+
+##Convert intervals into factors  
+
+USNEWS_MBAS$Tier &amp;lt;- factor(USNEWS_MBAS$Tier, levels = c(&amp;quot;0-10&amp;quot;, &amp;quot;10-20&amp;quot;, &amp;quot;20-30&amp;quot;, &amp;quot;30-40&amp;quot;, &amp;quot;40-50&amp;quot;, &amp;quot;50-60&amp;quot;, &amp;quot;60-70&amp;quot;, &amp;quot;70-80&amp;quot;, &amp;quot;80-90&amp;quot;, &amp;quot;90-100&amp;quot;, &amp;quot;Out of Top 100&amp;quot;))
+
+USNEWS_MBAS %&amp;gt;%
+  select(University, City, State, Tuition, Rank, Tier, Links)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 475 x 7
+##    University        City   State Tuition  Rank Tier  Links               
+##    &amp;lt;chr&amp;gt;             &amp;lt;chr&amp;gt;  &amp;lt;chr&amp;gt;   &amp;lt;int&amp;gt; &amp;lt;int&amp;gt; &amp;lt;fct&amp;gt; &amp;lt;chr&amp;gt;               
+##  1 Harvard Universi… Boston &amp;quot; MA&amp;quot;   72000     1 0-10  www.usnews.com/best…
+##  2 University of Ch… Chica… &amp;quot; IL&amp;quot;   69200     2 0-10  www.usnews.com/best…
+##  3 University of Pe… Phila… &amp;quot; PA&amp;quot;   70200     3 0-10  www.usnews.com/best…
+##  4 Stanford Univers… Stanf… &amp;quot; CA&amp;quot;   68868     4 0-10  www.usnews.com/best…
+##  5 Massachusetts In… Cambr… &amp;quot; MA&amp;quot;   71000     5 0-10  www.usnews.com/best…
+##  6 Northwestern Uni… Evans… &amp;quot; IL&amp;quot;   68955     6 0-10  www.usnews.com/best…
+##  7 University of Ca… Berke… &amp;quot; CA&amp;quot;   58794     7 0-10  www.usnews.com/best…
+##  8 University of Mi… Ann A… &amp;quot; MI&amp;quot;   62300     8 0-10  www.usnews.com/best…
+##  9 Columbia Univers… New Y… &amp;quot; NY&amp;quot;   71544     9 0-10  www.usnews.com/best…
+## 10 Dartmouth Colleg… Hanov… &amp;quot; NH&amp;quot;   68910    10 0-10  www.usnews.com/best…
+## # ... with 465 more rows&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Let’s filter the schools and grab only the top 100.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;USNEWS_MBAS %&amp;gt;%
+  filter(Rank &amp;lt;= 100) %&amp;gt;%
+  ggplot(aes(x = Rank, y = Tuition, color = Tier)) + geom_point() +
+  ggtitle(&amp;quot;American MBA Programs&amp;quot;, subtitle = &amp;quot;By Rank and Tuition&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-05-06-top-mba-programs-by-us-news_files/figure-html/unnamed-chunk-6-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Some top 20-30 schools look to be a good deal in terms of high rank and (relatively) lower tuition. But if one goes for schools ranked in the 30-40 range, then the tuition gets even lower.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;a-more-detailed-look&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;A more detailed look&lt;/h2&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;USNEWS_MBAS %&amp;gt;%
+  select(University, Rank, Tuition, Tier) %&amp;gt;%
+  arrange(Rank, Tuition) %&amp;gt;%
+  group_by(Tier) %&amp;gt;%
+  top_n(-3, Tuition) %&amp;gt;%
+  ggplot(aes(x = reorder(University, -Rank), y = Tuition, fill = Tier)) +
+  geom_bar(stat = &amp;quot;identity&amp;quot;) + 
+coord_flip() +
+  ggtitle(&amp;quot;Three &amp;#39;Cheapest&amp;#39; Schools per Tier&amp;quot;, subtitle = &amp;quot;MBA Programs&amp;quot;) +
+  xlab(&amp;quot;University&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-05-06-top-mba-programs-by-us-news_files/figure-html/unnamed-chunk-7-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Up above, I selected 3 institutions from each “Tier” of rankings with the lowest tuition and plotted them. Some universities have suspiciously low tuition, which is likely due to documentation error on the US News website.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;some-observations&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Some Observations&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;MBA programs are very expensive for any institution ranked from 1-30.&lt;/li&gt;
+&lt;li&gt;Programs become affordable from ranks 30-50 and onward&lt;/li&gt;
+&lt;li&gt;Anything that appears especially low is probably an inconsistency in US News’ tuition data.&lt;/li&gt;
+&lt;li&gt;It’d be better to compare school rankings across a certain program instead of comprehensively&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;em&gt;Migrated from my original Wordpress blog&lt;/em&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
     </item>
     
   </channel>

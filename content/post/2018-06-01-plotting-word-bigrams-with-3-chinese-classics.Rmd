@@ -1,0 +1,184 @@
+---
+title: Plotting Word Bigrams with 3 Chinese Classics
+author: Jeremy 
+date: '2018-06-01'
+slug: plotting-word-bigrams-with-3-chinese-classics
+categories: [text analysis]
+tags: [tmcn, ctextclassics, tidytext]
+---
+
+In the last post, we saw frequencies of the most common words in the Analects, Zhuangzi, and Mozi texts. The faceted plot did an excellent job of capturing a generic "theme" of each text. However, I wondered how the results might change when plotting bigrams (2 word combinations of adjacent words) as opposed to single values. 
+
+This is where I ran into a problem with Tidytext -- although it worked fine for tokenizing Chinese text into single character tokens, it did not perform as well at separating the text into bigrams. I felt my only choice was to define my own (crude) function to segment the text better. So I did. 
+
+
+To pick up from the last post, I source my data in from a file which I originally downloaded with ```ctextclassics```. 
+
+```{r message=FALSE, warning=FALSE}
+
+library(tidyverse)
+library(readr)
+library(stringr)
+##For Chinese stopwords, pinyin, simplified, traditional Chinese conversions
+library(tmcn)
+##For pretty HTML tables
+library(kableExtra)
+
+
+my_classics <- read_csv("~/Desktop/anything_data/content/post/my_classics.csv") %>%
+  select(-1) %>%
+  mutate(book = str_to_title(book))
+```
+## The data look like this:
+```{r echo=FALSE}
+options(knitr.table.format = "html") 
+
+knitr::kable(head(my_classics)) %>%
+  kableExtra::kable_styling(position = "center", bootstrap_options = "responsive") %>%
+  kableExtra::row_spec(1:6, color = "white", background = "#232528") %>%
+  kableExtra::scroll_box(width = "100%", height = "350px")
+```
+
+*Note, I'm not accustumed to looking at traditional characters.* 
+
+So, my workflow for working with bigrams with this dataset is:
+
+* I determine a word as being constituted by one character, since this is usually the case for classical Chinese.
+* I write a simple function to concentate each word with each adjacent word. (ABCD) to (A B, B C, C D)
+* I unnest the resulting list column so there is one value per row (tidy format). 
+
+The workflow beyond this point is ultimately the same as before - obtaining the value-count pairs per book and then plotting them. The hope here is that paired words can give us an even deeper undestanding about each book than the single words did.
+
+
+```{r}
+##Simple function to concentate a value in a vector with adjacent value
+
+simple_bigram <- function(x) {
+  if(length(x) < 2) {
+    return(NA)
+  } else {
+output_length <- length(x) - 1
+output <- vector(length = output_length)
+for(i in 1:output_length) {
+output[i] <- paste(x[i], x[i+1], sep = " ")
+}
+output
+  }
+}
+
+##Use stringi split_boundaries to split each string into a vector with one value per character.
+##Use the 2 functions with unlist and lapply.
+
+tokenizer <- function(text) {
+unlist(lapply(stringi::stri_split_boundaries(text), function(x) simple_bigram(x)))
+}
+
+```
+
+I would like to add a disclaimer that, my "one character = one word" assumption for classical Chinese used in constructing bigrams here isn't perfect in all cases. (Ultimately words will have differing lengths, and words will need to be split with a more specialized tool.) However, in the absence of a fine-tuned segmenter, I do think that this method accomplishes the gist of what I'm attempting to get at. 
+
+```{r message=FALSE, warning=FALSE}
+##Clean out all odd punctuation symbols
+##Apply tokenizing function to create bigrams
+##Filter out stop words
+
+stopwordsCN <- data.frame(word = c(tmcn::stopwordsCN(),
+"子曰", "曰", "於", "則","吾", "子", "不", "無", "斯","與", "為", "必",
+"使", "非","天下", "以為","上", "下", "人", "天", "不可", "謂", "是以",
+"而不", "皆", "不亦", "乎", "之", "而", "者", "本", "與", "吾", "則",
+"以", "其", "為", "不以", "不可", "也", "矣", "子", "由", "子曰", "曰",
+"非其", "於", "不能", "如", "斯", "然", "君", "亦", "言", "聞", "今",
+"君", "不知", "无"))
+
+
+bigrams <- my_classics %>%
+  mutate(word = str_replace_all(word, "[「」《》『』,，、。；：？！]", "")) %>%
+  mutate(word = map(word, function(x) tokenizer(x))) %>%
+  unnest(word) %>%
+  filter(!is.na(word)) %>%
+  separate(word, into = c("word1", "word2")) %>%
+  filter(!word1 %in% stopwordsCN$word, !word2 %in% stopwordsCN$word) %>%
+  unite("word", c("word1", "word2"), sep = " ")
+
+
+## Bigram counts per book 
+
+book_bigram_count <- bigrams %>%
+  count(book, word) %>%
+  arrange(book, -n) %>%
+  group_by(book) %>%
+  mutate(frequency = n/sum(n))
+
+```
+
+With these counts, we're almost ready to plot. However, in a minor plot twist, let's read in a beautiful graphic to use as a background in our plot later. Let's also set up a color scheme that matches the themes of classical philosophy and calligraphy. 
+
+```{r message=FALSE, warning=FALSE}
+library(jpeg)
+library(grid)
+image <- jpeg::readJPEG("~/Desktop/anything_data/content/post/image.jpg")
+
+bar_colors <- rev(c("#271a0c", "#483030", "#232528"))
+```
+I also wish to provide English labels to go with the terms we're plotting. 
+```{r message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(fig.width=16, fig.height=12)
+
+## I translated after taking the top 10 bigrams, but I place this vector one step ahead in the workflow in order for the processing to occur in one step.
+
+translations <- c("Studious", "(Disciple) Yan Hui", "3 years’ mourning", "Great officer", "(Disciple) Zi Zhang asked", "Enter politics", "Have not seen", "(Disciple) Fan Chi", "(Disciple) Zi Gong asked", "Inquired about governance", "Parents", "Know Ritual"," Ritual", "(Disciple) Lu asked", "Sage King", "Ghosts/Spirits", "Common folk", "Feudal lords", "Country", "Engage in", "Rulers", "All people", "10 Steps", "Control", "All Things", "Confucius", "Benevolence and\n Righteousness", "Lao Dan/Laozi", "Master", "Never", "Huang Di", "The Beginning", "Zhu Liang", "Life and\n Death")
+
+##Filter out 3 "nonsense" values that otherwise show up in top bigrams
+##Calculate top 10 bigrams
+##Include English translations for labelling
+
+top_10_bigrams <- book_bigram_count %>%
+  select(book, word, n, frequency) %>%
+  distinct() %>%
+  filter(!word %in% c("公 問", "公 大", "二 三")) %>%
+  top_n(10, n) %>%
+  arrange(book, -n) %>%
+  ungroup() %>%
+  mutate(translations = translations)
+
+
+```
+
+
+```{r, fig.width = 13, fig.height=7, fig.align="center"} 
+
+ggplot(top_10_bigrams, aes(x = reorder(factor(word), frequency), y = n, fill = book)) +
+   annotation_custom(rasterGrob(image, 
+                               width = unit(1,"npc"), 
+                               height = unit(1,"npc")), 
+                               -Inf, Inf, -Inf, Inf) +
+  geom_col(alpha = .95, color = "black", show.legend = FALSE) + 
+  geom_text(aes(label = translations), color = "ivory", position = position_stack(vjust = 0.5)) + 
+  facet_wrap(~book, scales = "free") + 
+  coord_flip() +
+  scale_fill_manual(values = bar_colors) +
+  theme_dark(base_family= "HiraKakuProN-W3") + 
+  theme(axis.text.x = element_text(color = "#232528", angle = 90)) +
+  theme(axis.text.y = element_text(color = "#232528", size = 12)) +
+  theme(panel.background = element_rect(fill = "#87969B"), plot.background = element_rect(fill = "ivory"), panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + 
+  labs(x = NULL, y = "Count") +
+  ggtitle("Top Word Bigrams \n The Analects, Mozi, and Zhuangzi") +
+  theme(plot.title = element_text(size = 20, color = "#232528", hjust = 0.5)) 
+
+```
+
+## Did Counting Bigrams Help?
+
+This method did yield some new information. Firstly we see that the Analects seems to have a prevalent structure of Confucius's disciples asking him questions. We also see meaning regarding the concept of Ritual, 3 years' mourning after the passing of a parent, studying, and parents. These values sound very Confucian (and there were more core themes such as piety, slightly right out of the top 10). Arguably if we filtered out the disciple names we'd see more interesting bigrams.
+
+The Zhuangzi is still very cosmological - All Things, Life and Death, The Beginning are all evidence of this. 
+
+And as for the Mozi, well, it is still hard to identify a core theme through bigrams. (Hint, calculating top bigrams by chapter helps more meaningful themes such as "Universal Love" shine through.)
+
+
+Anyway, that is the conclusion for this post on bigrams!
+
+----
+
+*Apologies regarding the background image in plot; I can't remember its source...
+

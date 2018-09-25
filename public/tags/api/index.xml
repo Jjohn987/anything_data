@@ -8,7 +8,7 @@
     <language>en-us</language>
     <lastBuildDate>Thu, 17 May 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/api/index.xml" rel="self" type="application/rss+xml" />
+        <atom:link href="/tags/api/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -17,8 +17,68 @@
       <pubDate>Thu, 17 May 2018 00:00:00 +0000</pubDate>
       
       <guid>/blog/2018-05-17-ctextclassics-my-first-package/</guid>
-      <description>My latest update is a milestone! I have authored my first ever R package which is an API caller for ctext.org. Ctext hosts numerous pre-modern Chinese texts and my package makes them available to you. The scope is broad, but think philosophical works in Confucianism, Daoism, Legalism, military doctrines, history compilations, works in medicine, and many more.
-The three main functions of ctextclassics are get_chapter(&amp;quot;book&amp;quot;, &amp;quot;chapter&amp;quot;) ,get_chapters(&amp;quot;book&amp;quot;, chapters), get_books(&amp;quot;book&amp;quot;) and the internal dataframe book_list which shows the available texts.</description>
+      <description>&lt;p&gt;My latest update is a milestone! I have authored my first ever R package which is an API caller for ctext.org. Ctext hosts numerous pre-modern Chinese texts and my package makes them available to you. The scope is broad, but think philosophical works in Confucianism, Daoism, Legalism, military doctrines, history compilations, works in medicine, and many more.&lt;/p&gt;
+&lt;p&gt;The three main functions of ctextclassics are &lt;code&gt;get_chapter(&amp;quot;book&amp;quot;, &amp;quot;chapter&amp;quot;)&lt;/code&gt; ,&lt;code&gt;get_chapters(&amp;quot;book&amp;quot;, chapters)&lt;/code&gt;, &lt;code&gt;get_books(&amp;quot;book&amp;quot;)&lt;/code&gt; and the internal dataframe &lt;code&gt;book_list&lt;/code&gt; which shows the available texts. So perhaps try something like: &lt;br&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(ctextclassics)
+head(unique(book_list$book), n = 5)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;analects&amp;quot;        &amp;quot;art-of-war&amp;quot;      &amp;quot;bai-hu-tong&amp;quot;     &amp;quot;baopuzi&amp;quot;        
+## [5] &amp;quot;book-of-changes&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;knitr::kable(head(get_books(&amp;quot;analects&amp;quot;)))&lt;/code&gt;&lt;/pre&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th align=&#34;left&#34;&gt;book&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;chapter&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;word&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;chapter_cn&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;analects&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;xue-er&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;子曰：「學而時習之，不亦說乎？有朋自遠方來，不亦樂乎？人不知而不慍，不亦君子乎？」&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;學而&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;analects&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;xue-er&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;有子曰：「其為人也孝弟，而好犯上者，鮮矣；不好犯上，而好作亂者，未之有也。君子務本，本立而道生。孝弟也者，其為仁之本與！」&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;學而&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;analects&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;xue-er&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;子曰：「巧言令色，鮮矣仁！」&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;學而&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;analects&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;xue-er&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;曾子曰：「吾日三省吾身：為人謀而不忠乎？與朋友交而不信乎？傳不習乎？」&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;學而&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;analects&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;xue-er&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;子曰：「道千乘之國：敬事而信，節用而愛人，使民以時。」&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;學而&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;analects&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;xue-er&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;子曰：「弟子入則孝，出則弟，謹而信，汎愛眾，而親仁。行有餘力，則以學文。」&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;學而&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;Just be careful, the API limit is around 60-ish. Which means you can get about 3 books on average before my download functions start spitting out NA values.&lt;/p&gt;
+&lt;p&gt;The API indexes its book and chapter names differently. Some are in English (e.g., “analects”) whereas others are written in Pinyin (e.g., “mengzi”). Some chapter titles use the word “the” whereas others don’t. So eventually I’ll consider the need to make the function calls more robust and help users avoid those inconsistencies. There’s a lot that can be improved here, be it adding authentication, a way to keep track of API call count, or anything else - but I’m looking forward to it!&lt;/p&gt;
+&lt;p&gt;So, what’s my ultimate goal? It is to use &lt;code&gt;ctextclassics&lt;/code&gt; for text analysis on Chinese classic texts - Similar to how we see the &lt;strong&gt;amazing Tidytext&lt;/strong&gt; and gutenbergr packages used! &lt;strong&gt;Quite ambitious, I know.&lt;/strong&gt; At any rate, I’m enjoying reading this classical Chinese.&lt;/p&gt;
+&lt;p&gt;To cap off this post, you can use my package by typing &lt;code&gt;devtools::install_github(&amp;quot;Jjohn987/ctextclassics&amp;quot;)&lt;/code&gt; and remember to check out the documentation of the functions for a better explanation.&lt;/p&gt;
+&lt;p&gt;If you want to contribute, please do so! You can comment here, fork my Github, or post an issue.&lt;/p&gt;
+</description>
     </item>
     
   </channel>

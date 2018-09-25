@@ -8,7 +8,7 @@
     <language>en-us</language>
     <lastBuildDate>Thu, 17 May 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+        <atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -48,6 +48,15 @@
     </item>
     
     <item>
+      <title>Chinese Text Analysis</title>
+      <link>/tags/chinese-text-analysis/</link>
+      <pubDate>Fri, 08 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/chinese-text-analysis/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Correlates of War Project</title>
       <link>/tags/correlates-of-war-project/</link>
       <pubDate>Sun, 01 Apr 2018 00:00:00 +0000</pubDate>
@@ -68,9 +77,45 @@
     <item>
       <title>Ctextclassics</title>
       <link>/tags/ctextclassics/</link>
-      <pubDate>Thu, 17 May 2018 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 01 Jun 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/ctextclassics/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Fortune 500s</title>
+      <link>/tags/fortune-500s/</link>
+      <pubDate>Mon, 29 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/fortune-500s/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ggmap</title>
+      <link>/tags/ggmap/</link>
+      <pubDate>Mon, 29 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/ggmap/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ggplot2</title>
+      <link>/tags/ggplot2/</link>
+      <pubDate>Fri, 21 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/ggplot2/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ggraph</title>
+      <link>/tags/ggraph/</link>
+      <pubDate>Fri, 08 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/ggraph/</guid>
       <description></description>
     </item>
     
@@ -80,6 +125,24 @@
       <pubDate>Sun, 06 May 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/github-pages/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Google</title>
+      <link>/tags/google/</link>
+      <pubDate>Mon, 29 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/google/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Halo</title>
+      <link>/tags/halo/</link>
+      <pubDate>Fri, 21 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/halo/</guid>
       <description></description>
     </item>
     
@@ -102,11 +165,11 @@
     </item>
     
     <item>
-      <title>International Organizations</title>
-      <link>/tags/international-organizations/</link>
-      <pubDate>Tue, 24 Jan 2017 00:00:00 +0000</pubDate>
+      <title>Microsoft Halo 5 Api</title>
+      <link>/tags/microsoft-halo-5-api/</link>
+      <pubDate>Fri, 21 Sep 2018 00:00:00 +0000</pubDate>
       
-      <guid>/tags/international-organizations/</guid>
+      <guid>/tags/microsoft-halo-5-api/</guid>
       <description></description>
     </item>
     
@@ -156,6 +219,15 @@
     </item>
     
     <item>
+      <title>Shiny</title>
+      <link>/tags/shiny/</link>
+      <pubDate>Fri, 21 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/shiny/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Text Analysis</title>
       <link>/tags/text-analysis/</link>
       <pubDate>Thu, 17 May 2018 00:00:00 +0000</pubDate>
@@ -165,20 +237,38 @@
     </item>
     
     <item>
-      <title>Tidyr</title>
-      <link>/tags/tidyr/</link>
-      <pubDate>Tue, 24 Jan 2017 00:00:00 +0000</pubDate>
+      <title>Tidygraph</title>
+      <link>/tags/tidygraph/</link>
+      <pubDate>Fri, 08 Jun 2018 00:00:00 +0000</pubDate>
       
-      <guid>/tags/tidyr/</guid>
+      <guid>/tags/tidygraph/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Tidytext</title>
+      <link>/tags/tidytext/</link>
+      <pubDate>Fri, 01 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/tidytext/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Tidyverse</title>
       <link>/tags/tidyverse/</link>
-      <pubDate>Tue, 24 Jan 2017 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 29 Jan 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/tidyverse/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Tmcn</title>
+      <link>/tags/tmcn/</link>
+      <pubDate>Fri, 01 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/tmcn/</guid>
       <description></description>
     </item>
     

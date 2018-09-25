@@ -1,0 +1,666 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Chinese Text Analysis on Anything is |Data| is Anything</title>
+    <link>/categories/chinese-text-analysis/</link>
+    <description>Recent content in Chinese Text Analysis on Anything is |Data| is Anything</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 29 May 2018 00:00:00 +0000</lastBuildDate>
+    
+        <atom:link href="/categories/chinese-text-analysis/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>A Tidytext Analysis of 3 Chinese Classics</title>
+      <link>/blog/2018-05-29-a-tidytext-analysis-of-3-chinese-classics/</link>
+      <pubDate>Tue, 29 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2018-05-29-a-tidytext-analysis-of-3-chinese-classics/</guid>
+      <description>&lt;script src=&#34;/rmarkdown-libs/kePrint/kePrint.js&#34;&gt;&lt;/script&gt;
+
+
+&lt;p&gt;For a long time I’ve admired the &lt;code&gt;tidytext&lt;/code&gt; package and its wonderful companion book &lt;a href=&#34;https://www.tidytextmining.com&#34;&gt;&lt;em&gt;Text Mining with R&lt;/em&gt;&lt;/a&gt;. After reading it I thought, “Why not undertake a project of Chinese text analysis?” &lt;strong&gt;I am deeply interested in Chinese philosophy&lt;/strong&gt; but I decided to keep the analysis narrow by selecting just three works - &lt;strong&gt;The Analects, Zhuangzi, and the Mozi&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Following similar pace with Tidytext, I first download my data. Here I use my package &lt;code&gt;ctextclassics&lt;/code&gt; and specifically, the function &lt;code&gt;get_books(c(...))&lt;/code&gt;. But I want to point out the API limit is very low and I had to download my books between two different days. For information on ctextclassics, check out my previous post or type &lt;code&gt;install_github(&amp;quot;Jjohn987/ctextclassics&amp;quot;)&lt;/code&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)
+library(stringr)
+library(ctextclassics)
+library(tmcn)
+library(tidytext)
+library(topicmodels)
+library(readr)
+
+my_classics &amp;lt;- read_csv(&amp;quot;~/Desktop/anything_data/content/post/my_classics.csv&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;With any text analysis, tokenizing the text and filtering out stop words is fundamental. Tidytext segments English quite naturally, considering words are easily separated by spaces. However, I’m not so sure how it performs with Chinese characters.&lt;/p&gt;
+&lt;p&gt;There are specific segementers for Chinese text - one main tool is &lt;code&gt;jiebaR&lt;/code&gt;, which is also included in the &lt;code&gt;tmcn&lt;/code&gt; package.&lt;/p&gt;
+&lt;p&gt;However, when comparing the two methods, I noticed that JiebaR segments text in a way most suitable for &lt;strong&gt;modern&lt;/strong&gt; Chinese (Mostly 2 character words). Since I’m dealing with classical Chinese here, Tidytext’s one character segmentaions are more preferable.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;tidytext_segmented &amp;lt;- my_classics %&amp;gt;% 
+  unnest_tokens(word, word)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;For dealing with stopwords, JiebaR offers a useful stopword list, but obviously more should be added since we’re dealing with classical Chinese. Many of the words I added are amorphous grammar particles, but there’s other low value phrases amongst these works such as “子曰” (“The Master said”), “天下” (Tian Xia, a common but amorphous concept roughly meaning a country, realm, or the world), and more.&lt;/p&gt;
+&lt;p&gt;Let’s filter out those words and make 2 data frames - word frequencies for each book and each chapter.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;stopwordsCN &amp;lt;- data.frame(word = c(tmcn::stopwordsCN(),
+&amp;quot;子曰&amp;quot;, &amp;quot;曰&amp;quot;, &amp;quot;於&amp;quot;, &amp;quot;則&amp;quot;,&amp;quot;吾&amp;quot;, &amp;quot;子&amp;quot;, &amp;quot;不&amp;quot;, &amp;quot;無&amp;quot;, &amp;quot;斯&amp;quot;,&amp;quot;與&amp;quot;, &amp;quot;為&amp;quot;, &amp;quot;必&amp;quot;,
+&amp;quot;使&amp;quot;, &amp;quot;非&amp;quot;,&amp;quot;天下&amp;quot;, &amp;quot;以為&amp;quot;,&amp;quot;上&amp;quot;, &amp;quot;下&amp;quot;, &amp;quot;人&amp;quot;, &amp;quot;天&amp;quot;, &amp;quot;不可&amp;quot;, &amp;quot;謂&amp;quot;, &amp;quot;是以&amp;quot;,
+&amp;quot;而不&amp;quot;, &amp;quot;皆&amp;quot;, &amp;quot;不亦&amp;quot;, &amp;quot;乎&amp;quot;, &amp;quot;之&amp;quot;, &amp;quot;而&amp;quot;, &amp;quot;者&amp;quot;, &amp;quot;本&amp;quot;, &amp;quot;與&amp;quot;, &amp;quot;吾&amp;quot;, &amp;quot;則&amp;quot;,
+&amp;quot;以&amp;quot;, &amp;quot;其&amp;quot;, &amp;quot;為&amp;quot;, &amp;quot;不以&amp;quot;, &amp;quot;不可&amp;quot;, &amp;quot;也&amp;quot;, &amp;quot;矣&amp;quot;, &amp;quot;子&amp;quot;, &amp;quot;由&amp;quot;, &amp;quot;子曰&amp;quot;, &amp;quot;曰&amp;quot;,
+&amp;quot;非其&amp;quot;, &amp;quot;於&amp;quot;, &amp;quot;不能&amp;quot;, &amp;quot;如&amp;quot;, &amp;quot;斯&amp;quot;, &amp;quot;然&amp;quot;, &amp;quot;君&amp;quot;, &amp;quot;亦&amp;quot;, &amp;quot;言&amp;quot;, &amp;quot;聞&amp;quot;, &amp;quot;今&amp;quot;,
+&amp;quot;君&amp;quot;, &amp;quot;不知&amp;quot;, &amp;quot;无&amp;quot;))
+
+## Add a column that converts traditional Chinese to simplified Chinese
+## Count words by book, then word frequency to account for different book lengths. 
+
+counts_by_book &amp;lt;- tidytext_segmented %&amp;gt;%
+  ungroup() %&amp;gt;%
+  mutate(simplified = tmcn::toTrad(word, rev = TRUE), pinyin = tmcn::toPinyin(word)) %&amp;gt;%
+  anti_join(stopwordsCN) %&amp;gt;%
+  count(book, word, pinyin, simplified) %&amp;gt;%
+  group_by(book) %&amp;gt;%
+  mutate(word_freq = `n`/sum(`n`)) %&amp;gt;%
+  arrange(-n) %&amp;gt;%
+  ungroup()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Warning: Column `word` joining character vector and factor, coercing into
+## character vector&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now let’s do the familiar ritual of examining the top 10 words in each book (e.g, counts_by_book) and plot them.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;book_top_words &amp;lt;- counts_by_book %&amp;gt;%
+  ungroup() %&amp;gt;%
+  group_by(book) %&amp;gt;%
+  top_n(10) %&amp;gt;%
+  ungroup()
+
+##format the above dataframe for a pretty display with kable
+formatted_words &amp;lt;- book_top_words %&amp;gt;%
+  group_by(book) %&amp;gt;%
+  transmute(word, simplified, n, word_freq, order = 1:n()) %&amp;gt;%
+  arrange(book, -word_freq) %&amp;gt;%
+  select(-order)
+
+##Set format for kable 
+options(knitr.table.format = &amp;quot;html&amp;quot;) 
+
+knitr::kable(formatted_words) %&amp;gt;%
+  kableExtra::kable_styling(font_size = 15, full_width = T) %&amp;gt;% kableExtra::row_spec(1:10, color = &amp;quot;white&amp;quot;, background = &amp;quot;#232528&amp;quot;) %&amp;gt;% kableExtra::row_spec(11:20, color = &amp;quot;white&amp;quot;, background = &amp;quot;#6A656B&amp;quot;) %&amp;gt;% kableExtra::row_spec(21:30, color = &amp;quot;white&amp;quot;, background = &amp;quot;#454d4c&amp;quot;) %&amp;gt;%
+kableExtra::row_spec(0, bold = F, color = &amp;quot;black&amp;quot;, background = &amp;quot;white&amp;quot;)  %&amp;gt;% kableExtra::scroll_box(width = &amp;quot;100%&amp;quot;, height = &amp;quot;350px&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;div style=&#34;border: 1px solid #ddd; padding: 5px; overflow-y: scroll; height:350px; overflow-x: scroll; width:100%; &#34;&gt;
+&lt;table class=&#34;table&#34; style=&#34;font-size: 15px; margin-left: auto; margin-right: auto;&#34;&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:left;color: black;background-color: white;&#34;&gt;
+book
+&lt;/th&gt;
+&lt;th style=&#34;text-align:left;color: black;background-color: white;&#34;&gt;
+word
+&lt;/th&gt;
+&lt;th style=&#34;text-align:left;color: black;background-color: white;&#34;&gt;
+simplified
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;color: black;background-color: white;&#34;&gt;
+n
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;color: black;background-color: white;&#34;&gt;
+word_freq
+&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+analects
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+問
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+问
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+110
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+0.0154321
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+analects
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+君子
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+君子
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+108
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+0.0151515
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+analects
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+仁
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+仁
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+76
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+0.0106622
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+analects
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+孔子
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+孔子
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+68
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+0.0095398
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+analects
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+行
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+行
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+57
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+0.0079966
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+analects
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+知
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+知
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+54
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+0.0075758
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+analects
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+路
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+路
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+52
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+0.0072952
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+analects
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+見
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+见
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+51
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+0.0071549
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+analects
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+民
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+民
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+45
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+0.0063131
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+analects
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+子貢
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #232528;&#34;&gt;
+子贡
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+44
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #232528;&#34;&gt;
+0.0061728
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+mozi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+民
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+民
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+257
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+0.0068141
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+mozi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+治
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+治
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+229
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+0.0060717
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+mozi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+利
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+利
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+227
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+0.0060187
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+mozi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+墨
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+墨
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+207
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+0.0054884
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+mozi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+知
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+知
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+200
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+0.0053028
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+mozi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+說
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+说
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+197
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+0.0052232
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+mozi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+行
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+行
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+192
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+0.0050907
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+mozi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+欲
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+欲
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+190
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+0.0050376
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+mozi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+長
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+长
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+189
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+0.0050111
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+mozi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+國
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #6A656B;&#34;&gt;
+国
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+175
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #6A656B;&#34;&gt;
+0.0046399
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+zhuangzi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+夫
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+夫
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+313
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+0.0099356
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+zhuangzi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+知
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+知
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+302
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+0.0095864
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+zhuangzi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+見
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+见
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+222
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+0.0070469
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+zhuangzi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+物
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+物
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+217
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+0.0068882
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+zhuangzi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+大
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+大
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+204
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+0.0064756
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+zhuangzi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+行
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+行
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+176
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+0.0055868
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+zhuangzi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+邪
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+邪
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+165
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+0.0052376
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+zhuangzi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+德
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+德
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+164
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+0.0052059
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+zhuangzi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+道
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+道
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+164
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+0.0052059
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+zhuangzi
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+心
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;color: white;background-color: #454d4c;&#34;&gt;
+心
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+142
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;color: white;background-color: #454d4c;&#34;&gt;
+0.0045075
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;p&gt;So far so good - these results are very intuitive. Of course, plotting them can accomplish this in even greater detail. Let’s plot the top 10 words and their respective frequencies from each of these texts, in calligraphy inspired colors!&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ink_colors &amp;lt;- rev(c(&amp;quot;ivory&amp;quot;, &amp;quot;#454d4c&amp;quot;, &amp;quot;#6A656B&amp;quot;, &amp;quot;#232528&amp;quot;))
+
+ggplot(book_top_words, aes(x = reorder(word, word_freq), y = word_freq, fill = book)) +
+  geom_col(show.legend = FALSE) + 
+  geom_text(aes(label = pinyin), color = &amp;quot;white&amp;quot;, position = position_stack(vjust = 0.5)) + 
+  facet_wrap(~book, scales = &amp;quot;free&amp;quot;, labeller = labeller(labels)) + 
+  coord_flip() +
+  scale_fill_manual(values = ink_colors) +
+  theme_dark(base_family= &amp;quot;HiraKakuProN-W3&amp;quot;) + 
+  theme(axis.text.x = element_text(color = &amp;quot;#232528&amp;quot;, angle = 90)) +
+  theme(axis.text.y = element_text(color = &amp;quot;#232528&amp;quot;, size = 15)) +
+  theme(panel.background = element_rect(fill = &amp;quot;#87969B&amp;quot;), plot.background = element_rect(fill = &amp;quot;ivory&amp;quot;), panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + 
+  labs(x = NULL, y = NULL) +
+  ggtitle(&amp;quot;Word Frequencies&amp;quot;) +
+  theme(plot.title = element_text(size = 20, color = &amp;quot;#232528&amp;quot;, hjust = 0.5))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-05-29-tidytext-analysis-of-3-chinese-classics_files/figure-html/unnamed-chunk-5-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;div id=&#34;summary&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Summary&lt;/h2&gt;
+&lt;p&gt;In this post, I…&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Used ctextclassics to download classic Chinese texts&lt;/li&gt;
+&lt;li&gt;Split the text into character tokens of 1&lt;/li&gt;
+&lt;li&gt;Filtered out common stop words&lt;/li&gt;
+&lt;li&gt;Grouped the data by book and word, calculating total words and word frequencies&lt;/li&gt;
+&lt;li&gt;Made a (calligraphy inspired) bar plot of the top 10 most frequent words in each text.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div id=&#34;conclusion&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;These word frequencies are very pleasing!&lt;/p&gt;
+&lt;p&gt;The Analects has prevalant usage of words such as “Benevolence” (仁), “Gentleman” (君子) and “Confucius” (孔子). (I capitalize these terms to show they are uniquely different from contemporary English equivalents.)&lt;/p&gt;
+&lt;p&gt;The Zhuangzi, a Taoist text, mentions cosmological concepts such as the Tao(道), morality (德), and evil(邪).&lt;/p&gt;
+&lt;p&gt;The Mozi seems to have terms that are mostly civic related, such as country (国), citizen (民) and govern（治).&lt;/p&gt;
+&lt;p&gt;These frequencies do a good job of capturing the context of the works - e.g., regarding the Analects, Benevolence and the Gentleman are often mentioned - one examplary sentence may be:&lt;/p&gt;
+&lt;p&gt;“君子而不仁者有矣夫。未有小人而仁者也.” My own (shorthand) translation:&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Of Gentlemen, there are some who do not possess Benevolence; but of Villians, there is not a single one that possesses it.&lt;/em&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;next-post&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Next Post&lt;/h2&gt;
+&lt;p&gt;In my next post, I would like to either &lt;strong&gt;follow the same procedure but with bigrams&lt;/strong&gt;, and/or &lt;strong&gt;apply LDA (Latent Dirichlet Allocation)&lt;/strong&gt; to see whether chapters can be distinguished from one another.&lt;/p&gt;
+&lt;p&gt;Although frequent words are very different among texts, I’m not so sure that each book can be completely distinguished from others (There are many shared words - Dao isn’t solely mentioned in Taoist texts, and each text includes civic related concepts related to proper governance, plus, the Mozi is likely authored by different people!)&lt;/p&gt;
+&lt;p&gt;On that note, to be continued!&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

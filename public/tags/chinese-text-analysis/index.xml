@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Chinese Text Analysis on Anything is |Data| is Anything</title>
+    <link>/tags/chinese-text-analysis/</link>
+    <description>Recent content in Chinese Text Analysis on Anything is |Data| is Anything</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 08 Jun 2018 00:00:00 +0000</lastBuildDate>
+    
+        <atom:link href="/tags/chinese-text-analysis/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Part II: Chinese Classics&#39; Word/Network Plots</title>
+      <link>/blog/2018-06-08-part-ii-chinese-classics-word/network-plots/</link>
+      <pubDate>Fri, 08 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2018-06-08-part-ii-chinese-classics-word/network-plots/</guid>
+      <description>&lt;p&gt;This is a continuation in my series of exploratory text analysis of 3 Chinese classic works. In the previous post, I calculated word counts for each book, and visualized common words using bar charts. This time, I’d like to examine word use &lt;strong&gt;across&lt;/strong&gt; the texts with network visualization. The goal is to help see &lt;strong&gt;what’s common&lt;/strong&gt; and &lt;strong&gt;what’s different&lt;/strong&gt; between the texts regarding word usage.&lt;/p&gt;
+&lt;p&gt;Network visualization is particularly helpful for discovering simularities and differences between objects - this is because nodes and edges can form connections and clusters (or stay isolated). Thus, through a network structure we can get an idea of commonalities and differences between the word usages in these 3 works.&lt;/p&gt;
+&lt;p&gt;Disclaimer - the setup of this post is very similar to last time. I’m essentially importing the same data. So just skip past these first 2 code blocks.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)
+library(readr)
+library(stringi)
+library(tidygraph)
+library(ggraph)
+
+
+my_classics &amp;lt;- read_csv(&amp;quot;~/Desktop/anything_data/content/post/my_classics.csv&amp;quot;) %&amp;gt;%
+  select(-1) %&amp;gt;%
+  mutate(book = str_to_title(book))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;simple_bigram &amp;lt;- function(x) {
+  if(length(x) &amp;lt; 2) {
+    return(NA)
+  } else {
+    output_length &amp;lt;- length(x) - 1
+    output &amp;lt;- vector(length = output_length)
+    for(i in 1:output_length) {
+      output[i] &amp;lt;- paste(x[i], x[i+1], sep = &amp;quot; &amp;quot;)
+    }
+    output
+  }
+}
+
+tokenizer &amp;lt;- function(text) {
+  unlist(lapply(stringi::stri_split_boundaries(text), function(x) simple_bigram(x)))
+}
+
+library(tmcn)
+
+stopwordsCN &amp;lt;- data.frame(word = c(tmcn::stopwordsCN(),
+                                   &amp;quot;子曰&amp;quot;, &amp;quot;曰&amp;quot;, &amp;quot;於&amp;quot;, &amp;quot;則&amp;quot;,&amp;quot;吾&amp;quot;, &amp;quot;子&amp;quot;, &amp;quot;不&amp;quot;, &amp;quot;無&amp;quot;, &amp;quot;斯&amp;quot;,&amp;quot;與&amp;quot;, &amp;quot;為&amp;quot;, &amp;quot;必&amp;quot;,
+                                   &amp;quot;使&amp;quot;, &amp;quot;非&amp;quot;,&amp;quot;天下&amp;quot;, &amp;quot;以為&amp;quot;,&amp;quot;上&amp;quot;, &amp;quot;下&amp;quot;, &amp;quot;人&amp;quot;, &amp;quot;天&amp;quot;, &amp;quot;不可&amp;quot;, &amp;quot;謂&amp;quot;, &amp;quot;是以&amp;quot;,
+                                   &amp;quot;而不&amp;quot;, &amp;quot;皆&amp;quot;, &amp;quot;不亦&amp;quot;, &amp;quot;乎&amp;quot;, &amp;quot;之&amp;quot;, &amp;quot;而&amp;quot;, &amp;quot;者&amp;quot;, &amp;quot;本&amp;quot;, &amp;quot;與&amp;quot;, &amp;quot;吾&amp;quot;, &amp;quot;則&amp;quot;,
+                                   &amp;quot;以&amp;quot;, &amp;quot;其&amp;quot;, &amp;quot;為&amp;quot;, &amp;quot;不以&amp;quot;, &amp;quot;不可&amp;quot;, &amp;quot;也&amp;quot;, &amp;quot;矣&amp;quot;, &amp;quot;子&amp;quot;, &amp;quot;由&amp;quot;, &amp;quot;子曰&amp;quot;, &amp;quot;曰&amp;quot;,
+                                   &amp;quot;非其&amp;quot;, &amp;quot;於&amp;quot;, &amp;quot;不能&amp;quot;, &amp;quot;如&amp;quot;, &amp;quot;斯&amp;quot;, &amp;quot;然&amp;quot;, &amp;quot;君&amp;quot;, &amp;quot;亦&amp;quot;, &amp;quot;言&amp;quot;, &amp;quot;聞&amp;quot;, &amp;quot;今&amp;quot;,
+                                   &amp;quot;君&amp;quot;, &amp;quot;不知&amp;quot;, &amp;quot;无&amp;quot;))
+
+##High frequency single-words by chapter
+chapter_words &amp;lt;- my_classics %&amp;gt;%
+  mutate(word = map(word, function(x) unlist(stringi::stri_split_boundaries(x)))) %&amp;gt;%
+  unnest(word) %&amp;gt;%
+  mutate(word = str_replace_all(word, &amp;quot;[「」《》『』,，、。；：？！]&amp;quot;, &amp;quot;&amp;quot;)) %&amp;gt;%
+  filter(!is.na(word), !grepl(&amp;quot;Invald&amp;quot;, word)) %&amp;gt;%
+  anti_join(stopwordsCN) %&amp;gt;%
+  select(word, book, chapter_number) %&amp;gt;% 
+  count(book, chapter_number, word) %&amp;gt;%
+  group_by(book, chapter_number) %&amp;gt;%
+  mutate(frequency = n/sum(n), book_edges = book) %&amp;gt;%
+  filter(frequency &amp;gt; .01) %&amp;gt;% ungroup() %&amp;gt;%
+  select(word, book, n, frequency, book_edges)
+
+book_words &amp;lt;- my_classics %&amp;gt;%
+  mutate(word = map(word, function(x) unlist(stringi::stri_split_boundaries(x)))) %&amp;gt;%
+  unnest(word) %&amp;gt;%
+  mutate(word = str_replace_all(word, &amp;quot;[「」《》『』,，、。；：？！]&amp;quot;, &amp;quot;&amp;quot;)) %&amp;gt;%
+  filter(!is.na(word), !grepl(&amp;quot;Invald&amp;quot;, word)) %&amp;gt;%
+  anti_join(stopwordsCN) %&amp;gt;%
+  select(word, book) %&amp;gt;% 
+  count(book, word) %&amp;gt;%
+  group_by(book) %&amp;gt;%
+  mutate(frequency = n/sum(n), book_edges = book) %&amp;gt;%
+  filter(frequency &amp;gt; .001) &lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Plotting the edges in “arcs” helps avoid any overplotting or tangling that might exist in the case of too much interconnectivity, as we will soon see.&lt;/p&gt;
+&lt;p&gt;I’ve got 2 different ways of visualizing networks using words in these texts. First, let’s look at single word use between each text, one plot showing common words by each chapter/book, another by book.&lt;/p&gt;
+&lt;p&gt;Unfortunatly the blog squishes the plot a bit, so you might want to zoom in on it.&lt;/p&gt;
+&lt;div id=&#34;single-words-by-chapter-and-book&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Single Words by Chapter and Book&lt;/h2&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;knitr::opts_chunk$set(fig.width=16, fig.height=12)
+
+as_tbl_graph(chapter_words, directed = FALSE) %&amp;gt;% ggraph(layout = &amp;quot;fr&amp;quot;) + 
+  geom_edge_arc(aes(edge_width = frequency, color = factor(book_edges), alpha = frequency)) +
+  geom_node_point(color = &amp;quot;black&amp;quot;, alpha = .65, size = 7, show.legend = FALSE) + 
+  geom_node_text(aes(label = name), color = &amp;quot;white&amp;quot;,
+                 family = &amp;quot;HiraKakuProN-W3&amp;quot;, check_overlap = TRUE) +
+  scale_edge_colour_manual(values = c(&amp;quot;#b20047&amp;quot;, &amp;quot;#00b274&amp;quot;, &amp;quot;#FFB52A&amp;quot;)) + 
+  theme(axis.text.x = element_blank()) + 
+  theme(axis.text.y = element_blank()) + 
+  theme(panel.background = element_rect(fill = &amp;quot;#cddbda&amp;quot;),
+        plot.background = element_rect(fill = &amp;quot;#cddbda&amp;quot;),
+        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        plot.margin = margin(0, 0, 0, 0, &amp;quot;cm&amp;quot;)) + 
+  guides(edge_width=FALSE, edge_alpha = FALSE) + 
+  labs(x = NULL, y = NULL,
+       title = &amp;quot;\nCommon Characters\n in the Analects, Mozi, and Zhuangzi\n&amp;quot;) +
+  theme(plot.title = element_text(size = 25, vjust = -10, hjust = 0.5,
+                                  family = &amp;quot;Palatino&amp;quot;, face = &amp;quot;bold.italic&amp;quot;,
+                                  color = &amp;quot;#3d4040&amp;quot;)) + 
+  theme(legend.position = &amp;quot;bottom&amp;quot;, legend.title = element_blank(),
+        legend.key = element_rect(color = &amp;quot;#454444&amp;quot;, fill = &amp;quot;#f5fffe&amp;quot;),
+        legend.text = element_text(size = 12, color = &amp;quot;#3d4040&amp;quot;, family = &amp;quot;Palatino&amp;quot;),
+        legend.key.width = unit(4, &amp;quot;line&amp;quot;),
+        legend.background = element_rect(fill = &amp;quot;#cddbda&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-06-08-part-ii-chinese-classics-word-network-plots_files/figure-html/unnamed-chunk-3-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Compared to the above, doing the frequency counting by book seems to yeild a bit more balanced results. Of course frequency values become much lower that way, here I filter for greater than .001.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;single-words-by-book&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Single Words by Book&lt;/h2&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;as_tbl_graph(book_words, directed = FALSE) %&amp;gt;%
+  ggraph(layout = &amp;quot;fr&amp;quot;) + 
+  geom_edge_arc(aes(edge_width = frequency, color = factor(book_edges), alpha = frequency)) +
+  geom_node_point(color = &amp;quot;black&amp;quot;, alpha = .65, size = 7, show.legend = FALSE) + 
+  geom_node_text(aes(label = name), color = &amp;quot;white&amp;quot;,
+                 family = &amp;quot;HiraKakuProN-W3&amp;quot;, check_overlap = TRUE) +
+  scale_edge_colour_manual(values = c(&amp;quot;#b20047&amp;quot;, &amp;quot;#00b274&amp;quot;, &amp;quot;#FFB52A&amp;quot;)) + 
+  theme(axis.text.x = element_blank()) + 
+  theme(axis.text.y = element_blank()) + 
+  theme(panel.background = element_rect(fill = &amp;quot;#cddbda&amp;quot;),
+        plot.background = element_rect(fill = &amp;quot;#cddbda&amp;quot;),
+        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        plot.margin = margin(0, 0, 0, 0, &amp;quot;cm&amp;quot;)) + 
+  guides(edge_width=FALSE, edge_alpha = FALSE) + 
+  labs(x = NULL, y = NULL,
+       title = &amp;quot;\nCommon Characters\n in the Analects, Mozi, and Zhuangzi\n&amp;quot;, caption = &amp;quot;Per Book, Frequency &amp;gt; .001&amp;quot;) +
+  theme(plot.title = element_text(size = 25, vjust = -10, hjust = 0.5,
+                                  family = &amp;quot;Palatino&amp;quot;, face = &amp;quot;bold.italic&amp;quot;,
+                                  color = &amp;quot;#3d4040&amp;quot;)) + 
+  theme(legend.position = &amp;quot;bottom&amp;quot;, legend.title = element_blank(),
+        legend.key = element_rect(color = &amp;quot;#454444&amp;quot;, fill = &amp;quot;#f5fffe&amp;quot;),
+        legend.text = element_text(size = 12, color = &amp;quot;#3d4040&amp;quot;, family = &amp;quot;Palatino&amp;quot;),
+        legend.key.width = unit(4, &amp;quot;line&amp;quot;),
+        legend.background = element_rect(fill = &amp;quot;#cddbda&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-06-08-part-ii-chinese-classics-word-network-plots_files/figure-html/unnamed-chunk-4-1.png&#34; width=&#34;1536&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Regardless of calculating frequency by chapter and book or just by book, there are plenty of words that fall &lt;strong&gt;in between&lt;/strong&gt; texts.&lt;/p&gt;
+&lt;p&gt;I’m not sure how useful this method of examining “simularity” of word usage is analytically; however, I think it works in a sense. If not for an algorithm, then at least for our general understanding. However, I do suspect that this type of networking does play into clustering, and from the looks of the plots, I imagine that the LDA algorithm might run into confusion distinguishing the books/chapters later.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;now-lets-plot-bigrams&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Now let’s plot bigrams&lt;/h2&gt;
+&lt;p&gt;Here, a bigram is essentially two connected nodes. The connections (edges) between them are colored according to the text they appear in. Again, its a bit subjective on whether to calculate the bigrams by book or by each chapter and book. Conventional wisdom tells me that doing the calculation per chapter makes more sense, however, the Zhuangzi suffers from this operation. (Perhaps it has a greater word diversity per chapter?) So I decide to plot both ways.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;bigrams-by-chapter-and-book&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Bigrams by Chapter and Book&lt;/h2&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;knitr::opts_chunk$set(fig.width=6, fig.height=6, fig.pos = &amp;quot;center&amp;quot;)
+
+bigrams &amp;lt;- my_classics %&amp;gt;%
+  mutate(word = str_replace_all(word, &amp;quot;[「」《》『』,，、。；：？！]&amp;quot;, &amp;quot;&amp;quot;)) %&amp;gt;%
+  mutate(word = map(word, function(x) tokenizer(x))) %&amp;gt;%
+  unnest(word) %&amp;gt;%
+  filter(!is.na(word)) %&amp;gt;%
+  separate(word, into = c(&amp;quot;word1&amp;quot;, &amp;quot;word2&amp;quot;)) %&amp;gt;%
+  filter(!word1 %in% stopwordsCN$word, !word2 %in% stopwordsCN$word) %&amp;gt;%
+  unite(&amp;quot;word&amp;quot;, c(&amp;quot;word1&amp;quot;, &amp;quot;word2&amp;quot;), sep = &amp;quot; &amp;quot;)
+
+chapter_bigrams &amp;lt;- bigrams %&amp;gt;%
+  count(book, chapter_number, word) %&amp;gt;%
+  arrange(book, -n) %&amp;gt;%
+  group_by(book, chapter_number) %&amp;gt;%
+  mutate(frequency = n/sum(n)) %&amp;gt;%
+  ungroup() %&amp;gt;%
+  select(-chapter_number)
+
+
+chapter_bigrams %&amp;gt;%
+  separate(word, into = c(&amp;quot;word1&amp;quot;, &amp;quot;word2&amp;quot;)) %&amp;gt;%
+  select(word1, word2, n, frequency, book) %&amp;gt;%
+  filter(frequency &amp;gt;= .02) %&amp;gt;%
+  as_tbl_graph(directed = FALSE) %&amp;gt;%
+  ggraph(layout = &amp;quot;fr&amp;quot;) + 
+  geom_edge_density() +
+  geom_edge_arc(aes(color = book),
+                alpha = .70, arrow = arrow(length = unit(1.5, &amp;quot;mm&amp;quot;)),
+                start_cap = circle(3, &amp;quot;mm&amp;quot;), end_cap = circle(3, &amp;quot;mm&amp;quot;), edge_width = .75) +
+  geom_node_point(size = 7, color = &amp;quot;black&amp;quot;, alpha = .75) +
+  geom_node_text(aes(label = name), color = &amp;quot;grey&amp;quot;, family = &amp;quot;HiraKakuProN-W3&amp;quot;, check_overlap = TRUE) +
+  scale_edge_colour_manual(values = c(&amp;quot;#b20047&amp;quot;, &amp;quot;#00b274&amp;quot;, &amp;quot;#fdff00&amp;quot;))+
+  theme(axis.text.x = element_blank()) +
+  theme(axis.text.y = element_blank()) +
+  theme(panel.background = element_rect(fill = &amp;quot;#8AE3C2&amp;quot;),
+        plot.background = element_rect(fill = &amp;quot;#8AE3C2&amp;quot;),
+        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        plot.margin = margin(0, 0, 0, 0, &amp;quot;cm&amp;quot;)) + 
+  guides(edge_width=FALSE) +
+  labs(x = NULL, y = NULL, title = &amp;quot;Bigrams in the Analects, Mozi, and Zhuangzi&amp;quot;, caption = &amp;quot;Per chapter, Frequency &amp;gt; .02&amp;quot;) +
+  theme(plot.title = element_text(size = 35, vjust = -10, hjust = 0.5,
+                                  family = &amp;quot;Palatino&amp;quot;, face = &amp;quot;italic&amp;quot;,
+                                  color = &amp;quot;black&amp;quot;)) +
+  theme(legend.position = &amp;quot;bottom&amp;quot;, legend.title = element_blank(),
+        legend.key = element_rect(color = &amp;quot;black&amp;quot;, fill = &amp;quot;#8AE3C2&amp;quot;),
+        legend.text = element_text(size = 12, color = &amp;quot;black&amp;quot;, family = &amp;quot;Palatino&amp;quot;),
+        legend.key.width = unit(4, &amp;quot;line&amp;quot;),
+        legend.background = element_rect(fill = &amp;quot;#8AE3C2&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-06-08-part-ii-chinese-classics-word-network-plots_files/figure-html/unnamed-chunk-5-1.png&#34; width=&#34;1536&#34; /&gt; For the final plot, unfortunately many edges/links don’t show. Perhaps it is because many nodes are positioned so close together that the edges just aren’t drawn.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;bigrams-by-book&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Bigrams by Book&lt;/h2&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;knitr::opts_chunk$set(fig.width=6, fig.height=6, fig.pos = &amp;quot;center&amp;quot;)
+
+book_bigrams &amp;lt;- bigrams %&amp;gt;%
+  count(book, word) %&amp;gt;%
+  arrange(book, -n) %&amp;gt;%
+  group_by(book) %&amp;gt;%
+  mutate(frequency = n/sum(n)) %&amp;gt;%
+  ungroup()
+
+book_bigrams %&amp;gt;%
+  separate(word, into = c(&amp;quot;word1&amp;quot;, &amp;quot;word2&amp;quot;)) %&amp;gt;%
+  select(word1, word2, n, frequency, book) %&amp;gt;%
+  filter(frequency &amp;gt;= .001) %&amp;gt;%
+  as_tbl_graph(directed = FALSE) %&amp;gt;%
+  ggraph(layout = &amp;quot;fr&amp;quot;) + 
+  geom_edge_density() +
+  geom_edge_arc(aes(color = book),
+                alpha = .70, arrow = arrow(length = unit(1.5, &amp;quot;mm&amp;quot;)),
+                start_cap = circle(3, &amp;quot;mm&amp;quot;), end_cap = circle(3, &amp;quot;mm&amp;quot;), edge_width = .75) +
+  geom_node_point(size = 7, color = &amp;quot;black&amp;quot;, alpha = .75) +
+  geom_node_text(aes(label = name), color = &amp;quot;grey&amp;quot;, family = &amp;quot;HiraKakuProN-W3&amp;quot;, check_overlap = TRUE) +
+  scale_edge_colour_manual(values = c(&amp;quot;#b20047&amp;quot;, &amp;quot;#00b274&amp;quot;, &amp;quot;#fdff00&amp;quot;))+
+  theme(axis.text.x = element_blank()) +
+  theme(axis.text.y = element_blank()) +
+  theme(panel.background = element_rect(fill = &amp;quot;#8AE3C2&amp;quot;),
+        plot.background = element_rect(fill = &amp;quot;#8AE3C2&amp;quot;),
+        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        plot.margin = margin(0, 0, 0, 0, &amp;quot;cm&amp;quot;)) + 
+  guides(edge_width=FALSE) +
+  labs(x = NULL, y = NULL, title = &amp;quot;Bigrams in\n the Analects, Mozi, and Zhuangzi&amp;quot;, caption = &amp;quot;Per book, Frequency &amp;gt; .001&amp;quot;) +
+  theme(plot.title = element_text(size = 25, vjust = -10, hjust = 0.5,
+                                  family = &amp;quot;Palatino&amp;quot;, face = &amp;quot;italic&amp;quot;,
+                                  color = &amp;quot;black&amp;quot;)) +
+  theme(legend.position = &amp;quot;bottom&amp;quot;, legend.title = element_blank(),
+        legend.key = element_rect(color = &amp;quot;black&amp;quot;, fill = &amp;quot;#8AE3C2&amp;quot;),
+        legend.text = element_text(size = 12, color = &amp;quot;black&amp;quot;, family = &amp;quot;Palatino&amp;quot;),
+        legend.key.width = unit(4, &amp;quot;line&amp;quot;),
+        legend.background = element_rect(fill = &amp;quot;#8AE3C2&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2018-06-08-part-ii-chinese-classics-word-network-plots_files/figure-html/unnamed-chunk-6-1.png&#34; width=&#34;576&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;There we have it, two different network plots of words used in these 3 classic works. In the case of the single characters, there is a lot of commonality (as expected). In the case of the bigrams, there is a lot less in common between the works.&lt;/p&gt;
+&lt;p&gt;Before I close, I’d like to comment briefly on the &lt;code&gt;tidygraph&lt;/code&gt; package which made these plots possible. Previously, I used igraph and found it powerful and quite robust, yet not too intuitive or user-friendly. Tidygraph changes all of that and allows network data to be manipulated in a way similar to the tidyverse methodology. I love tidygraph!&lt;/p&gt;
+&lt;p&gt;I hope you enjoyed these two network plots. Until next time!&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
