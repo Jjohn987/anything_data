@@ -10,8 +10,10 @@ library(grid)
 library(colourpicker)
 
 ## Load Background/Map metadata
-url <- "https://twitter.com/share?ref_src=twsrc%5Etfw/"
-url2 <- "https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fjjohn9000.shinyapps.io%2FHalo5_Stats%2F&amp;src=sdkpreparse"
+url1 <- "https://www.facebook.com/sharer/sharer.php?u=https%3A//jjohn9000.shinyapps.io/Halo5_Stats/"
+url2 <- "https://twitter.com/share?ref_src=twsrc%5Etfw/"
+url3 <- "https://www.linkedin.com/in/jeremy-johnson-09016a112"
+url4 <- "https://jjohn987.rbind.io/"
 maps <- read.csv("maps.csv", stringsAsFactors = FALSE)[-c(1, 3)]
 
 
@@ -21,7 +23,7 @@ ui <- fluidPage(theme = shinytheme("slate"),
 
                 tags$div(h1("Halo 5 Stats"), align = "center"),
                 
-                tags$div(h6("Download your SPARTAN and GAME STATS using Microsoft Halo 5 API", align = "right")),
+                tags$div(h6("Create & download your beautiful game stats using Microsoft's Halo 5 API", align = "right")),
  ##Javascript to read window size for dynamic plot specs
                 sidebarLayout(
                           sidebarPanel(width = 3, 
@@ -38,14 +40,7 @@ ui <- fluidPage(theme = shinytheme("slate"),
                                     Shiny.onInputChange("dimension", dimension);
                                 });
                             '),
-                                                 tags$script("<div id='fb-root'></div>
-                                                               <script>(function(d, s, id) {
-                                                                 var js, fjs = d.getElementsByTagName(s)[0];
-                                                                 if (d.getElementById(id)) return;
-                                                                 js = d.createElement(s); js.id = id;
-                                                                 js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.1';
-                                                                 fjs.parentNode.insertBefore(js, fjs);
-                                                               }(document, 'script', 'facebook-jssdk'));</script>")),
+                                                 tags$script('http://platform.twitter.com/widgets.js')),
                     
                     tags$div(h5("Search"), align = "center"),
                     ##Global Input values
@@ -71,50 +66,16 @@ ui <- fluidPage(theme = shinytheme("slate"),
                     
                     colourInput("col", "Chart Outline Color", "white"),
                     tags$div(h4("Made in R with Shiny"), align = "center"),
-                    tags$div(tags$div("By Jeremy Johnson", class = "nametag"),
-                    tags$br(),
-                    tags$div(style = "display:inline-block", tags$a(tags$img(src = "images/flogo_RGB_HEX-144.png", style = "margin:0 10 px; width:36px"), href = url2)),
-                    tags$div(style="display:inline-block", tags$a(tags$img(src ="images/Twitter_Social_Icon_Circle_Color.png", style="margin:0 10px; width:36px"), href=url)), align = "center"), 
-                    includeScript("http://platform.twitter.com/widgets.js")),
-                  
+                    tags$div(tags$div(HTML("<font size = 3><font color = 'gold'> Contact </font>"), "|", HTML("<font color = 'white'> Share </font>"), align ="center")),
+                    tags$div(tags$a(tags$div(style="display:inline-block", id = "image4", class = "cropcircle-share"), style = "text-decoration: none;", href = url4, title = "My Blog"),
+                    tags$a(tags$div(style="display:inline-block", id = "image3", class = "cropcircle-share"), style = " text-decoration: none;", href = url3, title = "Linked In"),
+                    tags$a(tags$div(style="display:inline-block", id = "image2", class = "cropcircle-contact"), href = url2, style = "text-decoration: none;", title = "Share via Twitter"),
+                    tags$a(tags$div(style="display:inline-block", id = "image1", class = "cropcircle-contact"), href = url1, style = "text-decoration: none;", title = "Share via Facebook"), align = "center"),
+                    tags$div("By Jeremy Johnson", class = "nametag", align = "center")),
+                    
 ##Individual Plots and Local Plot Specs                   
                   mainPanel(
                     tabsetPanel(
-                    tabPanel("Compiled", div(plotOutput("consolidated"), class = "well-plotpanel"),
-                             tags$div(downloadButton('downloadPlot', 'Download Plot'), align = "right"),
-
-                             column(3, 
-                                    tags$div(h4("Spartan"),
-                                             tags$div(
-                                               sliderInput("spartanposx", "X-Axis", min = -1, max = 1,
-                                                           value = -.17, step = .01, ticks = FALSE),
-                                               sliderInput("spartanposy", "Y-Axis", min = -1, max = 1,
-                                                           value = -.02, step = .01, ticks = FALSE, label),
-                                               sliderInput("spartanscale", "Scale", min = .1, max = 2,
-                                                           value = 0.95, step = .01, ticks = FALSE), align = "left"), align = "center", class = "well")),
-                             column(3,
-                                    tags$div(
-                                      h4("Emblem"),
-                                      tags$div(
-                                        sliderInput("emblemposx", "X-Axis", min = -.75, max = .75,
-                                                    value = .26, step = .01, ticks = FALSE),
-                                        sliderInput("emblemposy", "Y-Axis", min = -.75, max = .75,
-                                                    value = .01, step = .01, ticks = FALSE),
-                                        sliderInput("emblemscale", "Scale", min = .10, max = 1,
-                                                    value = .59, step = .01, ticks = FALSE), align = "left"), align = "center", class = "well")),
-                             column(3,
-                                    tags$div(
-                                      h4("Title Text"),
-                                      tags$div(
-                                        sliderInput("textposx", "X-Axis", min = -.75, max = .75,
-                                                    value = .5, step = .01, ticks = FALSE),
-                                        sliderInput("textposy", "Y-Axis", min = -1, max = 1,
-                                                    value = .98, step = .01, ticks = FALSE),
-                                        sliderInput("textsize", "Scale", min = .10, max = 100,
-                                                    value = 50, step = 1, ticks = FALSE), align = "left"), align = "center", class = "well"))),
-                    
-                    
-                    
                     tabPanel("Shot Accuracy", div(plotOutput("shootingaccuracy"), class = "well-plotpanel"),
                              tags$div(downloadButton('downloadPlot1', 'Download Plot'), align = "right"),
 
@@ -146,26 +107,24 @@ ui <- fluidPage(theme = shinytheme("slate"),
                                         sliderInput("chartposx1", "X-Axis", min = -.75, max = .75,
                                                     value = -0.18, step = .01, ticks = FALSE),
                                         sliderInput("chartposy1", "Y-Axis", min = -.75, max = .75, 
-                                                    value = -0.08, step = .01, ticks = FALSE),
-                                        sliderInput("chartscale1", "Scale", value = 1.18, min = 0.25, max = 2.0, step = .01, ticks = FALSE), class = "well")),
+                                                    value = -0.06, step = .01, ticks = FALSE),
+                                        sliderInput("chartscale1", "Scale", value = 1.13, min = 0.25, max = 2.0, step = .01, ticks = FALSE), class = "well")),
 
                             column(3,
                                    div(
                                      div(h4("Legend"), align = "center"),
                                         
                                         sliderInput("legendposx1", "X-Axis", min = -1, max = 1,
-                                                    value = .14, step = .01, ticks = FALSE),
+                                                    value = .11, step = .01, ticks = FALSE),
                                         sliderInput("legendposy1", "Y-Axis", min = -1, max = 1,
-                                                    value = 0.38, step = .01, ticks = FALSE),
+                                                    value = 0.43, step = .01, ticks = FALSE),
                                      selectInput("legenddirection1", "Direction",
                                                  choices = c("vertical", "horizontal"), 
-                                                 selected = "horizontal"), class = "well"))
-                            ),
+                                                 selected = "horizontal"), class = "well"))),
 
 
                     
                     tabPanel("Kill Style", div(plotOutput("killstyles"), class = "well-plotpanel"),
-                             
                              tags$div(downloadButton('downloadPlot2', 'Download Plot'), align = "right"),
                              column(3,
                                     tags$div(
@@ -242,25 +201,23 @@ ui <- fluidPage(theme = shinytheme("slate"),
                                                     value = .22, step = .01, ticks = FALSE),
                                         sliderInput("chartposy3", "Y-Axis", min = -.75, max = .75,
                                                     value = -.05, step = .01, ticks = FALSE),
-                                        sliderInput("chartscale3", "Scale", value = 1.25, min = .25, max = 2.0, step = .01, ticks = FALSE),
+                                        sliderInput("chartscale3", "Scale", value = 1.15, min = .25, max = 2.0, step = .01, ticks = FALSE),
                                         align = "left"), align = "center", class = "well")),
                              column(3,
                                     tags$div(
                                       h4("Legend"),
                                       tags$div(
                                         sliderInput("legendposx3", "X-Axis", min = -1, max = 1,
-                                                    value = .76, step = .01, ticks = FALSE),
+                                                    value = .56, step = .01, ticks = FALSE),
                                         sliderInput("legendposy3", "Y-Axis", min = -1, max = 1,
-                                                    value = .4, step = .01, ticks = FALSE),
+                                                    value = .47, step = .01, ticks = FALSE),
                                       selectInput("legenddirection3", "Direction", 
                                                   choices = c("vertical", "horizontal"), 
-                                                  selected = "vertical"),  align = "left"), 
+                                                  selected = "horizontal"),  align = "left"), 
                                       align = "center", class = "well"))),
                     
                     tabPanel("Win:Loss Ratio", div(plotOutput("winlost"), class = "well-plotpanel"),
-                             
                              tags$div(downloadButton('downloadPlot4', 'Download Plot'), align = "right"),
-
                              column(3,
                                     tags$div(
                                       h4("Spartan"),
@@ -302,10 +259,55 @@ ui <- fluidPage(theme = shinytheme("slate"),
                                       selectInput("legenddirection4", "Direction", 
                                                   choices = c("vertical", "horizontal"), 
                                                   selected = "horizontal"), align = "left"),
-                                        align = "center", class = "well"))))
+                                        align = "center", class = "well"))),
+                    
+                    tabPanel("Compiled", div(plotOutput("consolidated"), class = "well-plotpanel"),
+                             tags$div(downloadButton('downloadPlot', 'Download Plot'), align = "right"),
+                             
+                             column(3, 
+                                    tags$div(h4("Spartan"),
+                                             tags$div(
+                                               sliderInput("spartanposx", "X-Axis", min = -1, max = 1,
+                                                           value = -.17, step = .01, ticks = FALSE),
+                                               sliderInput("spartanposy", "Y-Axis", min = -1, max = 1,
+                                                           value = -.02, step = .01, ticks = FALSE, label),
+                                               sliderInput("spartanscale", "Scale", min = .1, max = 2,
+                                                           value = 0.95, step = .01, ticks = FALSE), align = "left"), align = "center", class = "well")),
+                             column(3,
+                                    tags$div(
+                                      h4("Emblem"),
+                                      tags$div(
+                                        sliderInput("emblemposx", "X-Axis", min = -.75, max = .75,
+                                                    value = .26, step = .01, ticks = FALSE),
+                                        sliderInput("emblemposy", "Y-Axis", min = -.75, max = .75,
+                                                    value = .01, step = .01, ticks = FALSE),
+                                        sliderInput("emblemscale", "Scale", min = .10, max = 1,
+                                                    value = .59, step = .01, ticks = FALSE), align = "left"), align = "center", class = "well")),
+                             column(3,
+                                    tags$div(
+                                      h4("Title Text"),
+                                      tags$div(
+                                        sliderInput("textposx", "X-Axis", min = -.75, max = .75,
+                                                    value = .5, step = .01, ticks = FALSE),
+                                        sliderInput("textposy", "Y-Axis", min = -1, max = 1,
+                                                    value = .96, step = .01, ticks = FALSE),
+                                        sliderInput("textsize", "Scale", min = .10, max = 100,
+                                                    value = 50, step = 1, ticks = FALSE), align = "left"), align = "center", class = "well")))
+                    
+                    )
+                    
                   )
-                )
+
+),
+tags$br(),
+tags$br(),
+tags$br(),
+tags$div("Disclaimer: This application is offered by Myself, who of which is solely responsible for its content. It is not sponsored or endorsed by Microsoft. This application uses the Halo® Game Data API. Halo © Microsoft Corporation. All rights reserved. Microsoft, Halo, and the Halo Logo are trademarks of the Microsoft group of companies.
+                    comply with all applicable laws.", class = "footer")
 )
+
+                
+
                   
                   
                 
@@ -317,7 +319,7 @@ server <- function(input, output) {
   
   ##Api Call arguments
   
-  key <- "3ac802c56aa44f8cae8ac1bd0417ad63"
+  key <- "d8dc660a4e694daabddcad7bbffc5f24"
   
   player <- eventReactive(input$submitbutton, {
     input$player
@@ -626,7 +628,7 @@ server <- function(input, output) {
             legend.direction = legenddirection1()) +
       labs(x = NULL, y = NULL) +
       coord_polar(theta = "y", direction = 1) +
-      geom_label_repel(aes(label = value), fill = "white", color = "black", size = 4, alpha = 0.5, position = position_identity(), 
+      geom_label_repel(aes(label = value), fill = "white", color = "black", size = 4, alpha = 0.7, position = position_identity(), 
                        show.legend = FALSE) 
     
     
@@ -654,7 +656,7 @@ server <- function(input, output) {
       ggplot(aes(x = Kill_Type, y = value, fill = Kill_Type, color = linecolor())) + 
       labs(x = NULL, y = NULL) +
       geom_bar(stat = "identity", color = linecolor(), alpha = .8) +
-      scale_fill_brewer(palette = colors(), direction = -1) +
+      scale_fill_brewer(palette = colors(), direction = -1, name = "Kill Style") +
       theme(panel.grid.minor = element_blank(),
             legend.position = c(.4, .9),
             legend.direction = legenddirection2(),
@@ -701,7 +703,7 @@ server <- function(input, output) {
             axis.text = element_blank(),
             axis.ticks = element_blank(),
             axis.line = element_blank()) +
-      scale_fill_brewer(palette = colors(), direction = 1) +
+      scale_fill_brewer(palette = colors(), direction = 1, name = "Kill Style") +
       geom_label(aes(label = value), size = 4, fill = "white", color = "black", show.legend = FALSE, alpha = .5, position = position_stack(vjust = .6)) +
       coord_flip()
     
@@ -714,12 +716,12 @@ server <- function(input, output) {
     base_plot3 <- KDA_df() %>%
       ggplot(aes(x = "", y = reorder(value, value), fill = var)) +
       geom_bar(stat = "identity", alpha = 0.8, color  = linecolor(), width = .5, position = "stack") +
-      scale_fill_brewer(palette = colors()) +
+      scale_fill_brewer(palette = colors(), name = "KDA") +
       theme(axis.line = element_blank(),
             axis.text = element_blank(),
             axis.ticks = element_blank(),
-            legend.title = element_blank(),
             plot.title = element_text(size = 20, hjust = 0.5),
+            legend.title = element_text(face = "bold"),
             legend.position = "top",
             legend.direction = legenddirection3(),
             legend.background = element_rect(fill = alpha("white", 0.4))) +
@@ -745,12 +747,12 @@ server <- function(input, output) {
     KDA_df() %>%
       ggplot(aes(x = var, y = value, fill = var)) +
       geom_col(alpha = 0.8, color = linecolor(), width = 1) +
-      scale_fill_brewer(palette = colors(), direction = 1) +
+      scale_fill_brewer(palette = colors(), direction = 1, name = "KDA") +
       geom_label(aes(label = value), position = position_stack(vjust = .6), size = 4, show.legend = FALSE, fill = "white", color = "black", alpha = 0.5) +
       theme(axis.line = element_blank(),
             axis.text = element_blank(),
             axis.ticks= element_blank(),
-            legend.title = element_blank(),
+            legend.title = element_text(face = "bold"),
             legend.position = c(.6, .275),
             legend.direction = "vertical",
             legend.background = element_rect(fill = alpha("white", 0.5)),
@@ -769,16 +771,16 @@ server <- function(input, output) {
       ggplot(aes(x = category, y = value, fill = category)) +
       geom_bar(stat = "identity", color = linecolor(), alpha = .8) +
       labs(x = NULL, y = NULL) +
-      scale_fill_brewer(palette = colors()) +
+      scale_fill_brewer(palette = colors(), name = "Record ") +
       geom_label(aes(label = value), position = position_stack(vjust = .5), size = 4, fill = "white", color = "black", alpha = .5, show.legend = FALSE) +
       theme(axis.line.x = element_line(color = linecolor()),
             axis.ticks = element_line(color = linecolor()),
             axis.line.y = element_line(color = linecolor()),
             axis.text = element_blank(),
             legend.direction = legenddirection4(),
+            legend.title = element_text(face = "bold"),
             legend.background = element_rect(fill=alpha("white", 0.5)),
             legend.position = c(.3, 1.0),
-            legend.title = element_blank(),
             panel.background = element_blank())
     
     base_plot4_legend <- get_legend(base_plot4)
@@ -797,7 +799,7 @@ server <- function(input, output) {
       ggplot(aes(x = category, y = value, fill = category)) +
       geom_bar(stat = "identity", color = linecolor(), alpha = .8) +
       labs(x = NULL, y = NULL) +
-      scale_fill_brewer(palette = colors(), direction = 1) +
+      scale_fill_brewer(palette = colors(), direction = 1, name = "Record") +
       geom_label(aes(label = value), position = position_stack(vjust = .5), size = 4, fill = "white", color = "black", alpha = .5, show.legend = FALSE) +
       theme(axis.ticks = element_blank(),
             axis.line = element_blank(),
@@ -805,7 +807,7 @@ server <- function(input, output) {
             legend.direction = "vertical",
             legend.background = element_rect(fill=alpha("white", 0.5)),
             legend.position = c(0, .275),
-            legend.title = element_blank(),
+            legend.title = element_text(face = "bold"),
             plot.caption = element_text(color = linecolor(), hjust = .2),
             panel.background = element_blank()) +
       coord_flip() +
@@ -867,7 +869,7 @@ server <- function(input, output) {
     
     ggdraw() +
       draw_image(background(), scale = 1.30) +
-      draw_text(paste(edited_player_name()), x = textposx(), y = textposy(), size = textsize(), family = "Halo", color = linecolor(), alpha = 1) +
+      draw_text(paste(str_to_title(edited_player_name())), x = textposx(), y = textposy(), size = textsize(), fontface = "italic", color = linecolor(), alpha = 1) +
       draw_image(img1, x = emblemposx(), y = emblemposy(), scale = emblemscale()) +
       draw_image(spartan_img(), x = spartanposx(), y = spartanposy(), scale = spartanscale()) +
       draw_plot(plot1) 

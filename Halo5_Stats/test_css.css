@@ -80,9 +80,9 @@
 
 h1 {
 font-family:"Halo", Regular; 
-color: white; 
+color: rgb(242,232,3); 
 font-size: 60px; 
-background-color: rgba(0, 0, 0, .5)
+background-color: rgba(0,0,0, .5)
 }
 
 .nametag {
