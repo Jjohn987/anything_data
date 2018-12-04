@@ -107,14 +107,6 @@ It's important to decide what goal to train my models for - Accuracy, Sensitivit
 
 Deciding between those choices, it seems most important to build a model that can predict the "Yes" values - cases result in hepatic damage. This makes sense, a mistake in a model predicting no liver damage would tragic, so we should do everything we can to capture the "Yes" values as much as possible, even if it means sacrificing accuracy. A look at the data:
 
-```{r}
-head(str(bio_train))[1:5]
-```
-
-```{r}
-head(str(chem_train))[1:5]
-```
-
 
 The first model is a classifier using linear discriminant analysis. I apply a model for the biological indicators as well as the chemical indicators, to see which have better predicative power.
 
