@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>/blog/2018-12-03-linear-classification-models---hepatic-dataset/</loc>
+    <lastmod>2018-12-03T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/blog/2018-09-21-first-app---halo-5-stats/</loc>
     <lastmod>2018-09-21T00:00:00+00:00</lastmod>
   </url>
@@ -54,7 +59,7 @@
   
   <url>
     <loc>/</loc>
-    <lastmod>2018-09-21T00:00:00+00:00</lastmod>
+    <lastmod>2018-12-03T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -79,6 +84,12 @@
   <url>
     <loc>/categories/blogging/</loc>
     <lastmod>2018-05-06T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/caret/</loc>
+    <lastmod>2018-12-03T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -115,6 +126,12 @@
   <url>
     <loc>/categories/chinese-text-analysis/</loc>
     <lastmod>2018-05-29T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/classification/</loc>
+    <lastmod>2018-12-03T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -197,8 +214,44 @@
   </url>
   
   <url>
+    <loc>/tags/lda/</loc>
+    <lastmod>2018-12-03T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/linear-model/</loc>
+    <lastmod>2018-12-03T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/logistic-regression/</loc>
+    <lastmod>2018-12-03T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/categories/machine-learning/</loc>
+    <lastmod>2018-12-03T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/tags/microsoft-halo-5-api/</loc>
     <lastmod>2018-09-21T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/categories/modelling/</loc>
+    <lastmod>2018-12-03T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/nearest-shrunken-centroids/</loc>
+    <lastmod>2018-12-03T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -227,8 +280,14 @@
   </url>
   
   <url>
+    <loc>/tags/pls/</loc>
+    <lastmod>2018-12-03T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/post/</loc>
-    <lastmod>2018-09-21T00:00:00+00:00</lastmod>
+    <lastmod>2018-12-03T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

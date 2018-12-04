@@ -1,0 +1,261 @@
+---
+title: Linear Classification Models - Hepatic Dataset
+author: ~ Jeremy Johnson
+date: '2018-12-03'
+slug: linear-classification-models-hepatic-dataset
+categories: [modelling, machine learning]
+tags: [classification, linear model, caret, LDA, PLS, nearest shrunken centroids, logistic regression]
+---
+
+This post is following exercise 1 in Chapter 12 of [Applied Predicative Modeling](http://appliedpredictivemodeling.com). Here I use the machine learning package CARET in R to make classification models; in particular, the linear classification models discussed in Chapter 12.
+
+The dataset in question is about hepatic injury (liver damage). It includes a dataframe of biological related predictors of liver damage  `bio`, a dataframe of chemical related predictors `chem`, and the response variable we are interested in, `injury`. If a model can be fitted adequately, that model could potentially be used to screen for harmful compounds in the future.
+
+```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+
+library(caret)
+
+library(pROC)
+
+library(AppliedPredictiveModeling)
+
+data(hepatic)
+
+```
+
+Before fitting a model it's always necessary to preprocess data. For linear classification algorithms, this means
+
+* 1. Remove near zero variance predictor variables/ near-zero variance) predictors.
+
+* 2. Remove collinear variables 
+
+```{r}
+
+##remove problematic variables for 'bio' dataframe
+
+bio_zerovar <- nearZeroVar(bio)
+
+bio_collinear <- findLinearCombos(cov(bio))$remove
+
+bio <- bio[, -c(bio_zerovar, bio_collinear)]
+
+##remove problematic variables for 'chem' dataframe
+
+chem_zerovar <- nearZeroVar(chem)
+
+chem_collinear <- findLinearCombos(chem)$remove
+
+chem <- chem[, -c(chem_zerovar, chem_collinear)]
+
+```
+
+The `injury` response variable I am fitting to has three classes - "None", "Mild", and "Severe". If the response variable has too many classes, it can (somewhat subjectively) be trimmed down. For expediency's sake, I decide to collapse `injury` into 2 classes - "Yes" or "No", where I count mild injuries as "No". (**Warning** This might influence prediction negatively, so in the future I'll be sure to try multi-class probability predictions.)
+
+```{r}
+
+##Collapse response into "Yes" or "No" values
+
+lut <- c("None" = "No", "Mild" = "No", "Severe" = "Yes")
+
+injury2 <- factor(unname(lut[injury]))
+
+```
+
+Now, I should consider a few other questions.
+
+* 1. How to partition data with unbalanced classes ("No"  far outnumbers "Yes" values in `injury`.)
+
+* 2. How to validate model results
+
+* 3. Which metric to maximize for the best model (Accuracy, Sensitivity, Specificity)
+
+Thankfully, makes data partitioning easy with `createDataPartition`, which automatically uses stratified sampling to help control for severe class imbalances. As for validation, I choose for each model to be cross validated using 10 fold repeat cross validation, specified in the `trainControl` command. (Although my first model will not need cross validation, the others will, so I'll simply use the same control for each model.)
+
+```{r}
+
+set.seed(1234)
+
+##Partition the data with stratified sampling
+
+training <- createDataPartition(injury2, p = .8, list = FALSE)
+
+##Partition train and test sets for bio data
+
+bio_train <- bio[training, ]
+
+bio_test <- bio[-training, ]
+
+##Partition for train and test sets for chemical data
+
+chem_train <- chem[training, ]
+
+chem_test <- chem[-training, ]
+
+##Partition for the train and test sets for the response variable
+
+injury_train <- injury2[training]
+
+injury_test <- injury2[-training]
+
+## Set training control for model building
+
+ctrl <- trainControl(method = "repeatedcv", 10, repeats = 10, summaryFunction = twoClassSummary, classProbs = TRUE, savePredictions = TRUE)
+
+```
+
+It's important to decide what goal to train my models for - Accuracy, Sensitivity, or Specificity? For this, you also need to know what your "positive" variable is from Caret's perspective. Caret chooses the first factor class as its "positive" value, which corresponds to "No" in my `injury` vector. Therefore, Sensitivity corresponds to amount of "No" values correctly predicted, whereas Specificity equates to the "Yes" values correctly predicted.
+
+Deciding between those choices, it seems most important to build a model that can predict the "Yes" values - cases result in hepatic damage. This makes sense, a mistake in a model predicting no liver damage would tragic, so we should do everything we can to capture the "Yes" values as much as possible, even if it means sacrificing accuracy. A look at the data:
+
+```{r}
+head(str(bio_train))[1:5]
+```
+
+```{r}
+head(str(chem_train))[1:5]
+```
+
+
+The first model is a classifier using linear discriminant analysis. I apply a model for the biological indicators as well as the chemical indicators, to see which have better predicative power.
+
+```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+
+bio_lda <- train(bio_train, injury_train, method = "lda", trControl = ctrl, metric = "Spec")
+
+chem_lda <- train(chem_train, injury_train, method = "lda", trControl = ctrl, metric = "Spec")
+
+```
+
+```{r warning=FALSE}
+
+##Generate LDA model predictions for bio indicator test set
+
+bio_lda_pred <- predict(bio_lda, bio_test)
+
+##Generate confusion matrix to show results
+
+confusionMatrix(bio_lda_pred, injury_test, positive = "No")
+
+```
+
+Note that the "non-information rate" is .89, meaning that if we randomly guessed "No" each time, the model would automatically be right 89% of the time. Accuracy here is .83, which appears to underperform. But remember, accuracy isn't important - predicting true "Yes" values correctly is.
+
+For the biological predictors, we get .5 for Specificity, correctly identifying 3 Yes values but also generating 3 false negative predictions for 3 other Yes values -- I hope other models can do better.
+
+```{r}
+
+##Chem predictor LDA model
+
+chem_lda_pred <- predict(chem_lda, chem_test)
+
+##confusion matrix
+
+confusionMatrix(chem_lda_pred, injury_test, positive = "No")
+
+```
+
+LDA for chemical predictors fares worse at predicting the true Yes values. Here Specificity only reaches .16.
+
+Now lets try some other models for comparison. The first will be a penalized logistic regression model. For alpha values of 1, and lambda 0, it will behave like a lasso  model, whereas with alpha 0 and a non-zero lambda, a ridge regression model. Anywhere in between is an elastic net. Here, I don't specify a tuning grid, I just let Caret come up with a list of parameters for me, with `tuneLength = 20'.
+
+```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+
+bio_plr <- train(bio_train, injury_train, method = "glmnet", family = "binomial", metric = "Spec", tuneLength = 20,
+
+                 trControl = ctrl)
+
+chem_plr <- train(chem_train, injury_train, method = "glmnet", family = "binomial", metric = "Spec", tuneLength = 20, trControl = ctrl)
+
+```
+
+```{r}
+
+bio_plr_pred <- predict(bio_plr, bio_test)
+
+confusionMatrix(bio_plr_pred, injury_test, positive = "No")
+
+```
+
+This penalized logistic regression doesn't perform as well as simple linear discriminant analysis for the bio predictors.
+
+And now the chem predictors.
+
+```{r}
+
+chem_plr_pred <- predict(chem_plr, chem_test)
+
+confusionMatrix(chem_plr_pred, injury_test, positive = "No")
+
+```
+
+Penalized logistic regression fares even worse for chemical predictors. Clearly this is not a strong model to capture the structure of the data for the pattern we're looking for.
+
+Now, to fit a partial least squares regression model.
+
+```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+
+bio_pls <- train(bio_train, injury_train, method = "pls", trControl = ctrl, metric = "Spec", tuneLength = 20)
+
+chem_pls <- train(chem_train, injury_train, method = "pls", trControl = ctrl, metric = "Spec", tuneLength = 20)
+
+```
+
+```{r}
+
+bio_pls_pred <- predict(bio_pls, bio_test)
+
+confusionMatrix(bio_pls_pred, injury_test, positive = "No")
+
+```
+
+Only .16 for Specificity achieved here.
+
+And for the chemical predictors, we get 0 as seen below. Chemical indicators are continuously faring worse than biological predictors at predicting hepatic injury, **and there is still no great model**, so far.
+
+```{r}
+
+chem_pls_pred <- predict(chem_pls, chem_test, probability = TRUE)
+
+confusionMatrix(chem_pls_pred, injury_test, positive = "No")
+
+```
+
+```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+
+bio_centroid <- train(bio_train, injury_train, method = "pam",
+
+                      trControl = ctrl, preProcess = c("center", "scale"), metric = "Spec", tuneLength = 20)
+
+chem_centroid <- train(chem_train, injury_train, method = "pam",
+
+                       trControl = ctrl, preProcess = c("center", "scale"), metric = "Spec", tuneLength = 20)
+
+bio_centroid_pred <- predict(bio_centroid, bio_test)
+
+chem_centroid_pred <- predict(chem_centroid, chem_test)
+
+confusionMatrix(bio_centroid_pred, injury_test, positive = "No")
+
+```
+
+0 for specificity.
+
+```{r}
+
+confusionMatrix(chem_centroid_pred, injury_test, positive = "No")
+
+```
+
+And .16. for Specificity here, yawn.
+
+So the **best model for predicting hepatic injury** turns out to be the **first fit**, the LDA model on the biological indicators.
+
+```{r}
+
+predictions_bio_lda <- predict(bio_lda, bio_test, type = "prob")
+
+pROC::plot.roc(injury_test, predictions_bio_lda$Yes)
+
+```
+
+However, the area under the curve is not as high as I'd wish. Perhaps in the future I'll revisit this data and see what can be done differently to predict injury.
