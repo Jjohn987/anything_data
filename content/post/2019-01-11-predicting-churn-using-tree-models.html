@@ -25,7 +25,7 @@ tags: [caret, churn]
 <center>
 <img src = "/3_categorical_distributions.png" width = 600 height = 500>
 </center>
-<p>Categorical predictors are informative – <strong>Look at how many customers on an international plan end up churning!</strong> On the flipside, notice how churn outcome is unrelated to area code, but **somewhat related to if they have voice mail. International plan and voice mail look like they will be useful predictors. Is “state” information useful at all?</p>
+<p>Categorical predictors are informative – <strong>Look at how many customers on an international plan end up churning!</strong> On the flipside, notice how churn outcome is unrelated to area code, but somewhat related to if they have voice mail. International plan and voice mail look like they will be useful predictors. Is “state” information useful at all?</p>
 <center>
 <img src = "/4_state_distributions.png">
 </center>
@@ -41,7 +41,7 @@ tags: [caret, churn]
 </center>
 <p>Clearly, Churn <strong>doesn’t appear to be linearly separable</strong>, meaning a linear classifier might not suffice. However, there does appear to be some clusering for some of these scatterplots. Still, tree models and KNN might perform better. My last check is to look at class balance for the outcome variable.</p>
 <center>
-<img src = "/churnclassplot.jpeg" width = 500 height = 400>
+<img src = "/churnclassplot.jpeg" width = 400 height = 250>
 </center>
 <p><strong>Churn classes are very imbalanced.</strong> Normally this can be fixed through up/down sampling the data, but here the training set has already been provided. Resampling here would bias predictions, so I’ll just bite the bullet.</p>
 <p>Before modelling, let’s recap:</p>
@@ -64,7 +64,7 @@ knn_expanded &lt;- train(training_expanded, training_outcome, method = &quot;knn
 <pre class="r"><code>c50_regular &lt;- train(training_regular, training_outcome, method = &quot;C5.0&quot;, trControl = ctrl, tunegrid = expand.grid(trials = seq(25, 50, by = 2), model = c(&quot;tree&quot;, &quot;rules&quot;), winnow = c(&quot;TRUE&quot;, &quot;FALSE&quot;)), metric = &quot;Sens&quot;)
 
 c50_expanded &lt;- train(training_expanded, training_outcome, method = &quot;C5.0&quot;, trControl = ctrl, tuneGrid = expand.grid(trials = seq(25, 50, by = 2), model = c(&quot;tree&quot;, &quot;rules&quot;), winnow = c(&quot;TRUE&quot;, &quot;FALSE&quot;)), metric = &quot;Sens&quot;)</code></pre>
-<p>Remember that churn classes in this dataset are heavily imbalanced and that simply by predicting “No” a model can achieve a high ROC, like KNN did. What we want to maximize is <strong>sensitivity</strong>, and for that, the expanded C50 does a great job compared to the regular set. It fits a rules model with no winnow, and achieves a sensitivity value of .75, specificity of .98, and ROC of .909.</p>
+<p>Churn classes in this dataset are heavily imbalanced and that simply by predicting “No”, a model can achieve a high ROC like KNN did. What we want to maximize is <strong>sensitivity</strong>, and for that, the expanded C50 does a great job compared to the regular set. It fits a rules model with no winnow, and achieves a sensitivity value of .75, specificity of .98, and ROC of .909.</p>
 <p>Next up, a random forest. Again, I’ll fit two models, using the normal set and the expanded set.</p>
 <pre class="r"><code>rf_regular &lt;- train(training_regular, training_outcome, method = &quot;rf&quot;, ntree = 1500, trControl = ctrl, tuneLength = 20, metric = &quot;Sens&quot;, verbose = FALSE)
 
@@ -104,5 +104,5 @@ predictions_list &lt;- list(&quot;knn&quot; = knn_pred, &quot;c50_normal&quot; =
 </div>
 <div id="conclusion" class="section level2">
 <h2>Conclusion</h2>
-<p>In closing, the best models are the C50 and random forest models built on the expanded set of predictors. Since we are interested in churn, we can improve the performance of our predictions by altering our threshold cutoffs. But I’ll refrain from this and stick with the original model fit, since we do not have an extra test set of data to test the new cutoff on. All in all, predicting churn was an informative exercise!</p>
+<p>The best models are the C50 and random forest models built on the expanded set of predictors. Since we are interested sensitivity (true positives for churn = “yes”), we can improve the performance of our predictions by altering the decision threshold cutoffs. But, since we do not have a separate training set of data to test the new cutoff on, doing so would create model bias. All in all, predicting churn was an informative exercise!</p>
 </div>
