@@ -1,0 +1,475 @@
+---
+title: Predicting Churn Using Tree Models
+author: ~ Jeremy Johnson
+date: '2019-01-01'
+slug: predicting-churn-using-tree-models
+categories: [machine learning, predictive modeling]
+tags: [caret, churn]
+---
+  
+```{r echo = FALSE, message = FALSE, warning = FALSE}
+library(C50)
+library(tidyverse)
+library(caret)
+library(pROC)
+library(doMC)
+library(gridExtra)
+data(churn)
+```
+
+Today I want to predict churn using data from a hypothetical telecom company. Although it isn't real life data, it is based on real life data. The data are spread across 19 columns — 14 continuous, 4 categorical, and the outcome variable for prediction - "churn". The dataset is small, with 3333 rows for training and 1667 for testing.  
+
+Before modeling, I need to explore the data structure -- the distributions, class balances/imbalances, relationships between variables, etc. Are there any visual patterns in the data? How does churn relate to the continuous and discrete variables? These are questions I am asking at this initial stage. Let's start with a series of histograms.
+
+```{r eval=FALSE, include = FALSE, message=FALSE, warning=FALSE}
+
+continuous_predictors <- churnTrain[unlist(lapply(churnTrain, is.numeric))]
+
+continuous_predictors %>%
+  gather(key, value) %>%
+  mutate(key = gsub("_", " ", key)) %>%
+  ggplot(aes(value)) +
+  geom_histogram(fill = "lightsalmon", color = "black") +
+  theme(panel.background = element_rect(fill = "grey20"),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.grid.major.y = element_line(color = "darkslategray4")) +
+  facet_wrap(~key, scales = "free")
+
+```
+## Data Overview
+
+<center> <img src = "/1_distributions.png" width = 550 height = 550></center>
+
+Most continuous predictors appear normally distributed. However, there are some exceptions “Customer service calls” and "total international calls” are somewhat right skewed, and the majority of values for “numer of mail messages” are all “0”, meaning it is probably a zero variance predictor. For the most part, these data are well behaved.
+
+Let’s examine how these same predictors relate to churn. A density plot showing the variables' distributions by class will suffice.
+
+
+```{r include = FALSE, eval = FALSE, message=FALSE, warning=FALSE}
+
+churnTrain %>%
+  select(churn) %>%
+  bind_cols(continuous_predictors) %>%
+   gather(key, value, 2:16) %>% 
+  mutate(key = gsub("_", " ", key)) %>%
+  ggplot(aes(x = value, fill = churn)) +
+  geom_density(color = "black", alpha = .5) +
+    scale_fill_manual(values = c("lightsalmon", "darkslategray4")) +
+  theme(panel.background = element_rect(fill = "grey30"),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.grid.major.y = element_line(color = "grey40")) +
+  facet_wrap(~key, scales = "free", ncol = 5)
+```
+
+<center> <img src = "/2_distributions.png" width = 600 height = 600></center>
+
+This density plot shows that “positive" churn has symmetrical distributions with that of the non-churners for most numeric predictors. (Note this is a density plot, so it depicts proportions, not quantities, of each class across a range of values.) We only see separation between red and green in amount of minutes per day and day charges, but these two variables clearly repeat the same information. One should probably be removed. Let’s continue by looking at how churn relates to the categorical variables. 
+
+```{r include = FALSE, eval = FALSE, warning = FALSE}
+
+discrete_variables <- churnTrain[unlist(lapply(churnTrain, function(x) !is.numeric(x)))]
+
+discrete_variables %>%
+  group_by(state) %>% 
+  mutate(churn_num = ifelse(churn == "yes", 1, 0),
+         churn_proportion = sum(churn_num)/n(),
+         churn = factor(churn, levels = c("no", "yes"), ordered = TRUE)) %>%
+  ungroup() %>%
+  select(-state) %>%
+  gather(key, value, 1:3) %>%
+  mutate(key = gsub("_", " ", key),
+         value = gsub("area_code_", " ", value)) %>%
+  ggplot(aes(x = reorder(value, churn_proportion), fill = churn)) +
+  geom_bar(position = "fill", color = "grey20") +
+  theme_light() +
+  facet_wrap(~key, scales = "free") +
+  scale_fill_manual(values = c("darkslategray4", "lightsalmon")) +
+  theme(axis.text.x = element_text(angle = 90),
+        plot.title = element_text(size = 25, family = "serif", vjust = 0, hjust = .5, color = "darkslategray"),
+        panel.background = element_rect(fill = "grey20"),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.grid.major.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        legend.position = "bottom",
+        legend.direction = "horizontal") +
+  labs(title = "Churn & Phone Plan", x = NULL, y = NULL)
+
+```
+
+<center> <img src = "/3_categorical_distributions.png" width = 600 height = 500></center>
+
+Categorical predictors are informative -- **Look at how many customers on an international plan end up churning!** On the flipside, notice how churn outcome is unrelated to area code, but **somewhat related to if they have voice mail. International plan and voice mail look like they will be useful predictors. Is "state" information useful at all?
+  
+```{r include = FALSE, eval = FALSE, message=FALSE, warning=FALSE}
+
+state_predictors <- churnTrain %>%
+  select(churn, state) %>%
+  group_by(state) %>% 
+  mutate(churn_num = ifelse(churn == "yes", 1, 0),
+         churn_proportion = sum(churn_num)/n(),
+         churn = factor(churn, levels = c("no", "yes"), ordered = TRUE))
+
+state_predictors %>%
+  ggplot(aes(x = reorder(state, churn_proportion), fill = churn)) +
+  geom_bar(position = "fill", color = "grey20") +
+  theme_light() +
+  scale_fill_manual(values = c("darkslategray4", "lightsalmon")) +
+  theme(axis.text.x = element_text(angle = 90),
+        plot.title = element_text(size = 30, family = "serif", vjust = 0, hjust = .5, color = "darkslategray"),
+        panel.background = element_rect(fill = "grey20"),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.grid.major.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        legend.position = "bottom",
+        legend.direction = "horizontal") +
+  labs(title = "Churn by State", x = NULL, y = NULL)
+```
+
+<center><img src = "/4_state_distributions.png"></center>
+
+State information sure doesn't look useful. From just looking at totals, it's hard to see any kind of pattern. Also there doesn't seem to be any interesting variation, even if we randomly scrambled them all. Another way to see if there is a here is to plot the churn data on a choropleth (a shaded map) plot.  
+
+```{r include = FALSE, eval = FALSE, message=FALSE, warning=FALSE}
+## Get "states" map, rename "region" to "state"
+dat <- map_data("state") %>%
+  rename(state = region) %>%
+  mutate(state = as.character(state))
+
+## Use state name and abbreviations together for merging map data with churn data later.
+state_names <- data.frame(cbind("state" = tolower(state.name), "abbreviation" = state.abb), stringsAsFactors = FALSE)
+
+## Merge map data with state name and abbreviation data, in order to merge with churn data.
+##Calculate total churn by state
+##Plot with ggplot as map
+discrete_variables %>%
+  rename(abbreviation = state) %>%
+  group_by(abbreviation) %>%
+  mutate(churn2 = ifelse(churn == "yes", 1, 0),
+         total_churn = sum(churn2),
+         churn_rate = total_churn/n()) %>%
+  left_join(state_names)  %>%
+  distinct() %>%
+  left_join(dat) %>%
+  select(long, lat, state, abbreviation, group, churn, churn_rate) %>%
+  ggplot(aes(x=long, y = lat, group = group, fill = churn_rate)) +
+  scale_fill_gradient(low = "darkslategray4", high = "lightsalmon") +
+  geom_polygon(stat = "identity") +
+  theme_void() +
+  theme(panel.background = element_rect(fill = "white"),
+        plot.title = element_text(size = 30, family = "serif", vjust = 0, hjust = .5, color = "darkslategray"),
+        legend.position = "bottom")
+
+
+```
+
+<center> <img src = "/5_states.png"></center>
+I still cannot determine any visual pattern for churn amongst states. This variable probably won't be useful for most models. We can also check if there are obvious patterns between the continuous variables. Usually a panel of scatterplots can be made using `pairs()' or 'GGally::ggpairs()`. However, these functions dont work out of the box due to having too many variables.
+```{r include = FALSE, eval = FALSE, message = FALSE, warning = FALSE}
+
+##make column pairs that don't replicate
+
+paired_cols <- t(combn(names(continuous_predictors), 2))
+
+## initialize an empty list to hold plots
+plots <- vector("list", length = nrow(paired_cols))
+continuous_predictors_churn <- data.frame(continuous_predictors, churn = churnTrain[,colnames(churnTrain) %in% "churn"])
+
+pairs_scatterplot <- function() {
+  for(i in 1:nrow(paired_cols)) {
+    plots[[i]] <- ggplot(continuous_predictors_churn, aes_string(x = paired_cols[i, 1], y = paired_cols[i, 2])) +
+      geom_point(aes(color = churn), alpha = .5, show.legend = FALSE) +
+      scale_color_manual(values = c("darkslategray4", "lightsalmon")) +
+      theme(panel.background = element_rect(fill = "grey20"),
+            panel.grid.major.x = element_line(color = "light grey"),
+            panel.grid.minor.x = element_blank(),
+            panel.grid.minor.y = element_blank(),
+            panel.grid.major.y = element_line(color = "light grey"),
+            axis.text = element_blank())
+  }
+  ## Aggregate the plots in batches of 30, on a grid. 30 seems just right because plots maintain enough size to be seen.
+  
+  grob1 <- grid.arrange(grobs = plots[1:30])
+  grob2 <- grid.arrange(grobs = plots[31:60])
+  grob3 <- grid.arrange(grobs = plots[61:90])
+  grob4 <- grid.arrange(grobs = plots[91:105])
+  
+  ##Print out the graph aggregates
+  do.call(plot, list(grob1, grob2, grob3, grob4))
+  
+}
+```
+
+```{r include = FALSE, eval = FALSE}
+
+pairs_scatterplot()
+
+```
+With a bit of coding I aggregate the scatterplots into panels of 30, and produce a total of 4 grids like the two below. No need to clog up the page with all of them, most show a little clustering in some variables regarding the yes/no churn outcomes, and 1 or 2 instances of collinearity. 
+
+<center><div class = ""; display: inline-block> <img src = "/pairs1.png" width = 300, height = 300>
+<img src = "/pairs2.png" width = 300 height = 300></div></center>
+
+Clearly, Churn **doesn't appear to be linearly separable**, meaning a linear classifier might not suffice. However, there does appear to be some clusering for some of these scatterplots. Still, tree models and KNN might perform better. My last check is to look at class balance for the outcome variable. 
+
+```{r include = FALSE, eval = FALSE, message = FALSE, warning = FALSE}
+
+churnTrain %>%
+  select(churn) %>%
+  ggplot(aes(x = churn, fill = churn)) +
+  geom_bar(width = .75, color = "black") +
+  coord_flip() + 
+  theme_light() +
+  scale_fill_manual(values = c("lightsalmon", "darkslategray4")) +
+  theme(legend.position = "bottom",
+        legend.direction = "horizontal",
+        panel.background = element_rect(fill = "grey20"),
+        plot.title = element_text(size = 30, vjust = 0, hjust = .5, family = "serif", color = "darkslategray")) +
+  labs(title = "Churn Class Imbalance", x = NULL, y = NULL)
+
+```
+
+<center><img src = "/churnclassplot.jpeg" width = 500 height = 400></center>
+
+**Churn classes are very imbalanced.** Normally this can be fixed through up/down sampling the data, but here the training set has already been provided. Resampling here would bias predictions, so I'll just bite the bullet.
+
+Before modelling, let's recap:
+
+* Most continuous variables are evenly distributed.
+* Continuous predictors do not appear linearly seprable on the face of things, but there is some clustering.
+* There's class imbalance in the outcome variable `churn`. 
+* International plan and voice mail seem informative, as does total day charges. Perhaps a few states with super high or low vlues will be informarive in a model that uses an expanded predictor set.
+
+**Now lets try to build some models to help predict churn** I'll use two versions of predictor sets to fit models, one with the regular set of variables, and another with an "expanded set" where categorical variables are coded into binary (1-0) values. If you wish to see code, feel free to check github.
+
+## Modelling
+
+```{r include = FALSE, eval = FALSE, message = FALSE}
+
+set.seed(1234)
+
+## Separate outcome and predictors into 2 dataframes
+
+training <- churnTrain[, !colnames(churnTrain) %in% "churn"]
+training_outcome <- churnTrain[, "churn"]
+testing_outcome <- churnTest[, "churn"]
+## Calculate correlations for continuous predictor set, already created before
+correlations <- cor(continuous_predictors)
+correlation_vars <- findCorrelation(correlations)
+## Correlations are calls and charges, as expected. Remove these from train set.
+training <- training[, !names(training) %in% names(continuous_predictors[, correlation_vars])]
+
+## Remove state from training set, but keep for expanded set to be made later
+training_regular <- training[, !names(training) %in% "state"]
+training_expanded <- training
+
+## Check for zero variance predictors - uninformative variables
+zero_variance <- nearZeroVar(training)
+## Number of vmail messages is uninformative, remove from both training sets.
+training_regular <- training_regular[, -zero_variance]
+training_expanded <- training_expanded[, -zero_variance]
+
+## For regular and expanded sets, make test sets with same columns as training sets.
+testing_regular <- churnTest[, colnames(churnTest) %in% colnames(training_regular)]
+testing_expanded <- churnTest[, colnames(churnTest) %in% colnames(training_expanded)]
+
+## Expand categorical variables into hotcoded dummyvars for expanded set
+training_dummyvars <- dummyVars(~ ., data = training_expanded, fullRank = TRUE)
+
+testing_dummyvars <- dummyVars(~ ., fullRank = TRUE, data = testing_expanded)
+
+## Expanded categorical predictors for training and test sets
+training_dummyvars <- predict(training_dummyvars, training_expanded)
+##Test set dummy vars
+testing_dummyvars <- predict(testing_dummyvars, testing_expanded)
+
+## Remove original categorical predictors, replace with expanded ones, for both training and test sets.
+training_expanded <- cbind(training_expanded[, !colnames(training_expanded) %in% c("area_code", "international_plan", "voice_mail_plan", "state")], training_dummyvars)
+
+testing_expanded <- cbind(testing_expanded[, !colnames(testing_expanded) %in% c("area_code", "international_plan", "voice_mail_plan", "state")], testing_dummyvars)
+
+## Model tune control for 10-fold cross validation and two class probability models
+## Allow for parallel processing to speed up random forest, gradient boost resampling. 
+
+ctrl <- trainControl(method = "cv", classProbs = TRUE, savePredictions = TRUE, summaryFunction = twoClassSummary, allowParallel = TRUE)
+
+## Allocate additional cores for faster processing
+doMC::registerDoMC(cores = 4)
+
+```
+
+Since data didn't show linearity, I'll start with a K Nearest Neighbors. Data needs to be numeric (so for classification, I'll use binary values for all categorical variables) and data need to be preprocessed with scaling so that variables with higher values don't outweigh the variables with lower values. The only tuning paramater is K, which will be automatically tuned across 20 values of tunelength. 
+
+
+```{r include = TRUE, eval = FALSE, message = FALSE, warning = FALSE}
+
+##Expanded set
+knn_expanded <- train(training_expanded, training_outcome, method = "knn", preProcess = c("center", "scale"),
+                   trControl = ctrl, tuneLength = 20, metric = "Sens")
+```
+
+The optimal model has a paramater of K=5. ROC is .82, sensitivity .28, and specificty .98.  Although ROC (area under the curve) is high, sensitivity is way too low. It seems we cannot effectively use KNN to identify customers that will churn.
+
+Next let's try a tree/rules model using C50. The model can fit both decision trees and rules based trees. It also has the option of "winnow" which means it prunes away predictors it deems less useful.
+
+```{r, include = TRUE, eval = FALSE}
+
+c50_regular <- train(training_regular, training_outcome, method = "C5.0", trControl = ctrl, tunegrid = expand.grid(trials = seq(25, 50, by = 2), model = c("tree", "rules"), winnow = c("TRUE", "FALSE")), metric = "Sens")
+
+c50_expanded <- train(training_expanded, training_outcome, method = "C5.0", trControl = ctrl, tuneGrid = expand.grid(trials = seq(25, 50, by = 2), model = c("tree", "rules"), winnow = c("TRUE", "FALSE")), metric = "Sens")
+```
+
+Remember that churn classes in this dataset are heavily imbalanced and that simply by predicting "No" a model can achieve a high ROC, like KNN did. What we want to maximize is **sensitivity**, and for that, the expanded C50 does a great job compared to the regular set. It fits a rules model with no winnow, and achieves a sensitivity value of .75, specificity of .98, and ROC of .909. 
+
+Next up, a random forest. Again, I'll fit two models, using the normal set and the expanded set.
+
+```{r, include = TRUE, eval = FALSE}
+
+rf_regular <- train(training_regular, training_outcome, method = "rf", ntree = 1500, trControl = ctrl, tuneLength = 20, metric = "Sens", verbose = FALSE)
+
+
+rf_expanded <- train(training_expanded, training_outcome, method = "rf", ntree = 1500, trControl = ctrl, tuneGrid = expand.grid(mtry = seq(25, 60, by = 2)), metric = "Sens", verbose = FALSE)
+```
+
+The optimal random forest model is the model using the expanded set, and it uses a paramater of mtry = 17. ROC is .89, sensitivity is .82, and specificity is .90. The quality of fit is good, but the model for the regular variable set performed worse.
+
+Now let's try a gradient boosted tree model. 
+
+```{r include = TRUE, eval = FALSE}
+
+
+gbm_regular <- train(training_regular, training_outcome, method = "gbm", trControl = ctrl, tuneLength = 20, metric = "Sens", tuneLength = 20 verbose = FALSE)
+
+gbm_expanded <- train(training_expanded, training_outcome, method = "gbm", trControl = ctrl, tuneLength = 20, metric = "Sens")
+
+```
+
+Performance for the model trained on the expanded predictor set is slightly higher than the c50 model in terms of sensitivity. Let's compare the sensitivity values of each model in a boxplot. Since the models were cross validated over 10 folds, we can be sure that these sensitivity estimates are stable.
+
+```{r, include = FALSE, eval = FALSE, echo = FALSE}
+
+##Put model results in list
+models <- resamples(list("Knn" = knn_expanded, "C50-regular" = c50_regular, "C50-expanded" = c50_expanded, "random forest-regular" = rf_regular, "random forest-expanded" = rf_expanded, "boosted tree-expanded" = gbm_expanded))
+
+##Get model values, take away first column, bind into matrix and transpose
+##Choose models with "Sens" in name, plot boxplots for each model
+
+data.frame(t(do.call(rbind, lapply(models$values, function(x) x)[-1]))) %>% select_at(vars(contains("Sens"))) %>%
+  gather(Model, Sensitivity) %>%
+  mutate(Model = gsub(".Sens", "", Model)) %>%
+  group_by(Model) %>%
+  mutate(avg = mean(Sensitivity)) %>%
+  ggplot(aes(x = reorder(Model, avg), y = Sensitivity)) +
+  geom_boxplot(color = "black", linetype = "dashed", fill = "darkslategray4") + 
+  coord_flip() +
+  theme(panel.background = element_rect(fill = "white"),
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        axis.ticks = element_blank(),
+        plot.title = element_text(size = 30, vjust = 0, hjust = .5, family = "serif", color = "grey20")) +
+  labs(title = "Model Performance", caption = "For Churn = Yes", x = NULL, y = "Sensitivity")
+
+```
+
+Models built using the expanded predictor sets (categorical variables expanded into columns using hot coded binary values) performed much better than the models built on regular sets. Expanded random forest and c50 to be the best performers on the testing sets. Let's see how they perform on hold out testing data. 
+
+```{r, include = TRUE, eval = FALSE}
+## Use models to predict test data, evaluate performance.
+knn_pred <- predict(knn_expanded, newdata = testing_expanded)
+c50_normal_pred <- predict(c50_regular, newdata = testing_regular)
+c50_expanded_pred <- predict(c50_expanded, newdata = testing_expanded)
+rf_normal_pred <- predict(rf_regular, newdata = testing_regular)
+## Make list of model predictions
+models <- list("knn" = knn_pred, "c50" = c50_normal_pred, "c50 exp." = c50_expanded_pred, "random forest" = rf_normal_pred)
+
+##Make list of all model predictions
+predictions_list <- list("knn" = knn_pred, "c50_normal" = c50_normal_pred, "c50_expanded" = c50_expanded_pred)
+```
+
+<center><img src = "/sensitivity.png" width = 600 height = 600></center>
+
+```{r, include = FALSE, eval = FALSE}
+
+
+## Grab kappa values
+kappa <- unname(unlist(lapply(models, function(x) confusionMatrix(x, testing_outcome)$overall[3])))
+##Grab sensitivity values
+sensitivity <- unname(unlist(lapply(models, function(x) confusionMatrix(x, testing_outcome)$byClass[1])))
+##Grab specificity values
+specificity <- unname(unlist(lapply(models, function(x) confusionMatrix(x, testing_outcome)$byClass[2])))
+## Make data frame of all metrics
+model_performance <- data.frame("Model" = names(models), t(rbind(round(sensitivity, 3), round(specificity, 3), round(kappa, 3))))
+colnames(model_performance)[2:4] <- c("Sensitivity", "Specificity", "Kappa")
+## Assign relevant names to columns
+```
+
+The c50 model built on the expanded dataset achieves the highest sensitivity, at .741. 
+
+```{r, include = FALSE, eval = FALSE}
+library(kableExtra)
+model_performance %>%
+  arrange(desc(Sensitivity)) %>%
+  kable() %>%
+  kable_styling("bordered") %>%
+  row_spec(1, background = "cadetblue", color = "black") %>%
+  row_spec(2, background = "light grey", color = "black") %>%
+  row_spec(3, background = "cadetblue", color = "black") %>%
+  row_spec(4, background = "light grey", color = "black") %>%
+  row_spec(5, background = "cadetblue", color = "black") %>%
+  add_header_above(c("Test Performance-Sensitivity" = 4)) %>%
+  footnote(general = "Positive prediction is Churn = yes")
+
+```
+
+There are a number of ways the sensitivity of these models could be improved. Sometimes resampling the data to balance the outcome variable can help. Also, setting a new probability threshold on the predictions would help if the class balance means there is a low signal for the class you're trying to predict. 
+
+Say, instead of only predicting "Yes" if it has a probability of .5 or greater, we can lower the probability threshold of "evidence needed" to predict yes, to say .3, or .4, etc. Doing so will not change the model, but it will come at the cost of specificity. A rudimentary representation can be seen below, using the C50 model with the expanded predictor set.
+
+```{r, include = FALSE, eval = FALSE}
+
+##Make alternate predictions, predicting probabilities, not class
+knn_prob <- predict(knn_expanded, newdata = testing_expanded, type = "prob")
+c50_normal_prob <- predict(c50_regular, newdata = testing_regular, type = "prob")
+c50_expanded_prob <- predict(c50_expanded, newdata = testing_expanded, type = "prob")
+rf_normal_prob <- predict(rf_regular, newdata = testing_regular, type = "prob")
+rf_expanded_prob <- predict(rf_expanded, newdata = testing_expanded, type = "prob")
+
+## Calculate ROC curves for each Test set
+c50_normal_roc <- roc(testing_outcome, c50_normal_prob[, 1], levels = rev(levels(testing_outcome)))
+
+c50_expanded_roc <- roc(testing_outcome, c50_expanded_prob[, 1],levels = rev(levels(testing_outcome)))
+
+knn_roc <- roc(testing_outcome, knn_prob[, 1], levels = rev(levels(testing_outcome)))
+
+rf_normal_roc <- roc(testing_outcome, rf_normal_prob[, 1], levels = rev(levels(testing_outcome)))
+
+rf_expanded_roc <- roc(testing_outcome, rf_expanded_prob[, 1], levels = rev(levels(testing_outcome)))
+
+plot(c50_expanded_roc, print.thres = c(.5, .2, .1), type = "S", col = "cadetblue", asp = NA,
+     main = "C50 Expanded Model - Probability Thresholds")
+```
+
+<center><img src = "/roc_curve.png" width = 600 height = 600></center>
+
+Above are probability thresholds set at .5, .2, and .1.  Notice how sensitivity significantly improves if we determine a "yes" cutoff  lower than .5, and that specificity isn't impacted by this. However, when setting the threshold too low (.1), sensitivity tapers off, and comes with a much greater loss to specificity. At that point, half of our predictions would be false positives. Therefore setting a cutoff at around .2 or a bit more seems optimal. However, this is a hindsight bias and too risky to do if we dont have more data to test it on. Ideally we would  an intial training set to compare models, another to tweak parameters and decision threholds, and a test set to test them all.
+
+Let's end by simply the test set performances of all models together.
+
+```{r, include = FALSE, eval = FALSE}
+plot(c50_expanded_roc, col = "black", asp = NA, main = "Test Performance - All Models")
+plot(rf_expanded_roc, col = "grey40", add = TRUE)
+plot(rf_normal_roc, col = "cadetblue", add = TRUE)
+plot(c50_normal_roc, col = "lightsalmon", add = TRUE)
+plot(knn_roc, col = "grey40", add = TRUE)
+legend("bottomright", legend = c("c50_expanded", "rf_expanded", "rf_normal_roc", "c50 normal", "knn"), col = c("black", "grey40", "cadetblue", "lightsalmon", "gold"), lwd = 2)
+```
+
+<center><img src = "/performance.png" width = 600 height = 600></center>
+## Conclusion 
+
+In closing, the best models are the C50 and random forest models built on the expanded set of predictors. Since we are interested in churn, we can improve the performance of our predictions by altering our threshold cutoffs. But I'll refrain from this and stick with the original model fit, since we do not have an extra test set of data to test the new cutoff on.  All in all, predicting churn was an informative exercise!

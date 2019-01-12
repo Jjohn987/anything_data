@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>/blog/2019-01-01-predicting-churn-using-tree-models/</loc>
+    <lastmod>2019-01-01T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/blog/2018-12-03-linear-classification-models---hepatic-dataset/</loc>
     <lastmod>2018-12-03T00:00:00+00:00</lastmod>
   </url>
@@ -59,7 +64,7 @@
   
   <url>
     <loc>/</loc>
-    <lastmod>2018-12-03T00:00:00+00:00</lastmod>
+    <lastmod>2019-01-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -89,7 +94,7 @@
   
   <url>
     <loc>/tags/caret/</loc>
-    <lastmod>2018-12-03T00:00:00+00:00</lastmod>
+    <lastmod>2019-01-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -126,6 +131,12 @@
   <url>
     <loc>/categories/chinese-text-analysis/</loc>
     <lastmod>2018-05-29T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/churn/</loc>
+    <lastmod>2019-01-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -233,7 +244,7 @@
   
   <url>
     <loc>/categories/machine-learning/</loc>
-    <lastmod>2018-12-03T00:00:00+00:00</lastmod>
+    <lastmod>2019-01-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -287,7 +298,13 @@
   
   <url>
     <loc>/post/</loc>
-    <lastmod>2018-12-03T00:00:00+00:00</lastmod>
+    <lastmod>2019-01-01T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/categories/predictive-modeling/</loc>
+    <lastmod>2019-01-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
