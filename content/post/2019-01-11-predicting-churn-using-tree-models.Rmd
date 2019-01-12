@@ -473,4 +473,4 @@ legend("bottomright", legend = c("c50_expanded", "rf_expanded", "rf_normal_roc",
 
 The best models are the C50 and random forest models built on the expanded set of predictors. Since we are interested sensitivity (true positives for churn = "yes"), we can improve the performance of our predictions by altering the decision threshold cutoffs. But, since we do not have a separate training set of data to test the new cutoff on, doing so would create model bias. All in all, predicting churn was an informative exercise!
 
-Note: If you wish to see code, feel free to check the code for this post on [my github]('anything_data/content/post/2019-01-11-predicting-churn-using-tree-models.Rmd').
+Note: If you wish to see code, feel free to check the code for this post on [my github]('https://github.com/Jjohn987/anything_data/blob/master/content/post/2019-01-11-predicting-churn-using-tree-models.Rmd).
