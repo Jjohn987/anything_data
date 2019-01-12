@@ -51,7 +51,7 @@ tags: [caret, churn]
 <li>There’s class imbalance in the outcome variable <code>churn</code>.</li>
 <li>International plan and voice mail seem informative, as does total day charges. Perhaps a few states with super high or low vlues will be informarive in a model that uses an expanded predictor set.</li>
 </ul>
-<p><strong>Now lets try to build some models to help predict churn</strong> I’ll use two versions of predictor sets to fit models, one with the regular set of variables, and another with an “expanded set” where categorical variables are coded into binary (1-0) values. If you wish to see code, feel free to check github.</p>
+<p><strong>Now lets try to build some models to help predict churn</strong> I’ll use two versions of predictor sets to fit models, one with the regular set of variables, and another with an “expanded set” where categorical variables are coded into binary (1-0) values.</p>
 </div>
 <div id="modelling" class="section level2">
 <h2>Modelling</h2>
@@ -105,4 +105,5 @@ predictions_list &lt;- list(&quot;knn&quot; = knn_pred, &quot;c50_normal&quot; =
 <div id="conclusion" class="section level2">
 <h2>Conclusion</h2>
 <p>The best models are the C50 and random forest models built on the expanded set of predictors. Since we are interested sensitivity (true positives for churn = “yes”), we can improve the performance of our predictions by altering the decision threshold cutoffs. But, since we do not have a separate training set of data to test the new cutoff on, doing so would create model bias. All in all, predicting churn was an informative exercise!</p>
+<p>Note: If you wish to see code, feel free to check the code for this post on <a href="&#39;anything_data/content/post/2019-01-11-predicting-churn-using-tree-models.Rmd&#39;">my github</a>.</p>
 </div>

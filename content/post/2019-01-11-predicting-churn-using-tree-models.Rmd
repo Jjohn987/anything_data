@@ -19,7 +19,7 @@ data(churn)
 
 Today I want to predict churn using data from a hypothetical telecom company. Although it isn't real life data, it is based on real life data. The data are spread across 19 columns — 14 continuous, 4 categorical, and the outcome variable for prediction - "churn". The dataset is small, with 3333 rows for training and 1667 for testing.  
 
-Before modeling, I need to explore the data structure -- the distributions, class balances/imbalances, relationships between variables, etc. Are there any visual patterns in the data? How does churn relate to the continuous and discrete variables? These are questions I am asking at this initial stage. Let's start with a series of histograms.
+Before modeling, I need to explore the data structure -- the distributions, class balances/imbalances, relationships between variables, etc. Are there any visual patterns in the data? How does churn relate to the continuous and discrete variables? These are questions I am asking at this initial stage. Let's start with a series of histograms. 
 
 ```{r eval=FALSE, include = FALSE, message=FALSE, warning=FALSE}
 
@@ -245,7 +245,7 @@ Before modelling, let's recap:
 * There's class imbalance in the outcome variable `churn`. 
 * International plan and voice mail seem informative, as does total day charges. Perhaps a few states with super high or low vlues will be informarive in a model that uses an expanded predictor set.
 
-**Now lets try to build some models to help predict churn** I'll use two versions of predictor sets to fit models, one with the regular set of variables, and another with an "expanded set" where categorical variables are coded into binary (1-0) values. If you wish to see code, feel free to check github.
+**Now lets try to build some models to help predict churn** I'll use two versions of predictor sets to fit models, one with the regular set of variables, and another with an "expanded set" where categorical variables are coded into binary (1-0) values. 
 
 ## Modelling
 
@@ -472,3 +472,5 @@ legend("bottomright", legend = c("c50_expanded", "rf_expanded", "rf_normal_roc",
 ## Conclusion 
 
 The best models are the C50 and random forest models built on the expanded set of predictors. Since we are interested sensitivity (true positives for churn = "yes"), we can improve the performance of our predictions by altering the decision threshold cutoffs. But, since we do not have a separate training set of data to test the new cutoff on, doing so would create model bias. All in all, predicting churn was an informative exercise!
+
+Note: If you wish to see code, feel free to check the code for this post on [my github]('anything_data/content/post/2019-01-11-predicting-churn-using-tree-models.Rmd').
