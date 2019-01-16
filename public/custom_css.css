@@ -1,0 +1,65 @@
+
+h2 {
+color: black;
+  font-family: Iowan Old Style;
+  font-size: 65px;
+  padding-top: 60px;
+  padding-bottom: 45px;
+  margin:auto;
+  text-align: center;
+}
+
+
+h3 {
+  color: #004F94;
+  font-family: Iowan Old Style;
+  font-size: 24px;
+  font-style: regular;
+  padding-right: 15%;
+  padding-left: 5%;
+  display:inline;
+  padding-top: 1%
+}
+
+
+p {
+  color: black;
+  font-family: Baskerville;
+  font-size: 17px;
+  padding-left: 15%;
+  padding-right: 15%;
+}
+
+
+hr {
+border: .25px solid black;
+margin-top: 1px;
+margin-bottom:1px;
+}
+
+
+a {
+color: #0056b3;
+}
+
+figure {
+display: inline-block;
+float:center;
+}
+
+ul.2 {
+  font-family: Baskerville;
+  font-size: 16px;
+  padding-left: 15%;
+  padding-right: 15%;
+}
+
+box {
+  {
+  background-color: white;
+  width: 300px;
+  border: 1px solid black;
+  padding: 25px;
+  margin: 25px;
+}
+}

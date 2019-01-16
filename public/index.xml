@@ -2246,5 +2246,130 @@ coord_flip() +
 </description>
     </item>
     
+    <item>
+      <title></title>
+      <link>/projects/projects/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/projects/projects/</guid>
+      <description>&lt;div id=&#34;TOC&#34;&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#predicting-churn-with-telecom-data&#34;&gt;Predicting Churn with Telecom Data&lt;/a&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#exploring-numeric-data&#34;&gt;Exploring Numeric Data&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#exploring-categorical-data&#34;&gt;Exploring Categorical Data&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#modeling&#34;&gt;Modeling&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#model-test-performance&#34;&gt;Model Test Performance&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#conclusion&#34;&gt;Conclusion&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#shiny-app---halo-5-stats&#34;&gt;Shiny App - Halo 5 Stats&lt;/a&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#purpose&#34;&gt;Purpose&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#technology-learned&#34;&gt;Technology Learned&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#about-the-app&#34;&gt;About the App&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;link rel=&#34;stylesheet&#34; href=&#34;/custom_css.css&#34;&gt;
+&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;My R projects are works using R which are analytical, informative, predictive, or display a useful skill/technology for industry, such as Shiny.
+&lt;br&gt;
+&lt;br&gt;&lt;/p&gt;
+&lt;hr /&gt;
+&lt;div id=&#34;predicting-churn-with-telecom-data&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Predicting Churn with Telecom Data&lt;/h2&gt;
+&lt;p&gt;&lt;br&gt;
+This project used machine learning to predict customer churn in a telecom company. The data came from the UCI machine learning repository, and consisted of 19 columns, along with 3333 rows for training and 1667 for testing. First, I explored the data structure – the distributions, relationships between variables, and the class balances and imbalances.&lt;/p&gt;
+&lt;div id=&#34;exploring-numeric-data&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Exploring Numeric Data&lt;/h3&gt;
+&lt;p&gt;The data were mostly well-behaved. However, notice on the left panel the column “number vmail messages”, which shows that most customers don’t have any. As far as how distributions differ for different churn outcomes, the density plot (pictured right) shows that churn and non-churn customers have similar distributions across the numeric variables. However, in the case of “total day charge” and “total day minutes”, churners make longer calls and rack up higher phone bills than non-churners do. This is useful information.&lt;/p&gt;
+&lt;center&gt;
+&lt;div class = &#34;&#34;, display:inline-block&gt; &lt;img src = &#34;/1_Distributions.jpeg&#34; width = 350 height = 350&gt;
+&amp;nbsp; &amp;nbsp; 
+    
+&lt;img src = &#34;/2_distributions.jpeg&#34; width = 350 height = 350&gt; &lt;/div&gt;
+&lt;/center&gt;
+&lt;p&gt;For the purpose of showing more about the numeric variable relationships, here are two (out of four) panels of scatterplots. Mainly we can see that churn and non-churn outcomes don’t appear to be linearly separable. Despite there being some clustering in a few of the variables, most of the churn and non-churn cases overlap. which suggests that linear classifier models shouldn’t be considered for use in predicting churn.&lt;/p&gt;
+&lt;center&gt;
+&lt;div class = &#34;&#34;; display: inline-block&gt; &lt;img src = &#34;/pairs1.jpeg&#34; width = 300, height = 300&gt;
+&amp;nbsp; &amp;nbsp; &amp;nbsp;&lt;img src = &#34;/pairs2.jpeg&#34; width = 300 height = 300&gt;&lt;/div&gt;
+&lt;/center&gt;
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;exploring-categorical-data&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Exploring Categorical Data&lt;/h3&gt;
+&lt;center&gt;
+&lt;img src = &#34;/3_categorical_distributions.png&#34; width = 500 height = 300&gt;
+&lt;/center&gt;
+&lt;p&gt;An important insight shown here is that nearly half of the customers on an international plan are ones who end up churning. This is even more extraordinary when we consider the severe disproportion between the two classes of customers ( shown below) – Despite being greatly outnumbered, “churners” make up a significant portion of customers on an international plan. In a similar (but lesser) light, customers that churn are more likely to not be on a voice mail plan than on one. Area code has no connection with churn.&lt;/p&gt;
+&lt;center&gt;
+&lt;img src = &#34;/churnclassplot.jpeg&#34; width = 400 height = 250&gt;
+&lt;/center&gt;
+&lt;p&gt;State demographics don’t indicate any clear pattern for churn rates. (below)&lt;/p&gt;
+&lt;center&gt;
+&lt;img src = &#34;/4_state_distributions.png&#34;&gt;
+&lt;/center&gt;
+&lt;p&gt;Churn and non-churn rates mapped to states also does not reveal any striking information, save for that three of the largest states do seem to have more churn.&lt;/p&gt;
+&lt;center&gt;
+&lt;img src = &#34;/5_states.png&#34;&gt;
+&lt;/center&gt;
+&lt;p&gt;&lt;strong&gt;Exploratory Findings&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;1.) Continuous predictors don’t appear linearly separable, so linear models won’t be considered for modeling.&lt;br&gt;
+2.) International plan and voice mail seem informative, as does total day charges. Perhaps a few states with super high or low churn rates will be informative in a model.&lt;br&gt;
+3.) There’s severe class imbalance in churn outcome which may pose challenges. This means that our model can achieve high accuracy just by guessing “no” for churn in every case. Therefore our model’s goal should not be overall accuracy, but instead aim at identifying cases of “churn = yes” (sensitivity).&lt;br&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;modeling&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Modeling&lt;/h3&gt;
+&lt;p&gt;Only non-linear models (mostly tree-based) were used in this project. The training data was made into two versions, one using the regular set of variables, and another using an “expanded set” where categorical variables were coded into binary (1-0) values. The models used were K-Nearest-Neighbors, C50, Random Forest, and Gradient Boosted Machine.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;K Nearest Neighbors&lt;/strong&gt;
+The best fit had a sensitivity of .23, specificity of .97, and ROC of .66. The best fit chose a parameter of K = 5. Since sensitivity was so low, it is clear that KNN was unable to effectively identify customers that will churn.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;C50&lt;/strong&gt;
+The optimal model achieved a sensitivity of .75, a specificity of .98, and ROC of .90. It used the expanded predictor set, and chose a “rules” model with no winnow.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Random Forest&lt;/strong&gt;
+Sensitivity was .735, specificity was .987, and ROC was .90. The optimal Random Forest model used the expanded training set, choosing a parameter of “mtry” = 41.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Gradient Boosted&lt;/strong&gt;
+GBM trained with the expanded predictor set achieved a sensitivity of .735. Optimal tuning parameters were: 1000 trees, interaction.depth = 5, shrinkage = 0.1, and n.minobsinnode = 10.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;model-test-performance&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Model Test Performance&lt;/h3&gt;
+&lt;p&gt;The model performances on the holdout testing data were very similar to their cross validated training performances.&lt;/p&gt;
+&lt;center&gt;
+&lt;img src = &#34;/sensitivity.png&#34; width = 500 height = 300&gt;
+&lt;/center&gt;
+&lt;p&gt;For the holdout test data, the C50 model built on the expanded dataset achieved the highest sensitivity value at .741. This performance was consistent with its training performance.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Further Model Improvements&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;There are further methods that can be used to improve our ability to predict churn accurately. When dealing with class imbalance, a classification model can be improved by changing the probability threshold of the prediction. Think of this as lowering the bar for the “evidence needed” to make a prediction – instead of determining a probability of 0.5 or higher as “yes”, we might broaden the decision range to 0.3 and higher to capture more values (and incur a certain amount of error as a tradeoff).&lt;/p&gt;
+&lt;center&gt;
+&lt;img src = &#34;/roc_curve.png&#34; width = 500 height = 325&gt;
+&lt;/center&gt;
+&lt;p&gt;Pictured above, changing the decision threshold to a lower value such as .2 will presumably raise the C50 model’s sensitivity from .74 to .84, at little cost to specificity. Going beyond this point gives little raise to sensitivity and incurs a lot of false positives thereafter. Ideally, to alter the decision threshold would require testing on more data in order to be confident that this method is improving our ability to predict churn. Since there is no other data for testing, here it is safer not to alter the decision threshold.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;conclusion&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Conclusion&lt;/h3&gt;
+&lt;p&gt;The best models are the C50 and Random Forest models built on the expanded set of predictors. The most optimal model for predicting “churn = yes” correctly was the C50 model trained on the expanded training set. With a sensitivity of .74, it will correctly identify 74% of the customers that will churn. The model’s performance in terms of sensitivity can be further improved by altering the decision threshold cutoffs. However, without more data to test on, doing so would potentially result in bias.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;shiny-app---halo-5-stats&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Shiny App - Halo 5 Stats&lt;/h2&gt;
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+&lt;div id=&#34;purpose&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Purpose&lt;/h3&gt;
+&lt;p&gt;The purpose of this project was to learn Shiny, R Studio’s powerful framework for packaging R code into web applications. With Shiny, the possibilities for communicating data are endless, including connecting to API’s or creating dashboards that update in real time. You might embed a machine learning model for producing results on the go, or track metrics that constantly update. I wanted to demonstrate these concepts with an exciting data source.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;technology-learned&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Technology Learned&lt;/h3&gt;
+&lt;p&gt;I learned R’s &lt;code&gt;Shiny&lt;/code&gt; package. I learned fundamentals of Bootstrap and CSS, and how to parse JSON data as well. After sharing the development version with Microsoft’s (343 Industries) Halo API maintainers, I was granted access to a developer’s key to share this app with the worldwide Halo 5 community.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;about-the-app&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;About the App&lt;/h3&gt;
+&lt;p&gt;Search for a player’s name, and this app will connect to Microsoft’s Halo 5 API, import their game data, and create beautiful charts for downloading. To use, try searching for Hairball9000 (or any other player) and toggle options relating to the graphical inputs.
+&lt;br&gt;&lt;/p&gt;
+&lt;iframe src=&#34;https://jjohn9000.shinyapps.io/Halo_5_Stats&#34; width=&#34;100%,&#34; height=&#34;600&#34; scrolling=&#34;yes&#34;&gt;
+&lt;/iframe&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
   </channel>
 </rss>

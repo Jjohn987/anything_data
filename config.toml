@@ -8,6 +8,15 @@ GoogleAnalytics = "UA-118999723-1"
 pygmentscodefences = true
 pygmentsuseclasses = true
 
+[[menu.main]]
+  Name = "My Projects"
+  URL = "projects/Projects"
+  weight = -5
+[[menu.main]]
+  Name = "Blog"
+  URL = "index.html"
+  weight = -10
+
 [permalinks]
 post = "/blog/:year-:month-:day-:title/" # change the post URL to look like the old ones
 

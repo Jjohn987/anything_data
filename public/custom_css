@@ -1,0 +1,54 @@
+h1 {
+color: #1b6bb1;
+  font-family: Baskerville;
+  font-size: 50px
+}
+
+h2 {
+color: #E3E8E0;
+  font-family: baskerville;
+  font-style:bold;
+  font-weight: 300;
+  font-size: 50px;
+  background-color: #145493;
+  outline-color: black;
+ width:400px;
+ padding-left:15%;
+ pading-right:15%;
+ margin:auto;}
+
+
+h3 {
+  color: #5C432A;
+  font-family: baskerville;
+  font-size: 24px;
+  padding-right: 15%;
+  display:inline;
+  padding-top: 1%
+}
+
+
+body {
+  color: black;
+  font-family: Baskerville;
+  font-size: 16px;
+}
+
+
+hr {
+  border: .5px solid black;
+margin-top: -1.5px;
+}
+
+toc {
+background = "green";
+}
+
+a {
+color: #0056b3;
+}
+
+figure {
+display: inline-block;
+float:left;
+}
