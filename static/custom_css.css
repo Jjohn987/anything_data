@@ -21,6 +21,12 @@ h3 {
   padding-top: 1%
 }
 
+h6 {
+  color: silver;
+  font-family: 'PT Serif';
+  font-size: 1em;
+  font-weight:400;
+}
 
 p {
   color: black;
@@ -47,19 +53,3 @@ display: inline-block;
 float:center;
 }
 
-ul.2 {
-  font-family: Baskerville;
-  font-size: 16px;
-  padding-left: 15%;
-  padding-right: 15%;
-}
-
-box {
-  {
-  background-color: white;
-  width: 300px;
-  border: 1px solid black;
-  padding: 25px;
-  margin: 25px;
-}
-}
