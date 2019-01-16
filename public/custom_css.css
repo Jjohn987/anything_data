@@ -22,7 +22,7 @@ h3 {
 }
 
 h6 {
-  color: silver;
+  color: #C7BDBD;
   font-family: 'PT Serif';
   font-size: 1em;
   font-weight:400;
@@ -43,10 +43,6 @@ margin-top: 1px;
 margin-bottom:1px;
 }
 
-
-a {
-color: #0056b3;
-}
 
 figure {
 display: inline-block;
