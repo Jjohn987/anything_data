@@ -1,2 +1,2 @@
-# anything_data2
+# anything_data
 New theme for website
