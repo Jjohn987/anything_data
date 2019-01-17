@@ -14,16 +14,16 @@ tags: [caret, churn]
 <div id="data-overview" class="section level2">
 <h2>Data Overview</h2>
 <center>
-<img src = "/1_distributions.png" width = 550 height = 550>
+<img src = "/1_distributions.jpeg" width = 550 height = 550>
 </center>
 <p>Most continuous predictors appear normally distributed. However, there are some exceptions “Customer service calls” and “total international calls” are somewhat right skewed, and the majority of values for “numer of mail messages” are all “0”, meaning it is probably a zero variance predictor. For the most part, these data are well behaved.</p>
 <p>Let’s examine how these same predictors relate to churn. A density plot showing the variables’ distributions by class will suffice.</p>
 <center>
-<img src = "/2_distributions.png" width = 600 height = 600>
+<img src = "/2_distributions.jpeg" width = 600 height = 600>
 </center>
 <p>This density plot shows that “positive” churn has symmetrical distributions with that of the non-churners for most numeric predictors. (Note this is a density plot, so it depicts proportions, not quantities, of each class across a range of values.) We only see separation between red and green in amount of minutes per day and day charges, but these two variables clearly repeat the same information. One should probably be removed. Let’s continue by looking at how churn relates to the categorical variables.</p>
 <center>
-<img src = "/3_categorical_distributions.png" width = 600 height = 500>
+<img src = "/3_categorical_distributions.png" width = 600 height = 300>
 </center>
 <p>Categorical predictors are informative – <strong>Look at how many customers on an international plan end up churning!</strong> On the flipside, notice how churn outcome is unrelated to area code, but somewhat related to if they have voice mail. International plan and voice mail look like they will be useful predictors. Is “state” information useful at all?</p>
 <center>
@@ -36,8 +36,8 @@ tags: [caret, churn]
 <p>I still cannot determine any visual pattern for churn amongst states. This variable probably won’t be useful for most models. We can also check if there are obvious patterns between the continuous variables. Usually a panel of scatterplots can be made using <code>pairs()' or 'GGally::ggpairs()</code>. However, these functions dont work out of the box due to having too many variables.</p>
 <p>With a bit of coding I aggregate the scatterplots into panels of 30, and produce a total of 4 grids like the two below. No need to clog up the page with all of them, most show a little clustering in some variables regarding the yes/no churn outcomes, and 1 or 2 instances of collinearity.</p>
 <center>
-<div class = ""; display: inline-block> <img src = "/pairs1.png" width = 300, height = 300>
-<img src = "/pairs2.png" width = 300 height = 300></div>
+<div class = ""; display: inline-block> <img src = "/pairs1.jpeg" width = 300, height = 300>
+<img src = "/pairs2.jpeg" width = 300 height = 300></div>
 </center>
 <p>Clearly, Churn <strong>doesn’t appear to be linearly separable</strong>, meaning a linear classifier might not suffice. However, there does appear to be some clusering for some of these scatterplots. Still, tree models and KNN might perform better. My last check is to look at class balance for the outcome variable.</p>
 <center>
@@ -88,18 +88,18 @@ models &lt;- list(&quot;knn&quot; = knn_pred, &quot;c50&quot; = c50_normal_pred,
 ##Make list of all model predictions
 predictions_list &lt;- list(&quot;knn&quot; = knn_pred, &quot;c50_normal&quot; = c50_normal_pred, &quot;c50_expanded&quot; = c50_expanded_pred)</code></pre>
 <center>
-<img src = "/sensitivity.png" width = 600 height = 600>
+<img src = "/sensitivity.png" width = 600 height = 400>
 </center>
 <p>The c50 model built on the expanded dataset achieves the highest sensitivity, at .741.</p>
 <p>There are a number of ways the sensitivity of these models could be improved. Sometimes resampling the data to balance the outcome variable can help. Also, setting a new probability threshold on the predictions would help if the class balance means there is a low signal for the class you’re trying to predict.</p>
 <p>Say, instead of only predicting “Yes” if it has a probability of .5 or greater, we can lower the probability threshold of “evidence needed” to predict yes, to say .3, or .4, etc. Doing so will not change the model, but it will come at the cost of specificity. A rudimentary representation can be seen below, using the C50 model with the expanded predictor set.</p>
 <center>
-<img src = "/roc_curve.png" width = 600 height = 600>
+<img src = "/roc_curve.png" width = 600 height = 400>
 </center>
 <p>Above are probability thresholds set at .5, .2, and .1. Notice how sensitivity significantly improves if we determine a “yes” cutoff lower than .5, and that specificity isn’t impacted by this. However, when setting the threshold too low (.1), sensitivity tapers off, and comes with a much greater loss to specificity. At that point, half of our predictions would be false positives. Therefore setting a cutoff at around .2 or a bit more seems optimal. However, this is a hindsight bias and too risky to do if we dont have more data to test it on. Ideally we would an intial training set to compare models, another to tweak parameters and decision threholds, and a test set to test them all.</p>
 <p>Let’s end by simply the test set performances of all models together.</p>
 <center>
-<img src = "/performance.png" width = 600 height = 600>
+<img src = "/performance.png" width = 600 height = 400>
 </center>
 </div>
 <div id="conclusion" class="section level2">

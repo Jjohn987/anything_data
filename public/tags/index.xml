@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Tags on Anything is |Data| is Anything</title>
+    <title>Tags on Anything Data</title>
     <link>/tags/</link>
-    <description>Recent content in Tags on Anything is |Data| is Anything</description>
+    <description>Recent content in Tags on Anything Data</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 17 May 2018 00:00:00 +0000</lastBuildDate>
     
-        <atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -111,6 +111,15 @@
     </item>
     
     <item>
+      <title>Dashboard</title>
+      <link>/tags/dashboard/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/dashboard/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Fortune 500s</title>
       <link>/tags/fortune-500s/</link>
       <pubDate>Mon, 29 Jan 2018 00:00:00 +0000</pubDate>
@@ -174,6 +183,15 @@
     </item>
     
     <item>
+      <title>Halo 5</title>
+      <link>/tags/halo-5/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/halo-5/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Httr</title>
       <link>/tags/httr/</link>
       <pubDate>Thu, 17 May 2018 00:00:00 +0000</pubDate>
@@ -192,29 +210,20 @@
     </item>
     
     <item>
-      <title>Lda</title>
-      <link>/tags/lda/</link>
+      <title>Linear Models</title>
+      <link>/tags/linear-models/</link>
       <pubDate>Mon, 03 Dec 2018 00:00:00 +0000</pubDate>
       
-      <guid>/tags/lda/</guid>
+      <guid>/tags/linear-models/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Linear Model</title>
-      <link>/tags/linear-model/</link>
-      <pubDate>Mon, 03 Dec 2018 00:00:00 +0000</pubDate>
+      <title>Machine Learning</title>
+      <link>/tags/machine-learning/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/tags/linear-model/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Logistic Regression</title>
-      <link>/tags/logistic-regression/</link>
-      <pubDate>Mon, 03 Dec 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/logistic-regression/</guid>
+      <guid>/tags/machine-learning/</guid>
       <description></description>
     </item>
     
@@ -224,15 +233,6 @@
       <pubDate>Fri, 21 Sep 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/microsoft-halo-5-api/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Nearest Shrunken Centroids</title>
-      <link>/tags/nearest-shrunken-centroids/</link>
-      <pubDate>Mon, 03 Dec 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/nearest-shrunken-centroids/</guid>
       <description></description>
     </item>
     
@@ -264,11 +264,11 @@
     </item>
     
     <item>
-      <title>Pls</title>
-      <link>/tags/pls/</link>
-      <pubDate>Mon, 03 Dec 2018 00:00:00 +0000</pubDate>
+      <title>Predictive Modeling</title>
+      <link>/tags/predictive-modeling/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/tags/pls/</guid>
+      <guid>/tags/predictive-modeling/</guid>
       <description></description>
     </item>
     

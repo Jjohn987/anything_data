@@ -1,0 +1,31 @@
+---
+title: "Project 2"
+description: "A Shiny App that pulls player game data, character from Microsoft 343 Industries' Halo 5 API and produces beautiful visualizations"
+tags: ["Shiny", "dashboard", "Halo 5"]
+weight: 1
+draft: false
+output: 
+  blogdown::html_page:
+    toc: true
+    toc_depth: 4
+---
+
+<link rel="stylesheet" href="/custom_css.css">
+
+## Shiny App - Halo 5 Stats 
+<br>
+
+### Purpose
+
+The purpose of this project was to learn Shiny, R Studio's powerful framework for packaging R code into web applications. With Shiny, the possibilities for communicating data are endless, including connecting to API's or creating dashboards that update in real time. You might embed a machine learning model for producing results on the go, or track metrics that constantly update. I wanted to demonstrate these concepts with an exciting data source.
+
+### Technology Learned
+I learned R's `Shiny` package. I learned fundamentals of Bootstrap and CSS, and how to parse JSON data as well. After sharing the development version with Microsoft's (343 Industries) Halo API maintainers, I was granted access to a developer's key to share this app with the worldwide Halo 5 community. 
+
+### About the App
+
+Search for a player's name, and this app will connect to Microsoft's Halo 5 API, import their game data, and create beautiful charts for downloading. To use, try searching for Hairball9000 (or any other player) and toggle options relating to the graphical inputs.
+<br>
+
+<iframe src="https://jjohn9000.shinyapps.io/Halo_5_Stats" width = 100%, height = 600 scrolling = "yes"></iframe>
+

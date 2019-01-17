@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+         
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Part II: Chinese Classics&#39; Word/Network Plots</title>
+        
+        <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --accent: #5586BD;
+        --border-width:  5px ;
+    }
+
+</style>
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+
+
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+ 
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/go.min.js"></script>  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/haskell.min.js"></script>  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/kotlin.min.js"></script>  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/scala.min.js"></script>  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/swift.min.js"></script> 
+
+    <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+<script>$(document).on('click', function() { $('.collapse').collapse('hide'); })</script>
+ <meta name="generator" content="Hugo 0.40.2" />
+        
+
+        
+        
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-118999723-1"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments)};
+          gtag('js', new Date());
+
+          gtag('config', 'UA-118999723-1');
+        </script>
+        
+    </head>
+
+    
+    
+    <script type="text/javascript" async
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+    
+
+    <body>
+         
+        <nav class="navbar navbar-default navbar-fixed-top">
+
+            <div class="container">
+
+                <div class="navbar-header">
+
+                    <a class="navbar-brand visible-xs" href="#">Part II: Chinese Classics&#39; Word/Network Plots</a>
+
+                    <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                </div>
+
+                <div class="collapse navbar-collapse">
+
+                    
+                        <ul class="nav navbar-nav">
+                            
+                                <li><a href="/">Home</a></li>
+                            
+                                <li><a href="/post/">Posts</a></li>
+                            
+                                <li><a href="/project/">Projects</a></li>
+                            
+                        </ul>
+                    
+
+                    
+                        <ul class="nav navbar-nav navbar-right">
+                            
+                                <li class="navbar-icon"><a href="mailto:jeremyaaronjohnson@hotmail.com"><i class="fa fa-envelope-o"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://github.com/jjohn987/"><i class="fa fa-github"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://www.linkedin.com/in/jeremy-johnson-09016a112/"><i class="fa fa-linkedin"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://www.stackoverflow.com/superball10000/"><i class="fa fa-stack-overflow"></i></a></li>
+                            
+                        </ul>
+                    
+
+                </div>
+
+            </div>
+
+        </nav>
+
+
+<main>
+
+    <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/part-ii-chinese-classics-word-network-plots/">Part II: Chinese Classics&#39; Word/Network Plots</a></h4>
+    <h5>June 8, 2018</h5>
+    
+    <a href="/tags/tidygraph"><kbd class="item-tag">tidygraph</kbd></a>
+    
+    <a href="/tags/ggraph"><kbd class="item-tag">ggraph</kbd></a>
+    
+    <a href="/tags/chinese-text-analysis"><kbd class="item-tag">Chinese text analysis</kbd></a>
+    
+
+</div>
+
+
+    <br> <div class="text-justify"><p>This is a continuation in my series of exploratory text analysis of 3 Chinese classic works. In the previous post, I calculated word counts for each book, and visualized common words using bar charts. This time, I’d like to examine word use <strong>across</strong> the texts with network visualization. The goal is to help see <strong>what’s common</strong> and <strong>what’s different</strong> between the texts regarding word usage.</p>
+<p>Network visualization is particularly helpful for discovering simularities and differences between objects - this is because nodes and edges can form connections and clusters (or stay isolated). Thus, through a network structure we can get an idea of commonalities and differences between the word usages in these 3 works.</p>
+<p>Disclaimer - the setup of this post is very similar to last time. I’m essentially importing the same data. So just skip past these first 2 code blocks.</p>
+<pre class="r"><code>library(tidyverse)
+library(readr)
+library(stringi)
+library(tidygraph)
+library(ggraph)
+
+
+my_classics &lt;- read_csv(&quot;~/Desktop/anything_data/content/post/my_classics.csv&quot;) %&gt;%
+  select(-1) %&gt;%
+  mutate(book = str_to_title(book))</code></pre>
+<pre class="r"><code>simple_bigram &lt;- function(x) {
+  if(length(x) &lt; 2) {
+    return(NA)
+  } else {
+    output_length &lt;- length(x) - 1
+    output &lt;- vector(length = output_length)
+    for(i in 1:output_length) {
+      output[i] &lt;- paste(x[i], x[i+1], sep = &quot; &quot;)
+    }
+    output
+  }
+}
+
+tokenizer &lt;- function(text) {
+  unlist(lapply(stringi::stri_split_boundaries(text), function(x) simple_bigram(x)))
+}
+
+library(tmcn)
+
+stopwordsCN &lt;- data.frame(word = c(tmcn::stopwordsCN(),
+                                   &quot;子曰&quot;, &quot;曰&quot;, &quot;於&quot;, &quot;則&quot;,&quot;吾&quot;, &quot;子&quot;, &quot;不&quot;, &quot;無&quot;, &quot;斯&quot;,&quot;與&quot;, &quot;為&quot;, &quot;必&quot;,
+                                   &quot;使&quot;, &quot;非&quot;,&quot;天下&quot;, &quot;以為&quot;,&quot;上&quot;, &quot;下&quot;, &quot;人&quot;, &quot;天&quot;, &quot;不可&quot;, &quot;謂&quot;, &quot;是以&quot;,
+                                   &quot;而不&quot;, &quot;皆&quot;, &quot;不亦&quot;, &quot;乎&quot;, &quot;之&quot;, &quot;而&quot;, &quot;者&quot;, &quot;本&quot;, &quot;與&quot;, &quot;吾&quot;, &quot;則&quot;,
+                                   &quot;以&quot;, &quot;其&quot;, &quot;為&quot;, &quot;不以&quot;, &quot;不可&quot;, &quot;也&quot;, &quot;矣&quot;, &quot;子&quot;, &quot;由&quot;, &quot;子曰&quot;, &quot;曰&quot;,
+                                   &quot;非其&quot;, &quot;於&quot;, &quot;不能&quot;, &quot;如&quot;, &quot;斯&quot;, &quot;然&quot;, &quot;君&quot;, &quot;亦&quot;, &quot;言&quot;, &quot;聞&quot;, &quot;今&quot;,
+                                   &quot;君&quot;, &quot;不知&quot;, &quot;无&quot;))
+
+##High frequency single-words by chapter
+chapter_words &lt;- my_classics %&gt;%
+  mutate(word = map(word, function(x) unlist(stringi::stri_split_boundaries(x)))) %&gt;%
+  unnest(word) %&gt;%
+  mutate(word = str_replace_all(word, &quot;[「」《》『』,，、。；：？！]&quot;, &quot;&quot;)) %&gt;%
+  filter(!is.na(word), !grepl(&quot;Invald&quot;, word)) %&gt;%
+  anti_join(stopwordsCN) %&gt;%
+  select(word, book, chapter_number) %&gt;% 
+  count(book, chapter_number, word) %&gt;%
+  group_by(book, chapter_number) %&gt;%
+  mutate(frequency = n/sum(n), book_edges = book) %&gt;%
+  filter(frequency &gt; .01) %&gt;% ungroup() %&gt;%
+  select(word, book, n, frequency, book_edges)
+
+book_words &lt;- my_classics %&gt;%
+  mutate(word = map(word, function(x) unlist(stringi::stri_split_boundaries(x)))) %&gt;%
+  unnest(word) %&gt;%
+  mutate(word = str_replace_all(word, &quot;[「」《》『』,，、。；：？！]&quot;, &quot;&quot;)) %&gt;%
+  filter(!is.na(word), !grepl(&quot;Invald&quot;, word)) %&gt;%
+  anti_join(stopwordsCN) %&gt;%
+  select(word, book) %&gt;% 
+  count(book, word) %&gt;%
+  group_by(book) %&gt;%
+  mutate(frequency = n/sum(n), book_edges = book) %&gt;%
+  filter(frequency &gt; .001) </code></pre>
+<p>Plotting the edges in “arcs” helps avoid any overplotting or tangling that might exist in the case of too much interconnectivity, as we will soon see.</p>
+<p>I’ve got 2 different ways of visualizing networks using words in these texts. First, let’s look at single word use between each text, one plot showing common words by each chapter/book, another by book.</p>
+<p>Unfortunatly the blog squishes the plot a bit, so you might want to zoom in on it.</p>
+<p>##Single Words by Chapter and Book</p>
+<pre class="r"><code>knitr::opts_chunk$set(fig.width=16, fig.height=12)
+
+as_tbl_graph(chapter_words, directed = FALSE) %&gt;% ggraph(layout = &quot;fr&quot;) + 
+  geom_edge_arc(aes(edge_width = frequency, color = factor(book_edges), alpha = frequency)) +
+  geom_node_point(color = &quot;black&quot;, alpha = .65, size = 7, show.legend = FALSE) + 
+  geom_node_text(aes(label = name), color = &quot;white&quot;,
+                 family = &quot;HiraKakuProN-W3&quot;, check_overlap = TRUE) +
+  scale_edge_colour_manual(values = c(&quot;#b20047&quot;, &quot;#00b274&quot;, &quot;#FFB52A&quot;)) + 
+  theme(axis.text.x = element_blank()) + 
+  theme(axis.text.y = element_blank()) + 
+  theme(panel.background = element_rect(fill = &quot;#cddbda&quot;),
+        plot.background = element_rect(fill = &quot;#cddbda&quot;),
+        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        plot.margin = margin(0, 0, 0, 0, &quot;cm&quot;)) + 
+  guides(edge_width=FALSE, edge_alpha = FALSE) + 
+  labs(x = NULL, y = NULL,
+       title = &quot;\nCommon Characters\n in the Analects, Mozi, and Zhuangzi\n&quot;) +
+  theme(plot.title = element_text(size = 25, vjust = -10, hjust = 0.5,
+                                  family = &quot;Palatino&quot;, face = &quot;bold.italic&quot;,
+                                  color = &quot;#3d4040&quot;)) + 
+  theme(legend.position = &quot;bottom&quot;, legend.title = element_blank(),
+        legend.key = element_rect(color = &quot;#454444&quot;, fill = &quot;#f5fffe&quot;),
+        legend.text = element_text(size = 12, color = &quot;#3d4040&quot;, family = &quot;Palatino&quot;),
+        legend.key.width = unit(4, &quot;line&quot;),
+        legend.background = element_rect(fill = &quot;#cddbda&quot;))</code></pre>
+<p><img src="/post/2018-06-08-part-ii-chinese-classics-word-network-plots_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>Compared to the above, doing the frequency counting by book seems to yeild a bit more balanced results. Of course frequency values become much lower that way, here I filter for greater than .001.</p>
+<div id="single-words-by-book" class="section level2">
+<h2>Single Words by Book</h2>
+<pre class="r"><code>as_tbl_graph(book_words, directed = FALSE) %&gt;%
+  ggraph(layout = &quot;fr&quot;) + 
+  geom_edge_arc(aes(edge_width = frequency, color = factor(book_edges), alpha = frequency)) +
+  geom_node_point(color = &quot;black&quot;, alpha = .65, size = 7, show.legend = FALSE) + 
+  geom_node_text(aes(label = name), color = &quot;white&quot;,
+                 family = &quot;HiraKakuProN-W3&quot;, check_overlap = TRUE) +
+  scale_edge_colour_manual(values = c(&quot;#b20047&quot;, &quot;#00b274&quot;, &quot;#FFB52A&quot;)) + 
+  theme(axis.text.x = element_blank()) + 
+  theme(axis.text.y = element_blank()) + 
+  theme(panel.background = element_rect(fill = &quot;#cddbda&quot;),
+        plot.background = element_rect(fill = &quot;#cddbda&quot;),
+        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        plot.margin = margin(0, 0, 0, 0, &quot;cm&quot;)) + 
+  guides(edge_width=FALSE, edge_alpha = FALSE) + 
+  labs(x = NULL, y = NULL,
+       title = &quot;\nCommon Characters\n in the Analects, Mozi, and Zhuangzi\n&quot;, caption = &quot;Per Book, Frequency &gt; .001&quot;) +
+  theme(plot.title = element_text(size = 25, vjust = -10, hjust = 0.5,
+                                  family = &quot;Palatino&quot;, face = &quot;bold.italic&quot;,
+                                  color = &quot;#3d4040&quot;)) + 
+  theme(legend.position = &quot;bottom&quot;, legend.title = element_blank(),
+        legend.key = element_rect(color = &quot;#454444&quot;, fill = &quot;#f5fffe&quot;),
+        legend.text = element_text(size = 12, color = &quot;#3d4040&quot;, family = &quot;Palatino&quot;),
+        legend.key.width = unit(4, &quot;line&quot;),
+        legend.background = element_rect(fill = &quot;#cddbda&quot;))</code></pre>
+<p><img src="/post/2018-06-08-part-ii-chinese-classics-word-network-plots_files/figure-html/unnamed-chunk-4-1.png" width="1536" />
+Regardless of calculating frequency by chapter and book or just by book, there are plenty of words that fall <strong>in between</strong> texts.</p>
+<p>I’m not sure how useful this method of examining “simularity” of word usage is analytically; however, I think it works in a sense. If not for an algorithm, then at least for our general understanding. However, I do suspect that this type of networking does play into clustering, and from the looks of the plots, I imagine that the LDA algorithm might run into confusion distinguishing the books/chapters later.</p>
+<p>##Now let’s plot bigrams</p>
+<p>Here, a bigram is essentially two connected nodes. The connections (edges) between them are colored according to the text they appear in. Again, its a bit subjective on whether to calculate the bigrams by book or by each chapter and book. Conventional wisdom tells me that doing the calculation per chapter makes more sense, however, the Zhuangzi suffers from this operation. (Perhaps it has a greater word diversity per chapter?) So I decide to plot both ways.</p>
+<p>##Bigrams by Chapter and Book</p>
+<pre class="r"><code>knitr::opts_chunk$set(fig.width=6, fig.height=6, fig.pos = &quot;center&quot;)
+
+bigrams &lt;- my_classics %&gt;%
+  mutate(word = str_replace_all(word, &quot;[「」《》『』,，、。；：？！]&quot;, &quot;&quot;)) %&gt;%
+  mutate(word = map(word, function(x) tokenizer(x))) %&gt;%
+  unnest(word) %&gt;%
+  filter(!is.na(word)) %&gt;%
+  separate(word, into = c(&quot;word1&quot;, &quot;word2&quot;)) %&gt;%
+  filter(!word1 %in% stopwordsCN$word, !word2 %in% stopwordsCN$word) %&gt;%
+  unite(&quot;word&quot;, c(&quot;word1&quot;, &quot;word2&quot;), sep = &quot; &quot;)
+
+chapter_bigrams &lt;- bigrams %&gt;%
+  count(book, chapter_number, word) %&gt;%
+  arrange(book, -n) %&gt;%
+  group_by(book, chapter_number) %&gt;%
+  mutate(frequency = n/sum(n)) %&gt;%
+  ungroup() %&gt;%
+  select(-chapter_number)
+
+
+chapter_bigrams %&gt;%
+  separate(word, into = c(&quot;word1&quot;, &quot;word2&quot;)) %&gt;%
+  select(word1, word2, n, frequency, book) %&gt;%
+  filter(frequency &gt;= .02) %&gt;%
+  as_tbl_graph(directed = FALSE) %&gt;%
+  ggraph(layout = &quot;fr&quot;) + 
+  geom_edge_density() +
+  geom_edge_arc(aes(color = book),
+                alpha = .70, arrow = arrow(length = unit(1.5, &quot;mm&quot;)),
+                start_cap = circle(3, &quot;mm&quot;), end_cap = circle(3, &quot;mm&quot;), edge_width = .75) +
+  geom_node_point(size = 7, color = &quot;black&quot;, alpha = .75) +
+  geom_node_text(aes(label = name), color = &quot;grey&quot;, family = &quot;HiraKakuProN-W3&quot;, check_overlap = TRUE) +
+  scale_edge_colour_manual(values = c(&quot;#b20047&quot;, &quot;#00b274&quot;, &quot;#fdff00&quot;))+
+  theme(axis.text.x = element_blank()) +
+  theme(axis.text.y = element_blank()) +
+  theme(panel.background = element_rect(fill = &quot;#8AE3C2&quot;),
+        plot.background = element_rect(fill = &quot;#8AE3C2&quot;),
+        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        plot.margin = margin(0, 0, 0, 0, &quot;cm&quot;)) + 
+  guides(edge_width=FALSE) +
+  labs(x = NULL, y = NULL, title = &quot;Bigrams in the Analects, Mozi, and Zhuangzi&quot;, caption = &quot;Per chapter, Frequency &gt; .02&quot;) +
+  theme(plot.title = element_text(size = 35, vjust = -10, hjust = 0.5,
+                                  family = &quot;Palatino&quot;, face = &quot;italic&quot;,
+                                  color = &quot;black&quot;)) +
+  theme(legend.position = &quot;bottom&quot;, legend.title = element_blank(),
+        legend.key = element_rect(color = &quot;black&quot;, fill = &quot;#8AE3C2&quot;),
+        legend.text = element_text(size = 12, color = &quot;black&quot;, family = &quot;Palatino&quot;),
+        legend.key.width = unit(4, &quot;line&quot;),
+        legend.background = element_rect(fill = &quot;#8AE3C2&quot;))</code></pre>
+<p><img src="/post/2018-06-08-part-ii-chinese-classics-word-network-plots_files/figure-html/unnamed-chunk-5-1.png" width="1536" />
+For the final plot, unfortunately many edges/links don’t show. Perhaps it is because many nodes are positioned so close together that the edges just aren’t drawn.</p>
+<p>##Bigrams by Book</p>
+<pre class="r"><code>knitr::opts_chunk$set(fig.width=6, fig.height=6, fig.pos = &quot;center&quot;)
+
+book_bigrams &lt;- bigrams %&gt;%
+  count(book, word) %&gt;%
+  arrange(book, -n) %&gt;%
+  group_by(book) %&gt;%
+  mutate(frequency = n/sum(n)) %&gt;%
+  ungroup()
+
+book_bigrams %&gt;%
+  separate(word, into = c(&quot;word1&quot;, &quot;word2&quot;)) %&gt;%
+  select(word1, word2, n, frequency, book) %&gt;%
+  filter(frequency &gt;= .001) %&gt;%
+  as_tbl_graph(directed = FALSE) %&gt;%
+  ggraph(layout = &quot;fr&quot;) + 
+  geom_edge_density() +
+  geom_edge_arc(aes(color = book),
+                alpha = .70, arrow = arrow(length = unit(1.5, &quot;mm&quot;)),
+                start_cap = circle(3, &quot;mm&quot;), end_cap = circle(3, &quot;mm&quot;), edge_width = .75) +
+  geom_node_point(size = 7, color = &quot;black&quot;, alpha = .75) +
+  geom_node_text(aes(label = name), color = &quot;grey&quot;, family = &quot;HiraKakuProN-W3&quot;, check_overlap = TRUE) +
+  scale_edge_colour_manual(values = c(&quot;#b20047&quot;, &quot;#00b274&quot;, &quot;#fdff00&quot;))+
+  theme(axis.text.x = element_blank()) +
+  theme(axis.text.y = element_blank()) +
+  theme(panel.background = element_rect(fill = &quot;#8AE3C2&quot;),
+        plot.background = element_rect(fill = &quot;#8AE3C2&quot;),
+        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        plot.margin = margin(0, 0, 0, 0, &quot;cm&quot;)) + 
+  guides(edge_width=FALSE) +
+  labs(x = NULL, y = NULL, title = &quot;Bigrams in\n the Analects, Mozi, and Zhuangzi&quot;, caption = &quot;Per book, Frequency &gt; .001&quot;) +
+  theme(plot.title = element_text(size = 25, vjust = -10, hjust = 0.5,
+                                  family = &quot;Palatino&quot;, face = &quot;italic&quot;,
+                                  color = &quot;black&quot;)) +
+  theme(legend.position = &quot;bottom&quot;, legend.title = element_blank(),
+        legend.key = element_rect(color = &quot;black&quot;, fill = &quot;#8AE3C2&quot;),
+        legend.text = element_text(size = 12, color = &quot;black&quot;, family = &quot;Palatino&quot;),
+        legend.key.width = unit(4, &quot;line&quot;),
+        legend.background = element_rect(fill = &quot;#8AE3C2&quot;))</code></pre>
+<p><img src="/post/2018-06-08-part-ii-chinese-classics-word-network-plots_files/figure-html/unnamed-chunk-6-1.png" width="576" /></p>
+<p>There we have it, two different network plots of words used in these 3 classic works.
+In the case of the single characters, there is a lot of commonality (as expected).
+In the case of the bigrams, there is a lot less in common between the works.</p>
+<p>Before I close, I’d like to comment briefly on the <code>tidygraph</code> package which made these plots possible. Previously, I used igraph and found it powerful and quite robust, yet not too intuitive or user-friendly. Tidygraph changes all of that and allows network data to be manipulated in a way similar to the tidyverse methodology. I love tidygraph!</p>
+<p>I hope you enjoyed these two network plots. Until next time!</p>
+</div>
+</div>
+
+    
+    
+
+    
+
+    
+
+        <h4 class="page-header">Comments</h4>
+
+        <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "anything-is-data-is-anything" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+    
+
+</main>
+
+        <footer>
+
+            <p class="copyright text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a></p>
+
+        </footer>
+       
+    </body>
+
+</html>
+

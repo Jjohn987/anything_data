@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Linear Models on Anything Data</title>
+    <link>/tags/linear-models/</link>
+    <description>Recent content in Linear Models on Anything Data</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 03 Dec 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/linear-models/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Linear Classification Models - Hepatic Dataset</title>
+      <link>/post/linear-classification-models-hepatic-dataset/</link>
+      <pubDate>Mon, 03 Dec 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/linear-classification-models-hepatic-dataset/</guid>
+      <description>This post is following exercise 1 in Chapter 12 of Applied Predicative Modeling. Here I use the machine learning package CARET in R to make classification models; in particular, the linear classification models discussed in Chapter 12.
+The dataset in question is about hepatic injury (liver damage). It includes a dataframe of biological related predictors of liver damage bio, a dataframe of chemical related predictors chem, and the response variable we are interested in, injury.</description>
+    </item>
+    
+  </channel>
+</rss>

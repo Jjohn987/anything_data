@@ -1,67 +1,58 @@
-theme = "Hugo-Octopress"
 baseURL = "https://upbeat-ardinghelli-01cdfc.netlify.com"
 languageCode = "en-us"
-title = "Anything is |Data| is Anything"
-ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown", "_files$", "_cache$"]
-disqusShortname = "anything-is-data-is-anything"
-GoogleAnalytics = "UA-118999723-1"
-pygmentscodefences = true
-pygmentsuseclasses = true
-
-[[menu.main]]
-  Name = "My Projects"
-  URL = "projects/Projects"
-  weight = -5
-[[menu.main]]
-  Name = "Blog"
-  URL = "index.html"
-  weight = -10
-
-[permalinks]
-post = "/blog/:year-:month-:day-:title/" # change the post URL to look like the old ones
-
-# Make tags and categories work
-# As of Hugo v0.33 these are not needed anymore
-# [indexes]
-#   tag = "tags"
-#   category = "categories"
+title = "Anything Data"
+theme = "minimal"
+disqusShortname = "anything-is-data-is-anything" # delete this to disable disqus comments
+googleAnalytics = "UA-118999723-1"
 
 [params]
+    author = "Jeremy Johnson"
+    description = "My data science blog and projects"
+    githubUsername = "Jjohn987"
+    accent = "#5586BD"
+    showBorder = true
+    backgroundColor = "white"
+    font = "Raleway" # should match the name on Google Fonts!
+    highlight = true
+    highlightStyle = "solarized-dark"
+    highlightLanguages = ["go", "haskell", "kotlin", "scala", "swift"]
 
-  # --- Start sidebar options ---
-  # Number of last posts that will be displayed in the sidebar - set to 0 or remove to hide this section
-  sidebarRecentLimit = 5
+[[menu.main]]
+    url = "/"
+    name = "Home"
+    weight = 1
 
-  # Sidebar header - passed to markdownify so you can write markdown here
-  sidebarHeader = "About Me"
+[[menu.main]]
+    url = "/post/"
+    name = "Posts"
+    weight = 2
 
-  # Sidebar text also supports markdown
-  # New lines can be added with </br> or normal markdown (two spaces at the end of line or two new lines).
-  # when adding two new lines, remember to remove the indentation otherwise the new line will be treated as a codeblock
-  sidebarText = """I'm Jeremy, and am deeply interested in data science. Especially R. 
-  <br><br>
-  But my educational background is in **Chinese** and German. **Think that's unrelated with R**? <br>
-  <br> Well, I see language is a door to another world, and data science as a skillset to understanding it. <br><br> **Anything is Data, and Data is Anything**. 
-  </br><br>
-  *Cool Websites* <br>
-  https://www.r-bloggers.com <br>
-  
-**Me on Other Platforms:**  </br>
-  """
-  # Sidebar menu - if true will add a sidebar menu between sidebar text and recent posts
-  sidebarMenuEnabled = false
-  sidebarMenuHeader = "Check out"
+[[menu.main]]
+    url = "/project/"
+    name = "Projects"
+    weight = 3
 
-  # sidebar links
-  github = "https://github.com/Jjohn987/"
-  stackoverflow = "https://stackexchange.com/users/11094434/superball10000"
-  linkedin = "https://www.linkedin.com/in/jeremy-johnson-09016a112"
-  
-  subtitle = "The investigation of things..."
-  author = "Jeremy Johnson"
+# Social icons to be shown on the right-hand side of the navigation bar
+# The "name" field should match the name of the icon to be used
+# The list of available icons can be found at http://fontawesome.io/icons/
 
-defaultDescription = "My R blog, with projects in analytics, text analysis, data mining, and visualization. I might occasionally include Chinese text."
-  # defaultKeywords = ["R Studio" , "Chinese text analysis" , "data visualization" , "data science"]
+[[menu.icon]]
+    url = "mailto:jeremyaaronjohnson@hotmail.com"
+    name = "envelope-o"
+    weight = 1
 
-pygmentscodefences = true
-pygmentsuseclasses = true
+[[menu.icon]]
+    url = "https://github.com/jjohn987/"
+    name = "github"
+    weight = 2
+
+
+[[menu.icon]]
+    url = "https://www.linkedin.com/in/jeremy-johnson-09016a112/"
+    name = "linkedin"
+    weight = 4
+
+[[menu.icon]]
+    url = "https://www.stackoverflow.com/superball10000/"
+    name = "stack-overflow"
+    weight = 5

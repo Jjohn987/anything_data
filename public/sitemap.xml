@@ -3,67 +3,71 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>/blog/2019-01-01-predicting-churn-using-tree-models/</loc>
+    <loc>/project/project1/</loc>
+  </url>
+  
+  <url>
+    <loc>/project/project2/</loc>
+  </url>
+  
+  <url>
+    <loc>/post/predicting-churn-using-tree-models/</loc>
     <lastmod>2019-01-01T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/blog/2018-12-03-linear-classification-models---hepatic-dataset/</loc>
+    <loc>/post/linear-classification-models-hepatic-dataset/</loc>
     <lastmod>2018-12-03T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/blog/2018-09-21-first-app---halo-5-stats/</loc>
+    <loc>/post/first-app-halo-5-stats/</loc>
     <lastmod>2018-09-21T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/blog/2018-06-08-part-ii-chinese-classics-word/network-plots/</loc>
+    <loc>/post/part-ii-chinese-classics-word-network-plots/</loc>
     <lastmod>2018-06-08T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/blog/2018-06-01-plotting-word-bigrams-with-3-chinese-classics/</loc>
+    <loc>/post/plotting-word-bigrams-with-3-chinese-classics/</loc>
     <lastmod>2018-06-01T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/blog/2018-05-29-a-tidytext-analysis-of-3-chinese-classics/</loc>
+    <loc>/post/a-quasi-tidytext-analysis-of-3-chinese-classics/</loc>
     <lastmod>2018-05-29T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/blog/2018-05-17-ctextclassics-my-first-package/</loc>
+    <loc>/post/ctextclassics-my-first-package/</loc>
     <lastmod>2018-05-17T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/blog/2018-05-08-scraping-for-a-booklist-of-the-chinese-classics/</loc>
+    <loc>/post/scraping-for-a-booklist-of-the-chinese-classics/</loc>
     <lastmod>2018-05-08T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/blog/2018-05-06-on-relocating-to-github/netlify/</loc>
+    <loc>/post/on-relocating-to-github-netlify/</loc>
     <lastmod>2018-05-06T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/blog/2018-04-01-visualizing-european-ww1-defense-treaties-with-igraph/</loc>
+    <loc>/post/visualizing-european-ww1-defense-treaties-with-igraph/</loc>
     <lastmod>2018-04-01T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/blog/2018-01-29-plotting-fortune-500-hqs-in-r/</loc>
+    <loc>/post/plotting-fortune-500-hq-s-in-r/</loc>
     <lastmod>2018-01-29T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/blog/2017-07-01-top-mba-programs-by-us-news/</loc>
+    <loc>/post/top-mba-programs-by-us-news/</loc>
     <lastmod>2017-07-01T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/projects/projects/</loc>
   </url>
   
   <url>
@@ -169,6 +173,11 @@
   </url>
   
   <url>
+    <loc>/tags/dashboard/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/tags/fortune-500s/</loc>
     <lastmod>2018-01-29T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -217,6 +226,11 @@
   </url>
   
   <url>
+    <loc>/tags/halo-5/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/tags/httr/</loc>
     <lastmod>2018-05-17T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -229,20 +243,13 @@
   </url>
   
   <url>
-    <loc>/tags/lda/</loc>
+    <loc>/tags/linear-models/</loc>
     <lastmod>2018-12-03T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/tags/linear-model/</loc>
-    <lastmod>2018-12-03T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/logistic-regression/</loc>
-    <lastmod>2018-12-03T00:00:00+00:00</lastmod>
+    <loc>/tags/machine-learning/</loc>
     <priority>0</priority>
   </url>
   
@@ -259,13 +266,7 @@
   </url>
   
   <url>
-    <loc>/categories/modelling/</loc>
-    <lastmod>2018-12-03T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/nearest-shrunken-centroids/</loc>
+    <loc>/categories/modeling/</loc>
     <lastmod>2018-12-03T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
@@ -295,14 +296,13 @@
   </url>
   
   <url>
-    <loc>/tags/pls/</loc>
-    <lastmod>2018-12-03T00:00:00+00:00</lastmod>
+    <loc>/post/</loc>
+    <lastmod>2019-01-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/post/</loc>
-    <lastmod>2019-01-01T00:00:00+00:00</lastmod>
+    <loc>/tags/predictive-modeling/</loc>
     <priority>0</priority>
   </url>
   
@@ -313,7 +313,7 @@
   </url>
   
   <url>
-    <loc>/projects/</loc>
+    <loc>/project/</loc>
     <priority>0</priority>
   </url>
   

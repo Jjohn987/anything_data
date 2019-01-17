@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+         
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Visualizing European WW1 Defense Treaties with iGraph</title>
+        
+        <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --accent: #5586BD;
+        --border-width:  5px ;
+    }
+
+</style>
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+
+
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+ 
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/go.min.js"></script>  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/haskell.min.js"></script>  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/kotlin.min.js"></script>  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/scala.min.js"></script>  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/swift.min.js"></script> 
+
+    <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+<script>$(document).on('click', function() { $('.collapse').collapse('hide'); })</script>
+ <meta name="generator" content="Hugo 0.40.2" />
+        
+
+        
+        
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-118999723-1"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments)};
+          gtag('js', new Date());
+
+          gtag('config', 'UA-118999723-1');
+        </script>
+        
+    </head>
+
+    
+    
+    <script type="text/javascript" async
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+    
+
+    <body>
+         
+        <nav class="navbar navbar-default navbar-fixed-top">
+
+            <div class="container">
+
+                <div class="navbar-header">
+
+                    <a class="navbar-brand visible-xs" href="#">Visualizing European WW1 Defense Treaties with iGraph</a>
+
+                    <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                </div>
+
+                <div class="collapse navbar-collapse">
+
+                    
+                        <ul class="nav navbar-nav">
+                            
+                                <li><a href="/">Home</a></li>
+                            
+                                <li><a href="/post/">Posts</a></li>
+                            
+                                <li><a href="/project/">Projects</a></li>
+                            
+                        </ul>
+                    
+
+                    
+                        <ul class="nav navbar-nav navbar-right">
+                            
+                                <li class="navbar-icon"><a href="mailto:jeremyaaronjohnson@hotmail.com"><i class="fa fa-envelope-o"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://github.com/jjohn987/"><i class="fa fa-github"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://www.linkedin.com/in/jeremy-johnson-09016a112/"><i class="fa fa-linkedin"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://www.stackoverflow.com/superball10000/"><i class="fa fa-stack-overflow"></i></a></li>
+                            
+                        </ul>
+                    
+
+                </div>
+
+            </div>
+
+        </nav>
+
+
+<main>
+
+    <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/visualizing-european-ww1-defense-treaties-with-igraph/">Visualizing European WW1 Defense Treaties with iGraph</a></h4>
+    <h5>April 1, 2018</h5>
+    
+    <a href="/tags/network-analysis"><kbd class="item-tag">network analysis</kbd></a>
+    
+    <a href="/tags/network-visualization"><kbd class="item-tag">network visualization</kbd></a>
+    
+    <a href="/tags/igraph"><kbd class="item-tag">iGraph</kbd></a>
+    
+    <a href="/tags/correlates-of-war-project"><kbd class="item-tag">Correlates of War Project</kbd></a>
+    
+
+</div>
+
+
+    <br> <div class="text-justify"><p>I suddenly got bit by a bug to learn about network analysis. So I recalled the <a href="http://www.correlatesofwar.org/data-sets/formal-alliances">Correlates of War Project</a> having a dataset about alliances. I decided to revisit them and download the data for this new project, which you can do too.</p>
+<p>To start small, I decided to visualize a certain topic, e.g., European Defense Treaties relating to World War I. For that purpose I filtered the dataset <strong>for treaties that occured between 1878 and 1914.</strong> As usual there’s a lot of cleaning to be done before anything else can be done.</p>
+<pre class="r"><code>library(tidyverse)
+library(lubridate)
+library(scales)
+library(igraph)
+
+##import data
+Alliances &lt;- read_csv(&quot;alliance_v4.1_by_directed.csv&quot;)</code></pre>
+<div id="data-cleaning" class="section level2">
+<h2>Data cleaning</h2>
+<pre class="r"><code>## Create an interval object using Lubridate package to find time intervals for treaties.
+Beginning &lt;- ymd(1878, truncated = 2L)
+End &lt;- ymd(1914, truncated = 2L)
+Alliance_Timeline &lt;- interval(Beginning, End)
+
+##Change the column names to a &quot;From&quot; and &quot;To&quot; network analysis node format, get date columns set up.
+Tidy_Alliances &lt;- Alliances %&gt;% select(ID = version4id, CC1 = ccode1, CC2 = ccode2, From = state_name1, To = state_name2, contains(&quot;dyad&quot;), defense, neutrality, nonaggression,entente) %&gt;%
+  unite(Start_Date, c(&quot;dyad_st_month&quot;, &quot;dyad_st_day&quot;, &quot;dyad_st_year&quot;), sep = &quot;-&quot;) %&gt;%
+  unite(End_Date, c(&quot;dyad_end_month&quot;, &quot;dyad_end_day&quot;, &quot;dyad_end_year&quot;), sep = &quot;-&quot;) %&gt;% 
+  mutate(Start_Date = mdy(Start_Date), End_Date = mdy(End_Date)) 
+
+##Filter for the specific years stated above, and only select European countries. 
+Key_Treaties &lt;- Tidy_Alliances %&gt;% filter(Start_Date %within% Alliance_Timeline, End_Date %within% Alliance_Timeline) %&gt;%
+  distinct(From) %&gt;%
+  filter(!From %in% c(&quot;Brazil&quot;, &quot;Argentina&quot;, &quot;Uruguay&quot;))</code></pre>
+<p>Now that’s the basic data frame which I’m going to use to create my node and edge dataframes. This is essentially the workflow that I prefer in iGraph - processing with tidyverse tools and then passing the appropriate peices to iGraph to put it all together in its own objects. We will need an Edge list and a Node list, so let’s set ’em up.</p>
+<p>Also it’s good to have “attributes” which can be used to make the network graph more visually informative - like edge weights, node colors, etc. I am interested in the strength of connections between nodes (aka, the edges, and I define this as number of treaties made between 2 countries for the time period) and the sides they fought on in the conflict (a node attribute).</p>
+<pre class="r"><code>##Create Edge data frame
+Edges &lt;- Tidy_Alliances %&gt;%
+  filter(Start_Date %within% Alliance_Timeline, End_Date %within% Alliance_Timeline, From %in% Key_Treaties$From) %&gt;%
+  group_by(From, To) %&gt;%
+  select(From, To) %&gt;%
+  mutate(width = n()) %&gt;%
+  distinct()
+
+##Create Vertices data frame
+Vertices_Weights &lt;- Edges %&gt;%
+  select(From, To) %&gt;%
+  gather(Key, Country) %&gt;%
+  group_by(Country) %&gt;%
+  mutate(size = n()) %&gt;% 
+  ungroup() %&gt;%
+  select(Country, size) %&gt;%
+  distinct()
+
+##Create node attribute &quot;Sides&quot; to differentiate the factions
+
+Sides &lt;- c(&quot;Austria-Hungary&quot; = &quot;Central Powers&quot;, &quot;Bulgaria&quot; = &quot;Central Powers&quot;, &quot;China&quot; = &quot;Allies&quot;, &quot;France&quot; = &quot;Allies&quot;, &quot;Germany&quot; = &quot;Central Powers&quot;, &quot;Greece&quot; = &quot;Neutral&quot;, &quot;Italy&quot; = &quot;Central Powers&quot;, &quot;Japan&quot; = &quot;NA&quot;,
+           &quot;Korea&quot; = &quot;NA&quot;, &quot;Russia&quot; = &quot;Allies&quot;, &quot;Spain&quot; = &quot;Neutral&quot;, &quot;Turkey&quot; = &quot;Central Powers&quot;, &quot;United Kingdom&quot; = &quot;Allies&quot;, &quot;United States of America&quot; = &quot;Allies&quot;, &quot;Yugoslavia&quot; = &quot;Allies&quot;)
+
+Vertices &lt;- data.frame(Country = Edges$From, Side = Sides[Edges$From], stringsAsFactors = FALSE) %&gt;% distinct()</code></pre>
+<p>Now it’s time to pass the dataframes to igraph, and do the final processing there.</p>
+<pre class="r"><code>##Create our igraph object
+Treaty_igraph &lt;- graph_from_data_frame(d = Edges, vertices = Vertices, directed = F)
+
+V(Treaty_igraph)$size &lt;- Vertices_Weights$size
+V(Treaty_igraph)$sides &lt;- Sides[vertex_attr(Treaty_igraph)$name]
+V(Treaty_igraph)$color &lt;- ifelse(V(Treaty_igraph)$sides == &quot;Allies&quot;, &quot;cornflowerblue&quot;, ifelse(V(Treaty_igraph)$sides == &quot;Central Powers&quot;, &quot;olivedrab&quot;, &quot;gainsboro&quot;))
+V(Treaty_igraph)$size &lt;- rescale(V(Treaty_igraph)$size, to = c(10, 20))
+
+E(Treaty_igraph)$arrow.mode &lt;- 0
+
+Treaty_igraph &lt;- delete.vertices(Treaty_igraph, V(Treaty_igraph)$name[V(Treaty_igraph)$name == &quot;United States of America&quot;|V(Treaty_igraph)$name == &quot;Korea&quot;|V(Treaty_igraph)$name == &quot;Japan&quot;])</code></pre>
+<p>I rescaled the node sizes with “rescale” and I deleted the United States, Korea, and Japan nodes and edges with “delete.vertices” because they were isolated and didn’t seem relevant to any time before 1914. I’d have also deleted China for the same reason, where it not for its sole connection to Russia.</p>
+<pre class="r"><code>##plot our graph
+par(bg=&quot;snow2&quot;)
+plot(Treaty_igraph, rescale = TRUE, displaylabels = TRUE, remove.multiple = TRUE,
+     vertex.label.dist = 1.75, vertex.label.cex = .8, vertex.label = V(Treaty_igraph)$name, label.cex = 2, edge.curved = .2,
+     vertex.frame.color = &quot;black&quot;, vertex.col = V(Treaty_igraph)$color, vertex.label.color = &quot;black&quot;,
+     arrow.mode = E(Treaty_igraph)$arrow.mode, edge.color = &quot;darkgoldenrod2&quot;, edge.weight = E(Treaty_igraph)$width, main = &quot;European Treaties 1878-1914&quot;, sub = &quot;Defense Pacts and Ententes&quot;)
+legend(x=-1.5, y=-1.1, c(&quot;Allies&quot;,&quot;Central Powers&quot;, &quot;Neutral&quot;), 
+       col=&quot;#777777&quot;, c(&quot;cornflowerblue&quot;, &quot;olivedrab&quot;, &quot;grey&quot;), pt.cex=1, cex=1, bty=&quot;n&quot;, ncol=1)</code></pre>
+<p><img src="/post/2018-05-06-visualizing-european-ww1-defense-treaties-with-igraph_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+</div>
+<div id="closing" class="section level2">
+<h2>Closing</h2>
+<p>And there is my World War I network plot. We can easily see that Austria-Hungary, Germany, and Russia were the major players in power and diplomacy at the time.</p>
+<p>I mainly wanted to get aquainted with igraph plotting (technicality) as opposed to analytical concepts (which I didn’t use here). I feel like I accomplished that goal. Of course I’d love to get more analytical with this dataset in the future. For now this will suffice, I’m sure I’ll return to this dataset though. I might even use other network analysis tools in R like <code>tidygraph</code></p>
+<p>That being said, I feel that network analysis is quite exciting and the possibilities are quite rich. I close by saying that I hope everybody enjoyed this entry and that they may find it useful or inspiring to check out igraph and other network tools in R.</p>
+<p><strong>Citations</strong></p>
+<p>Gibler, Douglas M. 2009. International military alliances, 1648-2008 (Version 4.1). CQ Press.<br />
+Zweig, K. A. (2013). Network analysis literacy: A practical approach to network analysis project design. Vienna: Springer Verlag GmbH.</p>
+<p><a href="http://kateto.net/networks-r-igraph">This igraph tutorial</a></p>
+<p><em>This post was Migrated over from my Word Press</em></p>
+</div>
+</div>
+
+    
+    
+
+    
+
+    
+
+        <h4 class="page-header">Comments</h4>
+
+        <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "anything-is-data-is-anything" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+    
+
+</main>
+
+        <footer>
+
+            <p class="copyright text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a></p>
+
+        </footer>
+       
+    </body>
+
+</html>
+

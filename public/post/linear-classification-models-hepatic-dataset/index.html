@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+         
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Linear Classification Models - Hepatic Dataset</title>
+        
+        <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --accent: #5586BD;
+        --border-width:  5px ;
+    }
+
+</style>
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+
+
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+ 
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/go.min.js"></script>  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/haskell.min.js"></script>  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/kotlin.min.js"></script>  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/scala.min.js"></script>  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/swift.min.js"></script> 
+
+    <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+<script>$(document).on('click', function() { $('.collapse').collapse('hide'); })</script>
+ <meta name="generator" content="Hugo 0.40.2" />
+        
+
+        
+        
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-118999723-1"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments)};
+          gtag('js', new Date());
+
+          gtag('config', 'UA-118999723-1');
+        </script>
+        
+    </head>
+
+    
+    
+    <script type="text/javascript" async
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+    
+
+    <body>
+         
+        <nav class="navbar navbar-default navbar-fixed-top">
+
+            <div class="container">
+
+                <div class="navbar-header">
+
+                    <a class="navbar-brand visible-xs" href="#">Linear Classification Models - Hepatic Dataset</a>
+
+                    <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                </div>
+
+                <div class="collapse navbar-collapse">
+
+                    
+                        <ul class="nav navbar-nav">
+                            
+                                <li><a href="/">Home</a></li>
+                            
+                                <li><a href="/post/">Posts</a></li>
+                            
+                                <li><a href="/project/">Projects</a></li>
+                            
+                        </ul>
+                    
+
+                    
+                        <ul class="nav navbar-nav navbar-right">
+                            
+                                <li class="navbar-icon"><a href="mailto:jeremyaaronjohnson@hotmail.com"><i class="fa fa-envelope-o"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://github.com/jjohn987/"><i class="fa fa-github"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://www.linkedin.com/in/jeremy-johnson-09016a112/"><i class="fa fa-linkedin"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://www.stackoverflow.com/superball10000/"><i class="fa fa-stack-overflow"></i></a></li>
+                            
+                        </ul>
+                    
+
+                </div>
+
+            </div>
+
+        </nav>
+
+
+<main>
+
+    <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/linear-classification-models-hepatic-dataset/">Linear Classification Models - Hepatic Dataset</a></h4>
+    <h5>December 3, 2018</h5>
+    
+    <a href="/tags/classification"><kbd class="item-tag">classification</kbd></a>
+    
+    <a href="/tags/linear-models"><kbd class="item-tag">linear models</kbd></a>
+    
+
+</div>
+
+
+    <br> <div class="text-justify"><p>This post is following exercise 1 in Chapter 12 of <a href="http://appliedpredictivemodeling.com">Applied Predicative Modeling</a>. Here I use the machine learning package CARET in R to make classification models; in particular, the linear classification models discussed in Chapter 12.</p>
+<p>The dataset in question is about hepatic injury (liver damage). It includes a dataframe of biological related predictors of liver damage <code>bio</code>, a dataframe of chemical related predictors <code>chem</code>, and the response variable we are interested in, <code>injury</code>. If a model can be fitted adequately, that model could potentially be used to screen for harmful compounds in the future.</p>
+<pre class="r"><code>library(caret)
+
+library(pROC)
+
+library(AppliedPredictiveModeling)
+
+data(hepatic)</code></pre>
+<p>Before fitting a model it’s always necessary to preprocess data. For linear classification algorithms, this means</p>
+<ul>
+<li><ol style="list-style-type: decimal">
+<li>Remove near zero variance predictor variables/ near-zero variance) predictors.</li>
+</ol></li>
+<li><ol start="2" style="list-style-type: decimal">
+<li>Remove collinear variables</li>
+</ol></li>
+</ul>
+<pre class="r"><code>##remove problematic variables for &#39;bio&#39; dataframe
+
+bio_zerovar &lt;- nearZeroVar(bio)
+
+bio_collinear &lt;- findLinearCombos(cov(bio))$remove
+
+bio &lt;- bio[, -c(bio_zerovar, bio_collinear)]
+
+##remove problematic variables for &#39;chem&#39; dataframe
+
+chem_zerovar &lt;- nearZeroVar(chem)
+
+chem_collinear &lt;- findLinearCombos(chem)$remove
+
+chem &lt;- chem[, -c(chem_zerovar, chem_collinear)]</code></pre>
+<p>The <code>injury</code> response variable I am fitting to has three classes - “None”, “Mild”, and “Severe”. If the response variable has too many classes, it can (somewhat subjectively) be trimmed down. For expediency’s sake, I decide to collapse <code>injury</code> into 2 classes - “Yes” or “No”, where I count mild injuries as “No”. (<strong>Warning</strong> This might influence prediction negatively, so in the future I’ll be sure to try multi-class probability predictions.)</p>
+<pre class="r"><code>##Collapse response into &quot;Yes&quot; or &quot;No&quot; values
+
+lut &lt;- c(&quot;None&quot; = &quot;No&quot;, &quot;Mild&quot; = &quot;No&quot;, &quot;Severe&quot; = &quot;Yes&quot;)
+
+injury2 &lt;- factor(unname(lut[injury]))</code></pre>
+<p>Now, I should consider a few other questions.</p>
+<ul>
+<li><ol style="list-style-type: decimal">
+<li>How to partition data with unbalanced classes (“No” far outnumbers “Yes” values in <code>injury</code>.)</li>
+</ol></li>
+<li><ol start="2" style="list-style-type: decimal">
+<li>How to validate model results</li>
+</ol></li>
+<li><ol start="3" style="list-style-type: decimal">
+<li>Which metric to maximize for the best model (Accuracy, Sensitivity, Specificity)</li>
+</ol></li>
+</ul>
+<p>Thankfully, makes data partitioning easy with <code>createDataPartition</code>, which automatically uses stratified sampling to help control for severe class imbalances. As for validation, I choose for each model to be cross validated using 10 fold repeat cross validation, specified in the <code>trainControl</code> command. (Although my first model will not need cross validation, the others will, so I’ll simply use the same control for each model.)</p>
+<pre class="r"><code>set.seed(1234)
+
+##Partition the data with stratified sampling
+
+training &lt;- createDataPartition(injury2, p = .8, list = FALSE)
+
+##Partition train and test sets for bio data
+
+bio_train &lt;- bio[training, ]
+
+bio_test &lt;- bio[-training, ]
+
+##Partition for train and test sets for chemical data
+
+chem_train &lt;- chem[training, ]
+
+chem_test &lt;- chem[-training, ]
+
+##Partition for the train and test sets for the response variable
+
+injury_train &lt;- injury2[training]
+
+injury_test &lt;- injury2[-training]
+
+## Set training control for model building
+
+ctrl &lt;- trainControl(method = &quot;repeatedcv&quot;, 10, repeats = 10, summaryFunction = twoClassSummary, classProbs = TRUE, savePredictions = TRUE)</code></pre>
+<p>It’s important to decide what goal to train my models for - Accuracy, Sensitivity, or Specificity? For this, you also need to know what your “positive” variable is from Caret’s perspective. Caret chooses the first factor class as its “positive” value, which corresponds to “No” in my <code>injury</code> vector. Therefore, Sensitivity corresponds to amount of “No” values correctly predicted, whereas Specificity equates to the “Yes” values correctly predicted.</p>
+<p>Deciding between those choices, it seems most important to build a model that can predict the “Yes” values - cases result in hepatic damage. This makes sense, a mistake in a model predicting no liver damage would tragic, so we should do everything we can to capture the “Yes” values as much as possible, even if it means sacrificing accuracy. A look at the data:</p>
+<p>The first model is a classifier using linear discriminant analysis. I apply a model for the biological indicators as well as the chemical indicators, to see which have better predicative power.</p>
+<pre class="r"><code>bio_lda &lt;- train(bio_train, injury_train, method = &quot;lda&quot;, trControl = ctrl, metric = &quot;Spec&quot;)
+
+chem_lda &lt;- train(chem_train, injury_train, method = &quot;lda&quot;, trControl = ctrl, metric = &quot;Spec&quot;)</code></pre>
+<pre class="r"><code>##Generate LDA model predictions for bio indicator test set
+
+bio_lda_pred &lt;- predict(bio_lda, bio_test)
+
+##Generate confusion matrix to show results
+
+confusionMatrix(bio_lda_pred, injury_test, positive = &quot;No&quot;)</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction No Yes
+##        No  44   3
+##        Yes  6   3
+##                                           
+##                Accuracy : 0.8393          
+##                  95% CI : (0.7167, 0.9238)
+##     No Information Rate : 0.8929          
+##     P-Value [Acc &gt; NIR] : 0.9278          
+##                                           
+##                   Kappa : 0.3115          
+##  Mcnemar&#39;s Test P-Value : 0.5050          
+##                                           
+##             Sensitivity : 0.8800          
+##             Specificity : 0.5000          
+##          Pos Pred Value : 0.9362          
+##          Neg Pred Value : 0.3333          
+##              Prevalence : 0.8929          
+##          Detection Rate : 0.7857          
+##    Detection Prevalence : 0.8393          
+##       Balanced Accuracy : 0.6900          
+##                                           
+##        &#39;Positive&#39; Class : No              
+## </code></pre>
+<p>Note that the “non-information rate” is .89, meaning that if we randomly guessed “No” each time, the model would automatically be right 89% of the time. Accuracy here is .83, which appears to underperform. But remember, accuracy isn’t important - predicting true “Yes” values correctly is.</p>
+<p>For the biological predictors, we get .5 for Specificity, correctly identifying 3 Yes values but also generating 3 false negative predictions for 3 other Yes values – I hope other models can do better.</p>
+<pre class="r"><code>##Chem predictor LDA model
+
+chem_lda_pred &lt;- predict(chem_lda, chem_test)
+
+##confusion matrix
+
+confusionMatrix(chem_lda_pred, injury_test, positive = &quot;No&quot;)</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction No Yes
+##        No  41   5
+##        Yes  9   1
+##                                           
+##                Accuracy : 0.75            
+##                  95% CI : (0.6163, 0.8561)
+##     No Information Rate : 0.8929          
+##     P-Value [Acc &gt; NIR] : 0.9994          
+##                                           
+##                   Kappa : -0.0103         
+##  Mcnemar&#39;s Test P-Value : 0.4227          
+##                                           
+##             Sensitivity : 0.8200          
+##             Specificity : 0.1667          
+##          Pos Pred Value : 0.8913          
+##          Neg Pred Value : 0.1000          
+##              Prevalence : 0.8929          
+##          Detection Rate : 0.7321          
+##    Detection Prevalence : 0.8214          
+##       Balanced Accuracy : 0.4933          
+##                                           
+##        &#39;Positive&#39; Class : No              
+## </code></pre>
+<p>LDA for chemical predictors fares worse at predicting the true Yes values. Here Specificity only reaches .16.</p>
+<p>Now lets try some other models for comparison. The first will be a penalized logistic regression model. For alpha values of 1, and lambda 0, it will behave like a lasso model, whereas with alpha 0 and a non-zero lambda, a ridge regression model. Anywhere in between is an elastic net. Here, I don’t specify a tuning grid, I just let Caret come up with a list of parameters for me, with `tuneLength = 20’.</p>
+<pre class="r"><code>bio_plr &lt;- train(bio_train, injury_train, method = &quot;glmnet&quot;, family = &quot;binomial&quot;, metric = &quot;Spec&quot;, tuneLength = 20,
+
+                 trControl = ctrl)
+
+chem_plr &lt;- train(chem_train, injury_train, method = &quot;glmnet&quot;, family = &quot;binomial&quot;, metric = &quot;Spec&quot;, tuneLength = 20, trControl = ctrl)</code></pre>
+<pre class="r"><code>bio_plr_pred &lt;- predict(bio_plr, bio_test)
+
+confusionMatrix(bio_plr_pred, injury_test, positive = &quot;No&quot;)</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction No Yes
+##        No  43   4
+##        Yes  7   2
+##                                           
+##                Accuracy : 0.8036          
+##                  95% CI : (0.6757, 0.8977)
+##     No Information Rate : 0.8929          
+##     P-Value [Acc &gt; NIR] : 0.9858          
+##                                           
+##                   Kappa : 0.1585          
+##  Mcnemar&#39;s Test P-Value : 0.5465          
+##                                           
+##             Sensitivity : 0.8600          
+##             Specificity : 0.3333          
+##          Pos Pred Value : 0.9149          
+##          Neg Pred Value : 0.2222          
+##              Prevalence : 0.8929          
+##          Detection Rate : 0.7679          
+##    Detection Prevalence : 0.8393          
+##       Balanced Accuracy : 0.5967          
+##                                           
+##        &#39;Positive&#39; Class : No              
+## </code></pre>
+<p>This penalized logistic regression doesn’t perform as well as simple linear discriminant analysis for the bio predictors.</p>
+<p>And now the chem predictors.</p>
+<pre class="r"><code>chem_plr_pred &lt;- predict(chem_plr, chem_test)
+
+confusionMatrix(chem_plr_pred, injury_test, positive = &quot;No&quot;)</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction No Yes
+##        No  44   6
+##        Yes  6   0
+##                                           
+##                Accuracy : 0.7857          
+##                  95% CI : (0.6556, 0.8841)
+##     No Information Rate : 0.8929          
+##     P-Value [Acc &gt; NIR] : 0.9945          
+##                                           
+##                   Kappa : -0.12           
+##  Mcnemar&#39;s Test P-Value : 1.0000          
+##                                           
+##             Sensitivity : 0.8800          
+##             Specificity : 0.0000          
+##          Pos Pred Value : 0.8800          
+##          Neg Pred Value : 0.0000          
+##              Prevalence : 0.8929          
+##          Detection Rate : 0.7857          
+##    Detection Prevalence : 0.8929          
+##       Balanced Accuracy : 0.4400          
+##                                           
+##        &#39;Positive&#39; Class : No              
+## </code></pre>
+<p>Penalized logistic regression fares even worse for chemical predictors. Clearly this is not a strong model to capture the structure of the data for the pattern we’re looking for.</p>
+<p>Now, to fit a partial least squares regression model.</p>
+<pre class="r"><code>bio_pls &lt;- train(bio_train, injury_train, method = &quot;pls&quot;, trControl = ctrl, metric = &quot;Spec&quot;, tuneLength = 20)
+
+chem_pls &lt;- train(chem_train, injury_train, method = &quot;pls&quot;, trControl = ctrl, metric = &quot;Spec&quot;, tuneLength = 20)</code></pre>
+<pre class="r"><code>bio_pls_pred &lt;- predict(bio_pls, bio_test)
+
+confusionMatrix(bio_pls_pred, injury_test, positive = &quot;No&quot;)</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction No Yes
+##        No  45   5
+##        Yes  5   1
+##                                          
+##                Accuracy : 0.8214         
+##                  95% CI : (0.696, 0.9109)
+##     No Information Rate : 0.8929         
+##     P-Value [Acc &gt; NIR] : 0.9664         
+##                                          
+##                   Kappa : 0.0667         
+##  Mcnemar&#39;s Test P-Value : 1.0000         
+##                                          
+##             Sensitivity : 0.9000         
+##             Specificity : 0.1667         
+##          Pos Pred Value : 0.9000         
+##          Neg Pred Value : 0.1667         
+##              Prevalence : 0.8929         
+##          Detection Rate : 0.8036         
+##    Detection Prevalence : 0.8929         
+##       Balanced Accuracy : 0.5333         
+##                                          
+##        &#39;Positive&#39; Class : No             
+## </code></pre>
+<p>Only .16 for Specificity achieved here.</p>
+<p>And for the chemical predictors, we get 0 as seen below. Chemical indicators are continuously faring worse than biological predictors at predicting hepatic injury, <strong>and there is still no great model</strong>, so far.</p>
+<pre class="r"><code>chem_pls_pred &lt;- predict(chem_pls, chem_test, probability = TRUE)
+
+confusionMatrix(chem_pls_pred, injury_test, positive = &quot;No&quot;)</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction No Yes
+##        No  47   6
+##        Yes  3   0
+##                                           
+##                Accuracy : 0.8393          
+##                  95% CI : (0.7167, 0.9238)
+##     No Information Rate : 0.8929          
+##     P-Value [Acc &gt; NIR] : 0.9278          
+##                                           
+##                   Kappa : -0.0769         
+##  Mcnemar&#39;s Test P-Value : 0.5050          
+##                                           
+##             Sensitivity : 0.9400          
+##             Specificity : 0.0000          
+##          Pos Pred Value : 0.8868          
+##          Neg Pred Value : 0.0000          
+##              Prevalence : 0.8929          
+##          Detection Rate : 0.8393          
+##    Detection Prevalence : 0.9464          
+##       Balanced Accuracy : 0.4700          
+##                                           
+##        &#39;Positive&#39; Class : No              
+## </code></pre>
+<pre class="r"><code>bio_centroid &lt;- train(bio_train, injury_train, method = &quot;pam&quot;,
+
+                      trControl = ctrl, preProcess = c(&quot;center&quot;, &quot;scale&quot;), metric = &quot;Spec&quot;, tuneLength = 20)</code></pre>
+<pre><code>## 12345678910111213141516171819202122232425262728293011111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111</code></pre>
+<pre class="r"><code>chem_centroid &lt;- train(chem_train, injury_train, method = &quot;pam&quot;,
+
+                       trControl = ctrl, preProcess = c(&quot;center&quot;, &quot;scale&quot;), metric = &quot;Spec&quot;, tuneLength = 20)</code></pre>
+<pre><code>## 12345678910111213141516171819202122232425262728293011111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111</code></pre>
+<pre class="r"><code>bio_centroid_pred &lt;- predict(bio_centroid, bio_test)
+
+chem_centroid_pred &lt;- predict(chem_centroid, chem_test)
+
+confusionMatrix(bio_centroid_pred, injury_test, positive = &quot;No&quot;)</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction No Yes
+##        No  50   6
+##        Yes  0   0
+##                                           
+##                Accuracy : 0.8929          
+##                  95% CI : (0.7812, 0.9597)
+##     No Information Rate : 0.8929          
+##     P-Value [Acc &gt; NIR] : 0.60647         
+##                                           
+##                   Kappa : 0               
+##  Mcnemar&#39;s Test P-Value : 0.04123         
+##                                           
+##             Sensitivity : 1.0000          
+##             Specificity : 0.0000          
+##          Pos Pred Value : 0.8929          
+##          Neg Pred Value :    NaN          
+##              Prevalence : 0.8929          
+##          Detection Rate : 0.8929          
+##    Detection Prevalence : 1.0000          
+##       Balanced Accuracy : 0.5000          
+##                                           
+##        &#39;Positive&#39; Class : No              
+## </code></pre>
+<p>0 for specificity.</p>
+<pre class="r"><code>confusionMatrix(chem_centroid_pred, injury_test, positive = &quot;No&quot;)</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction No Yes
+##        No  45   5
+##        Yes  5   1
+##                                          
+##                Accuracy : 0.8214         
+##                  95% CI : (0.696, 0.9109)
+##     No Information Rate : 0.8929         
+##     P-Value [Acc &gt; NIR] : 0.9664         
+##                                          
+##                   Kappa : 0.0667         
+##  Mcnemar&#39;s Test P-Value : 1.0000         
+##                                          
+##             Sensitivity : 0.9000         
+##             Specificity : 0.1667         
+##          Pos Pred Value : 0.9000         
+##          Neg Pred Value : 0.1667         
+##              Prevalence : 0.8929         
+##          Detection Rate : 0.8036         
+##    Detection Prevalence : 0.8929         
+##       Balanced Accuracy : 0.5333         
+##                                          
+##        &#39;Positive&#39; Class : No             
+## </code></pre>
+<p>And .16. for Specificity here, yawn.</p>
+<p>So the <strong>best model for predicting hepatic injury</strong> turns out to be the <strong>first fit</strong>, the LDA model on the biological indicators.</p>
+<pre class="r"><code>predictions_bio_lda &lt;- predict(bio_lda, bio_test, type = &quot;prob&quot;)
+
+pROC::plot.roc(injury_test, predictions_bio_lda$Yes)</code></pre>
+<p><img src="/post/2018-12-03-linear-classification-models-hepatic-dataset_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p>However, the area under the curve is not as high as I’d wish. Perhaps in the future I’ll revisit this data and see what can be done differently to predict injury.</p>
+</div>
+
+    
+    
+
+    
+
+    
+
+        <h4 class="page-header">Comments</h4>
+
+        <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "anything-is-data-is-anything" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+    
+
+</main>
+
+        <footer>
+
+            <p class="copyright text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a></p>
+
+        </footer>
+       
+    </body>
+
+</html>
+
