@@ -58,8 +58,7 @@ For anybody that hasn't used the fabulous highcharter package before, `add_serie
       hc_add_series(milwaukees_favorite, type = 'column', hcaes(x = id, y = avg), tooltip = list(pointFormat = "{point.beer_category}: {point.avg}"), showInLegend = F) %>%
       hc_add_series(milwaukees_favorite, type = 'bubble', hcaes(x = id, y = avg, size = total, group = beer_category), tooltip = list(pointFormat = "{point.beer_category}: {point.total}"), marker = list(fillOpacity=1), minSize = 20, maxSize = 80) %>%
       hc_plotOptions(column = list(pointWidth = .5, pointPlacement = "on")) %>%
-      hc_title(text = "<span style=\'font-family:docktrin;font-size:40px;\'>Milwaukee's Most Common <span style=\'font-size:50px;color:white;'> Brewing Styles</span>",
-               useHTML = TRUE) %>%
+      hc_title(text = "Milwaukee's Most Common Brewing Styles") %>%
       hc_yAxis(title = list(text = "Avg Rating", style = list(color = "white", fontSize = 22)), labels = list(style = list(color = "white", fontSize = 15)), tickColor = "white", gridLineColor = "transparent") %>%
       hc_xAxis(labels = list(enabled = F), gridLineColor = "transparent") %>%
       hc_colors(color = hc_colors) %>%
