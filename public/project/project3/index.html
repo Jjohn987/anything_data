@@ -149,7 +149,7 @@
       
 
     <h4><a href="/project/project3/">Project3</a></h4>
-    <h5>Creating a dashboard with Shiny dashboard and Milwaukee Beer data that I obtained. Track sentiment, and discover &amp; compare beers that are brewed in Milwaukee!</h5>
+    <h5>Created a dashboard using Shinydashboard and Milwaukee beer data scraped from beeradvocate.com. This dashboard can compare beers brewed in Milwaukee and track customer sentiment.</h5>
     
     <a href="/tags/shiny"><kbd class="item-tag">shiny</kbd></a>
     
@@ -161,19 +161,7 @@
 </div>
 
 
-    <br> <div class="text-justify"><div id="TOC">
-<ul>
-<li><a href="#milwaukee-beer-dashboard-screenshots">Milwaukee Beer Dashboard – Screenshots</a><ul>
-<li><a href="#page-1-most-common-brewing-styles">Page 1 – Most Common Brewing Styles</a></li>
-<li><a href="#page-2-milwaukees-breweries">Page 2 – Milwaukee’s Breweries</a></li>
-<li><a href="#page-3-milwaukee-beer-comparison">Page 3 – Milwaukee Beer Comparison</a></li>
-<li><a href="#page-4-milwaukee-beer-data-table">Page 4 – Milwaukee Beer Data Table</a></li>
-<li><a href="#other-comments">Other Comments</a></li>
-</ul></li>
-</ul>
-</div>
-
-<p><font size = 4> App: <a href="https://jjohn9000.shinyapps.io/Milwaukee_Beer_App/" class="uri">https://jjohn9000.shinyapps.io/Milwaukee_Beer_App/</a> </font></p>
+    <br> <div class="text-justify"><p><font size = 4> App: <a href="https://jjohn9000.shinyapps.io/Milwaukee_Beer_App/" class="uri">https://jjohn9000.shinyapps.io/Milwaukee_Beer_App/</a> </font></p>
 <p>Introduction: Milwaukee Beer is a dashboard I built with R’s <code>shinydashboard</code> package – It provides quick insights into Milwaukee breweries, and beer brewed in Milwaukee. You can toggle dropdown tabs to:</p>
 <ul>
 <li>get ratings for beers and breweries</li>
@@ -183,8 +171,6 @@
 <li>and even dive in to the data yourself</li>
 </ul>
 <p>Feel free to search for beer by type and flavor too! Of course, Shiny is also free, unlike Tableau or any other software that come with a subscription or membership of some type.</p>
-<div id="milwaukee-beer-dashboard-screenshots" class="section level1">
-<h1>Milwaukee Beer Dashboard – Screenshots</h1>
 <div id="page-1-most-common-brewing-styles" class="section level2">
 <h2>Page 1 – Most Common Brewing Styles</h2>
 <ul>
@@ -199,8 +185,8 @@
 <h2>Page 2 – Milwaukee’s Breweries</h2>
 <ul>
 <li>Examine over 20 breweries in Milwaukee.</li>
-<li>Plannning a visit? Toggle dropdown to get the top 10 rated beers by a brewery.</li>
-<li>Observe “sentiment” expressed in reviews to see if its a brewery you want to avoid. (Disclaimer: There is limited comment data, but the concept is important)</li>
+<li>Planning a visit? Toggle dropdown to get the top 10 rated beers by a brewery.</li>
+<li>Observe “sentiment” expressed in reviews to see if it’s a brewery you want to avoid. (Disclaimer: There is limited comment data, but the concept is what’s important!)</li>
 </ul>
 </div>
 <div id="page-3-milwaukee-beer-comparison" class="section level2">
@@ -219,7 +205,7 @@
 <h2>Page 4 – Milwaukee Beer Data Table</h2>
 <ul>
 <li>Data table that powers the app.</li>
-<li>Obtained by webscraping Milwaukee section of beeradvocate.org</li>
+<li>Obtained by web scraping Milwaukee section of beeradvocate.org</li>
 <li>Search for any relevant terms to beer and find beers to look for on the previous pages.</li>
 </ul>
 <div class="figure">
@@ -231,7 +217,6 @@
 <h2>Other Comments</h2>
 <p>Before the app could even be born, I had to go out and find this data “in the wild”, weigh its relevance and potential, and identify a purpose for using it. From there on, I crafted a methodology not only to obtain the data (spread across a series of nested pages), but also determined the specific relationship (and therefore) how many tables to store the data in.</p>
 <p>I joined tables when it made sense to do so. Additionally, I spent time cleaning on cleaning and feature engineering. Considering that this dashboard was built from the ground up, its scope wasn’t exactly trivial. Finally, branding and “feel” were important concepts. In order to make the app visually pleasing, I customized a significant amount of css code and used custom fonts.</p>
-</div>
 </div>
 </div>
 

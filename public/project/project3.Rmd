@@ -1,12 +1,12 @@
 ---
 title: "Project3"
-description: "Creating a dashboard with Shiny dashboard and Milwaukee Beer data that I obtained. Track sentiment, and discover & compare beers that are brewed in Milwaukee!"
+description: "Created a dashboard using Shinydashboard and Milwaukee beer data scraped from beeradvocate.com. This dashboard can compare beers brewed in Milwaukee and track customer sentiment."
 tags: ["shiny", "shinydashboard", "highcharter"]
 weight: 1
 draft: false
 output: 
   blogdown::html_page:
-    toc: true
+    toc: false
     toc_depth: 4
 ---
 
@@ -22,7 +22,6 @@ Introduction: Milwaukee Beer is a dashboard I built with R's `shinydashboard` pa
 
 Feel free to search for beer by type and flavor too! Of course, Shiny is also free, unlike Tableau or any other software that come with a subscription or membership of some type. 
 
-# Milwaukee Beer Dashboard -- Screenshots #
 
 ## Page 1 --  Most Common Brewing Styles ##
 
@@ -33,8 +32,8 @@ Feel free to search for beer by type and flavor too! Of course, Shiny is also fr
 ##  Page 2 -- Milwaukee's Breweries ##
 
 * Examine over 20 breweries in Milwaukee. 
-* Plannning a visit? Toggle dropdown to get the top 10 rated beers by a brewery.
-* Observe "sentiment" expressed in reviews to see if its a brewery you want to avoid. (Disclaimer: There is limited comment data, but the concept is important)
+* Planning a visit? Toggle dropdown to get the top 10 rated beers by a brewery.
+* Observe "sentiment" expressed in reviews to see if it's a brewery you want to avoid. (Disclaimer: There is limited comment data, but the concept is what's important!)
 
 ## Page 3 -- Milwaukee Beer Comparison 
 
@@ -47,7 +46,7 @@ Feel free to search for beer by type and flavor too! Of course, Shiny is also fr
 ## Page 4 -- Milwaukee Beer Data Table ##
 
 * Data table that powers the app. 
-* Obtained by webscraping Milwaukee section of beeradvocate.org
+* Obtained by web scraping Milwaukee section of beeradvocate.org
 * Search for any relevant terms to beer and find beers to look for on the previous pages. 
 
 ![Milwaukee Beer App - Data table page](/project/2019-03-02-milwaukee-beer-dashboard_files/Screenshot 3.png)

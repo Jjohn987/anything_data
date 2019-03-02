@@ -27,8 +27,9 @@ Purpose The purpose of this project was to learn Shiny, R Studio’s powerful fr
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/project/project3/</guid>
-      <description>Milwaukee Beer Dashboard – Screenshots Page 1 – Most Common Brewing Styles Page 2 – Milwaukee’s Breweries Page 3 – Milwaukee Beer Comparison Page 4 – Milwaukee Beer Data Table Other Comments    App: https://jjohn9000.shinyapps.io/Milwaukee_Beer_App/ 
-Introduction: Milwaukee Beer is a dashboard I built with R’s shinydashboard package – It provides quick insights into Milwaukee breweries, and beer brewed in Milwaukee. You can toggle dropdown tabs to:</description>
+      <description>App: https://jjohn9000.shinyapps.io/Milwaukee_Beer_App/ 
+Introduction: Milwaukee Beer is a dashboard I built with R’s shinydashboard package – It provides quick insights into Milwaukee breweries, and beer brewed in Milwaukee. You can toggle dropdown tabs to:
+ get ratings for beers and breweries display results in reactive, dynamic, nice graphs track sentiment sourced from comments / product reviews posted on beeradvocate.org search for beers by flavor for convenient comparison and even dive in to the data yourself  Feel free to search for beer by type and flavor too!</description>
     </item>
     
     <item>
