@@ -2,7 +2,7 @@
 title: "Project 1"
 description: "Predicting Churn with Telecom Data"
 tags: ["machine learning", "predictive modeling"]
-weight: 1
+weight: 3
 draft: false
 output: 
   blogdown::html_page:

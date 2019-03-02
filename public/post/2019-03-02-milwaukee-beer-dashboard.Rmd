@@ -1,0 +1,43 @@
+---
+title: Milwaukee Beer Dashboard
+author: ~
+date: '2019-03-02'
+slug: milwaukee-beer-dashboard
+categories: [Shiny, dashboard]
+tags: [shiny, shinydashboard, highchartr]
+---
+App: https://jjohn9000.shinyapps.io/Milwaukee_Beer_App/
+
+Milwaukee Beer is a dashboard I built with R's `shinydashboard` package -- It  provides quick insights to into Milwaukee breweries and beer brewed in Milwaukee. You can toggle dropdown tabs to:
+
+* get ratings for beers and breweries
+* display results in reactive, dynamic nice graphs
+* track sentiment sourced from reviews posted on beeradvocate.org
+* search for beers by flavor for convenient comparison
+* and even dive in to the data yourself
+
+Feel free to search for beer by type and flavor too! 
+
+# Milwaukee Beer Dashboard -- Screenshots #
+
+## Page 1 --  Most Common Brewing Styles ##
+
+* View top 10 ranked beers for Milwaukee's beer breweries
+* Compare sentiments mined from customer reviews posted on beeradvocate.org.
+
+![Milwaukee Beer Dashboard - Front Page](/post/2019-03-02-milwaukee-beer-dashboard_files/milwaukee_beer_screen1.png)
+
+##  Page 2 -- Milwaukee's Breweries ##
+
+* Interactive "clickable" data to help you compare beers.
+* Find & compare beers by searching across brewing style or flavor
+* Compare sentiments mined from customer reviews posted on beeradvocate.org.
+
+
+![Milwaukee Beer App - Breweries Page](/post/2019-03-02-milwaukee-beer-dashboard_files/milwaukee_beer_screen2.png)
+
+## Page 3 -- Milwaukee Beer Search ##
+
+* Data table that powers the app. 
+* Obtained through webscraping Milwaukee brewery section of beeradvocate.org
+* Search for any relevant terms to beer and find beers to look out for on the previous pages. 

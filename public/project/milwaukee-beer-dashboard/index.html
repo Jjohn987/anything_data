@@ -4,7 +4,7 @@
          
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Tags</title>
+        <title>Milwaukee Beer Dashboard</title>
         
         <style>
 
@@ -21,7 +21,7 @@
 </style>
 
 
-<link rel="stylesheet" href="/css/main2.css">
+<link rel="stylesheet" href="/css/main.css">
 
 
 
@@ -31,6 +31,9 @@
 
 
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
@@ -57,9 +60,6 @@
 
 <script>$(document).on('click', function() { $('.collapse').collapse('hide'); })</script>
  <meta name="generator" content="Hugo 0.40.2" />
-        
-        <link href="/tags/index.xml" rel="alternate" type="application/rss+xml" title="Anything Data" />
-        <link href="/tags/index.xml" rel="feed" type="application/rss+xml" title="Anything Data" />
         
 
         
@@ -90,7 +90,7 @@
 
                 <div class="navbar-header">
 
-                    <a class="navbar-brand visible-xs" href="#">Tags</a>
+                    <a class="navbar-brand visible-xs" href="#">Milwaukee Beer Dashboard</a>
 
                     <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
                         <span class="icon-bar"></span>
@@ -139,9 +139,7 @@
 
 <main>
 
-    <h2>Tags</h2>
-
-     <div class="item">
+    <div class="item">
 
     
     
@@ -150,54 +148,75 @@
     
     
 
-    <h4><a href="/tags/predictive-modeling/">Predictive Modeling</a></h4>
-    <h5>January 1, 0001</h5>
-    
-
-</div>
-  <div class="item">
-
-    
-    
-    
-
-    
-    
-
-    <h4><a href="/tags/rvest/">Rvest</a></h4>
-    <h5>May 8, 2018</h5>
-    
-
-</div>
-  <div class="item">
-
-    
-    
-    
-
-    
-    
-
-    <h4><a href="/tags/scraping/">Scraping</a></h4>
-    <h5>May 8, 2018</h5>
-    
-
-</div>
-  <div class="item">
-
-    
-    
-    
-
-    
-    
-
-    <h4><a href="/tags/shiny/">Shiny</a></h4>
+    <h4><a href="/project/milwaukee-beer-dashboard/">Milwaukee Beer Dashboard</a></h4>
     <h5>March 2, 2019</h5>
     
+    <a href="/tags/shiny"><kbd class="item-tag">shiny</kbd></a>
+    
+    <a href="/tags/shinydashboard"><kbd class="item-tag">shinydashboard</kbd></a>
+    
+    <a href="/tags/highchartr"><kbd class="item-tag">highchartr</kbd></a>
+    
 
 </div>
-  <div class="item">
+
+
+    <br> <div class="text-justify"><p><font size = 4> App: <a href="https://jjohn9000.shinyapps.io/Milwaukee_Beer_App/" class="uri">https://jjohn9000.shinyapps.io/Milwaukee_Beer_App/</a> </font></p>
+<p>Milwaukee Beer is a dashboard I built with R’s <code>shinydashboard</code> package – It provides quick insights to into Milwaukee breweries and beer brewed in Milwaukee. You can toggle dropdown tabs to:</p>
+<ul>
+<li>get ratings for beers and breweries</li>
+<li>display results in reactive, dynamic, nice graphs</li>
+<li>track sentiment sourced from reviews posted on beeradvocate.org</li>
+<li>search for beers by flavor for convenient comparison</li>
+<li>and even dive in to the data yourself</li>
+<li>feel free to search for beer by type and flavor too!</li>
+</ul>
+<p>Of course, Shiny is also free, unlike Tableau or any other softwares that come with a subscription or membership of some type.</p>
+<div id="milwaukee-beer-dashboard-screenshots" class="section level1">
+<h1>Milwaukee Beer Dashboard – Screenshots</h1>
+<div id="page-1-most-common-brewing-styles" class="section level2">
+<h2>Page 1 – Most Common Brewing Styles</h2>
+<ul>
+<li>View top 10 ranked beers for Milwaukee’s beer breweries</li>
+<li>Compare sentiments mined from customer reviews posted on beeradvocate.org.</li>
+</ul>
+<div class="figure">
+<img src="/post/2019-03-02-milwaukee-beer-dashboard_files/milwaukee_beer_screen1.png" alt="Milwaukee Beer Dashboard - Front Page" />
+<p class="caption">Milwaukee Beer Dashboard - Front Page</p>
+</div>
+</div>
+<div id="page-2-milwaukees-breweries" class="section level2">
+<h2>Page 2 – Milwaukee’s Breweries</h2>
+<ul>
+<li>Interactive “clickable” data to help you compare beers.</li>
+<li>Find &amp; compare beers by searching across brewing style or flavor</li>
+<li>Compare sentiments mined from customer reviews posted on beeradvocate.org.</li>
+</ul>
+<div class="figure">
+<img src="/post/2019-03-02-milwaukee-beer-dashboard_files/milwaukee_beer_screen2.png" alt="Milwaukee Beer App - Breweries Page" />
+<p class="caption">Milwaukee Beer App - Breweries Page</p>
+</div>
+</div>
+<div id="page-3-milwaukee-beer-search" class="section level2">
+<h2>Page 3 – Milwaukee Beer Search</h2>
+<ul>
+<li>Data table that powers the app.</li>
+<li>Obtained through webscraping Milwaukee brewery section of beeradvocate.org</li>
+<li>Search for any relevant terms to beer and find beers to look out for on the previous pages.</li>
+</ul>
+<p><img src="/project/2019-03-02-milwaukee-beer-dashboard_files/Screenshot%203.png" /></p>
+</div>
+</div>
+</div>
+
+    
+    
+
+    
+
+        <h4 class="page-header">Related</h4>
+
+         <div class="item">
 
     
     
@@ -206,32 +225,49 @@
     
     
 
-    <h4><a href="/tags/shinydashboard/">Shinydashboard</a></h4>
+    <h4><a href="/post/my-shiny-dashboard-milwaukee-beer/">My Shiny Dashboard, Milwaukee Beer </a></h4>
     <h5>March 2, 2019</h5>
+    
+    <a href="/tags/shiny"><kbd class="item-tag">shiny</kbd></a>
+    
+    <a href="/tags/shinydashboard"><kbd class="item-tag">shinydashboard</kbd></a>
+    
+    <a href="/tags/highchartr"><kbd class="item-tag">highchartr</kbd></a>
     
 
 </div>
  
 
+    
+
+    
+
+        <h4 class="page-header">Comments</h4>
+
+        <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "anything-is-data-is-anything" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+    
+
 </main>
-
-
-
-<div class="pages">
-
-    
-    <a class="icon pages-icon" href="/tags/page/6/" rel="prev">
-        <i class="fa fa-arrow-left"></i>
-    </a>
-     
-    <a class="icon pages-icon" href="/tags/page/8/" rel="next">
-        <i class="fa fa-arrow-right"></i>
-    </a>
-    
-
-</div>
-
-
 
         <footer>
 

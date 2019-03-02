@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Shinydashboard on Anything Data</title>
-    <link>/tags/shinydashboard/</link>
-    <description>Recent content in Shinydashboard on Anything Data</description>
+    <title>Highcharter on Anything Data</title>
+    <link>/tags/highcharter/</link>
+    <description>Recent content in Highcharter on Anything Data</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 02 Mar 2019 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/shinydashboard/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/tags/highcharter/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -19,15 +18,6 @@
       <guid>/project/project3/</guid>
       <description>Milwaukee Beer Dashboard – Screenshots Page 1 – Most Common Brewing Styles Page 2 – Milwaukee’s Breweries Page 3 – Milwaukee Beer Comparison Page 4 – Milwaukee Beer Data Table Other Comments    App: https://jjohn9000.shinyapps.io/Milwaukee_Beer_App/ 
 Introduction: Milwaukee Beer is a dashboard I built with R’s shinydashboard package – It provides quick insights into Milwaukee breweries, and beer brewed in Milwaukee. You can toggle dropdown tabs to:</description>
-    </item>
-    
-    <item>
-      <title>My Shiny Dashboard, Milwaukee Beer </title>
-      <link>/post/my-shiny-dashboard-milwaukee-beer/</link>
-      <pubDate>Sat, 02 Mar 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/post/my-shiny-dashboard-milwaukee-beer/</guid>
-      <description>Milwaukee Beer - Inspired by my Job Hunt I’m excited to launch my latest Shiny app - “Milwaukee Beer” - which I made to learn shinydashboard. Due to my decision to return to the USA and hunt for a career in data, I decided to add another project to my portfolio.</description>
     </item>
     
   </channel>

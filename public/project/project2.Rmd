@@ -2,7 +2,7 @@
 title: "Project 2"
 description: "A Shiny App that pulls player game data, character from Microsoft 343 Industries' Halo 5 API and produces beautiful visualizations"
 tags: ["Shiny", "dashboard", "Halo 5"]
-weight: 1
+weight: 2
 draft: false
 output: 
   blogdown::html_page:
