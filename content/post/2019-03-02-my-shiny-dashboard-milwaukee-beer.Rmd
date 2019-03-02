@@ -30,7 +30,7 @@ library(highcharter)
 library(readr)
 
 ##You can find this data on my github:
-## https://github.com/Jjohn987/anything_data2/blob/master/static/milwaukee_beer3.csv
+## https://github.com/Jjohn987/anything_data/blob/master/public/post/milwaukee_beer3.csv
 
 milwaukee_beer <- read_csv("milwaukee_beer3.csv")[-1] 
    
