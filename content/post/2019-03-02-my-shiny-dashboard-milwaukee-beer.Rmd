@@ -8,11 +8,11 @@ tags: [shiny, shinydashboard, highchartr]
 ---
 ## Milwaukee Beer - Inspired by my Job Hunt ##
 <font size = 4> 
-I'm excited to launch my latest Shiny app - "Milwaukee Beer" - which I made to learn `shinydashboard`. Due to my decision to **return to the USA** and **hunt for a career** in data, I decided to add another project to my portfolio. Milwaukee Beer is a metric tracking dashboard that provides quick insights to the unique local brews. You may toggle dropdowns and get rankings, nice graphs, and sentiment tracking. Feel free to search for beer by type and flavor too! </font>
+I'm excited to launch my latest Shiny app - "Milwaukee Beer" - which I made to learn `shinydashboard`. Due to my decision to **return to the USA** and **hunt for a career** in data, I decided to add another project to my portfolio. Milwaukee Beer is a metric tracking dashboard that provides quick insights to the unique local brews. You may toggle dropdown tabs to get rankings, nice graphs, and sentiment tracking. Feel free to search for beer by type and flavor too! </font>
 
 <a href = https://jjohn9000.shinyapps.io/Milwaukee_Beer_App/'> ![](/post/2019-03-02-my-shiny-dashboard-milwaukee-beer_files/Milwaukeebeer-screen1.png)</a>
 
-App: https://jjohn9000.shinyapps.io/Milwaukee_Beer_App/
+<font size = 5>App: https://jjohn9000.shinyapps.io/Milwaukee_Beer_App/</font>
 
 # Motivation #
 <font size = 4>
