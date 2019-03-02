@@ -6,7 +6,7 @@
     <description>Recent content on Anything Data</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 01 Jan 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 02 Mar 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
@@ -17,7 +17,7 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/project/project1/</guid>
-      <description>Predicting Churn with Telecom DataExploring Numeric DataExploring Categorical DataModelingModel Test PerformanceConclusionPredicting Churn with Telecom Data
+      <description>Predicting Churn with Telecom Data Exploring Numeric Data Exploring Categorical Data Modeling Model Test Performance Conclusion    Predicting Churn with Telecom Data 
 This project used machine learning to predict customer churn in a telecom company. The data came from the UCI machine learning repository, and consisted of 19 columns, along with 3333 rows for training and 1667 for testing. First, I explored the data structure – the distributions, relationships between variables, and the class balances and imbalances.</description>
     </item>
     
@@ -27,8 +27,17 @@ This project used machine learning to predict customer churn in a telecom compan
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/project/project2/</guid>
-      <description>Shiny App - Halo 5 StatsPurposeTechnology LearnedAbout the AppShiny App - Halo 5 Stats
-PurposeThe purpose of this project was to learn Shiny, R Studio’s powerful framework for packaging R code into web applications. With Shiny, the possibilities for communicating data are endless, including connecting to API’s or creating dashboards that update in real time. You might embed a machine learning model for producing results on the go, or track metrics that constantly update.</description>
+      <description>Shiny App - Halo 5 Stats Purpose Technology Learned About the App    Shiny App - Halo 5 Stats 
+Purpose The purpose of this project was to learn Shiny, R Studio’s powerful framework for packaging R code into web applications. With Shiny, the possibilities for communicating data are endless, including connecting to API’s or creating dashboards that update in real time. You might embed a machine learning model for producing results on the go, or track metrics that constantly update.</description>
+    </item>
+    
+    <item>
+      <title>My Shiny Dashboard, Milwaukee Beer </title>
+      <link>/post/my-shiny-dashboard-milwaukee-beer/</link>
+      <pubDate>Sat, 02 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/my-shiny-dashboard-milwaukee-beer/</guid>
+      <description>Milwaukee Beer - Inspired by my Job Hunt I’m excited to launch my latest Shiny app - “Milwaukee Beer” - which I made to learn shinydashboard. Due to my decision to return to the USA and hunt for a career in data, I decided to add another project to my portfolio.</description>
     </item>
     
     <item>
@@ -57,7 +66,7 @@ The dataset in question is about hepatic injury (liver damage). It includes a da
       <pubDate>Fri, 21 Sep 2018 00:00:00 +0000</pubDate>
       
       <guid>/post/first-app-halo-5-stats/</guid>
-      <description>“Halo 5 Stats” is my first ever Shiny app, which is themed around the the popular sci-fi shooter Halo 5. It combines beatiful data with Halo’s beautiful graphics - something that Halo fans and data enthusiasts undoubtedly love. You can use my app at https://jjohn9000.shinyapps.io/Halo_5_Stats/After entering your gamertag, the app will automatically display your online game data using Microsoft’s Halo API and visualize your data with numerous customizable elements such as backdrop and plot colors.</description>
+      <description>“Halo 5 Stats” is my first ever Shiny app, which is themed around the the popular sci-fi shooter Halo 5. It combines beatiful data with Halo’s beautiful graphics - something that Halo fans and data enthusiasts undoubtedly love. You can use my app at https://jjohn9000.shinyapps.io/Halo_5_Stats/ After entering your gamertag, the app will automatically display your online game data using Microsoft’s Halo API and visualize your data with numerous customizable elements such as backdrop and plot colors.</description>
     </item>
     
     <item>

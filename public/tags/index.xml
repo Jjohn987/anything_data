@@ -192,6 +192,15 @@
     </item>
     
     <item>
+      <title>Highchartr</title>
+      <link>/tags/highchartr/</link>
+      <pubDate>Sat, 02 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/highchartr/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Httr</title>
       <link>/tags/httr/</link>
       <pubDate>Thu, 17 May 2018 00:00:00 +0000</pubDate>
@@ -293,9 +302,18 @@
     <item>
       <title>Shiny</title>
       <link>/tags/shiny/</link>
-      <pubDate>Fri, 21 Sep 2018 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 02 Mar 2019 00:00:00 +0000</pubDate>
       
       <guid>/tags/shiny/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Shinydashboard</title>
+      <link>/tags/shinydashboard/</link>
+      <pubDate>Sat, 02 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/shinydashboard/</guid>
       <description></description>
     </item>
     

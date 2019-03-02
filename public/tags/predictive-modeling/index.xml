@@ -16,7 +16,7 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/project/project1/</guid>
-      <description>Predicting Churn with Telecom DataExploring Numeric DataExploring Categorical DataModelingModel Test PerformanceConclusionPredicting Churn with Telecom Data
+      <description>Predicting Churn with Telecom Data Exploring Numeric Data Exploring Categorical Data Modeling Model Test Performance Conclusion    Predicting Churn with Telecom Data 
 This project used machine learning to predict customer churn in a telecom company. The data came from the UCI machine learning repository, and consisted of 19 columns, along with 3333 rows for training and 1667 for testing. First, I explored the data structure – the distributions, relationships between variables, and the class balances and imbalances.</description>
     </item>
     

@@ -48,6 +48,15 @@
     </item>
     
     <item>
+      <title>Dashboard</title>
+      <link>/categories/dashboard/</link>
+      <pubDate>Sat, 02 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/dashboard/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Geospatial Mapping</title>
       <link>/categories/geospatial-mapping/</link>
       <pubDate>Mon, 29 Jan 2018 00:00:00 +0000</pubDate>
@@ -104,7 +113,7 @@
     <item>
       <title>Shiny</title>
       <link>/categories/shiny/</link>
-      <pubDate>Fri, 21 Sep 2018 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 02 Mar 2019 00:00:00 +0000</pubDate>
       
       <guid>/categories/shiny/</guid>
       <description></description>

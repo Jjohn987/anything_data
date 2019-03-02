@@ -17,7 +17,7 @@
       <pubDate>Fri, 21 Sep 2018 00:00:00 +0000</pubDate>
       
       <guid>/post/first-app-halo-5-stats/</guid>
-      <description>“Halo 5 Stats” is my first ever Shiny app, which is themed around the the popular sci-fi shooter Halo 5. It combines beatiful data with Halo’s beautiful graphics - something that Halo fans and data enthusiasts undoubtedly love. You can use my app at https://jjohn9000.shinyapps.io/Halo_5_Stats/After entering your gamertag, the app will automatically display your online game data using Microsoft’s Halo API and visualize your data with numerous customizable elements such as backdrop and plot colors.</description>
+      <description>“Halo 5 Stats” is my first ever Shiny app, which is themed around the the popular sci-fi shooter Halo 5. It combines beatiful data with Halo’s beautiful graphics - something that Halo fans and data enthusiasts undoubtedly love. You can use my app at https://jjohn9000.shinyapps.io/Halo_5_Stats/ After entering your gamertag, the app will automatically display your online game data using Microsoft’s Halo API and visualize your data with numerous customizable elements such as backdrop and plot colors.</description>
     </item>
     
   </channel>

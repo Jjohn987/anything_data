@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Highchartr on Anything Data</title>
+    <link>/tags/highchartr/</link>
+    <description>Recent content in Highchartr on Anything Data</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 02 Mar 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/highchartr/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>My Shiny Dashboard, Milwaukee Beer </title>
+      <link>/post/my-shiny-dashboard-milwaukee-beer/</link>
+      <pubDate>Sat, 02 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/my-shiny-dashboard-milwaukee-beer/</guid>
+      <description>Milwaukee Beer - Inspired by my Job Hunt I’m excited to launch my latest Shiny app - “Milwaukee Beer” - which I made to learn shinydashboard. Due to my decision to return to the USA and hunt for a career in data, I decided to add another project to my portfolio.</description>
+    </item>
+    
+  </channel>
+</rss>
