@@ -183,53 +183,53 @@
 <li>How to assign color to the squares/marks in that grid.</li>
 <li>The calculation that will be used to create the color assignment.</li>
 </ol>
-<p>Of course, there’s always more than one way to do things in Tableau. I’ll show my unique way of building a waffle chart which serves my data needs quite well.</p>
-<p>We start by creating an index. To do so, all you have to do is make a calculated field with INDEX() in it.</p>
+<p>Of course, there’s always more than one way to do things in Tableau. I’ll show my unique way of building a waffle chart which serves my data needs quite well. Let’s start by creating an index. To do so, all you have to do is make a calculated field with INDEX() in it.</p>
 <center>
 <img src="/post/2019-07-08-tableau-creating-a-waffle-chart_files/%5BINDEX%5D.png" style="width:40.0%" style="height:40.0%" /><img src="/post/2019-07-08-tableau-creating-a-waffle-chart_files/%5Btenths%5D.png" style="width:40.0%" style="height:40.0%" />
 </center>
-<p><br>Next up, use INDEX to partition the whole dataset into 10 rows to build out the x-axis. So let’s figure out how many rows are in a “tenth” of the data – divide the maximum value of the index by 10 or multiply by 0.1. <strong>Note</strong> it is important to use ROUND to square off the value. If not, you will have rows of unequal lengths later.</br></p>
+<p><br>Next up, let’s figure out how many rows are in a “tenth” of the data so that we can partition the data into 10 clean rows. Divide the maximum value of the index by 10 or multiply by 0.1. <strong>Note</strong> it is important to use ROUND to square off the value. If not, you will have rows of unequal lengths due to uneven division.</br></p>
 <p>To make the X-axis from here, I simply assign values based off of where their index stands in relation to each tenth percentile.</p>
 <center>
 <img src="/post/2019-07-08-tableau-creating-a-waffle-chart_files/%5Bx%5D.png" style="width:50.0%" style="height:50.0%" />
 </center>
-<p>At this point, you place your newly created X variable on the rows shelf and choose to “compute using ____” (your dimension/row-level ID variable), and doing so you can see a neat little row of marks as such:</p>
+<p>At this point, by placing your newly created X variable on the rows shelf and choosing to “compute using ____” (your dimension/row-level ID variable), you can see a neat row of marks as such:</p>
 <center>
 <img src="/post/2019-07-08-tableau-creating-a-waffle-chart_files/%5Bx%5D%20row.png" style="width:50.0%" style="height:50.0%" />
 </center>
-<p>Now we need to expand this single row into 10 Y-values. If you guessed that we will now partition the X-values into 10 different rows, you are right. To do this I multiply the index value by 100 and divide by the maximum index value. This is exactly what it sounds like - a percentage. Note that rounding the values to the nearest integer is very important. Without doing so we won’t achieve a neatly separated 10 x 10 grid but a continuous line of marks instead.</p>
+<p>We’re halfway there! Now we need to expand this single row into 10 Y-values. To do this I multiply the index value by 100 and divide by the maximum index value. This is exactly what it sounds like - a percentage. Note that rounding the values to the nearest integer is very important so that we can obtain integers of 1-10 instead of a continuous range of values.</p>
 <center>
 <img src="/post/2019-07-08-tableau-creating-a-waffle-chart_files/%5By%5D.png" style="width:50.0%" style="height:50.0%" />
 </center>
-<p>The result is not a beautiful 10x10 grid, but a beautiful 11 x 11 grid.</p>
+<p>The result is not a beautiful 10x10 grid, but a beautiful 10 x 11 grid. What happened?</p>
 <center>
 <img src="/post/2019-07-08-tableau-creating-a-waffle-chart_files/11x11%20grid.png" style="width:50.0%" style="height:50.0%" />
 </center>
-<p>This is because of the rounding we did earlier - for each tenth percentile partiion of X, the bottom portion of the Y values were closer to 0 than 1, which means they were rounded down. Other tutorials may have a workaround, however, they seem to employ other means which require their own unique workarounds as well. At the end of the day, you’re probably going to need a workaround. Here is mine:</p>
+<p>This is due to the rounding we did above - for each tenth percentile partiion of X, the bottom portion of the Y values were closer to 0 than 1, which means they were rounded down. (A CEILING or FLOOR function would have been better than ROUND, but those 2 calculations unfortunately weren’t an option.) Other tutorials may have a workaround, however, those means require their own unique workarounds as well. At the end of the day, you’re probably going to need a workaround. Here is mine:</p>
 <p>Simply fold the 0 and 1 Y values into each other with another calculated field, as such.</p>
 <center>
 <img src="/post/2019-07-08-tableau-creating-a-waffle-chart_files/Y.png" style="width:40.0%" style="height:40.0%" /> <strong>And we get ====&gt;</strong><img src="/post/2019-07-08-tableau-creating-a-waffle-chart_files/10x10%20grid.png" style="width:40.0%" style="height:40.0%" />
 </center>
-<p>Voila! Now we have our “template” for a waffle chart! Not that it was necessary to fold all the values of our data into the chart.</p>
-<p><strong>But we can’t eat waffles yet</strong> - we need to assign color to it first. I suppose I’ll color the waffle chart based off of the percentage of Virginica species in the Iris dataset. Notice that I need to use fixed LOD calculations for this. Since the “View” influences calculations, it is best to work with an LOD which will compute the calculation first in spite of whatever is happening in the view.</p>
+<p>Voila! Now we have our “template” for a waffle chart! Not that it was probably not necessary to fold all the values of our data into the chart.</p>
+<p><strong>But we can’t eat waffles yet</strong> - we need to assign color to it first. I suppose I’ll color the waffle chart based off of the percentage of Virginica species in the Iris dataset. Notice that I need to use fixed LOD calculations for this. Since the “View” influences calculations, it is best to work with an LOD which will compute the calculation first in spite of whatever is happening in the view. If you have trouble with LOD’s, stay patient and get comfortable with them because they’re great.</p>
 <center>
 <img src="/post/2019-07-08-tableau-creating-a-waffle-chart_files/Total%20Virginica.png" style="width:40.0%" style="height:40.0%" /><img src="/post/2019-07-08-tableau-creating-a-waffle-chart_files/Percentage%20Virginica.png" style="width:40.0%" style="height:40.0%" />
 </center>
 <p>
-<p>Now we are ready to assign a color using the percentage variable. The logic is profoundly simple once you figure out the concept. Essentially, you need to tell Tableau to color a mark based off of the values it is less than. That means, multiplying X values by 10, Y values by 1, and starting by looking at the previous row. This calculation handles all possibilities, except of course doing partial squares.</p>
+<p>Now we are ready to assign a color using the percentage variable. The logic is profoundly simple once you figure out the concept. Essentially, you need to tell Tableau to color a mark based off of the values it is less than. That means, multiplying X values by 10, Y values by 1, and starting by looking at the next row. This calculation handles all possibilities, except of course decimal values/partial shading.</p>
 <center>
 <img src="/post/2019-07-08-tableau-creating-a-waffle-chart_files/Waffle%20Color.png" style="width:40.0%" style="height:40.0%" />
 </center>
-<p><br>Presto! Now we can finalize the beautiful waffle chart!</br></p>
+<p><br>Presto! From here on we have our chart, but we can further <strong>enhance and customize</strong> our beautiful waffle chart! If you wish to take it a step further, create a custom shape from your favorite image software and use that as a custom mark. Remove axis lines, grid lines, &amp; labels, and perhaps even add the percentage calculation to work with the visual.</br></p>
 <center>
-<img src="/post/2019-07-08-tableau-creating-a-waffle-chart_files/Colored%20Waffle.png" style="width:50.0%" style="height:50.0%" />
+<img src="/post/2019-07-08-tableau-creating-a-waffle-chart_files/Colored%20Waffle.png" style="width:40.0%" style="height:40.0%" /> Vs <img src="/post/2019-07-08-tableau-creating-a-waffle-chart_files/Flower%20Waffle.png" style="width:40.0%" style="height:40.0%" />
 </center>
+<p><br></p>
 <center>
 33% of the flowers in the iris dataset belong to the virginica species.
 </center>
 </div>
-<div id="the-end---enjoy-your-waffles" class="section level2">
-<h2>The End - Enjoy your Waffles!</h2>
+<div id="the-end---enjoy-your-waffles-and-flowers" class="section level2">
+<h2>The End - Enjoy your Waffles AND FLOWERS!</h2>
 </div>
 </div>
 </div>
