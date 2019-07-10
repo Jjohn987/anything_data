@@ -73,12 +73,6 @@
   </url>
   
   <url>
-    <loc>/tags/shiny/</loc>
-    <lastmod>2019-03-02T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>/categories/shiny/</loc>
     <lastmod>2019-03-02T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -92,6 +86,12 @@
   
   <url>
     <loc>/tags/highchartr/</loc>
+    <lastmod>2019-03-02T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/shiny/</loc>
     <lastmod>2019-03-02T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
@@ -201,13 +201,13 @@
   </url>
   
   <url>
-    <loc>/tags/ggraph/</loc>
+    <loc>/categories/text-analysis/</loc>
     <lastmod>2018-06-08T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/categories/text-analysis/</loc>
+    <loc>/tags/ggraph/</loc>
     <lastmod>2018-06-08T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
@@ -312,18 +312,18 @@
   </url>
   
   <url>
-    <loc>/categories/scraping/</loc>
-    <lastmod>2018-05-08T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>/post/scraping-for-a-booklist-of-the-chinese-classics/</loc>
     <lastmod>2018-05-08T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>/tags/scraping/</loc>
+    <lastmod>2018-05-08T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/categories/scraping/</loc>
     <lastmod>2018-05-08T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
