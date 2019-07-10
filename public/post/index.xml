@@ -33,7 +33,7 @@
 &lt;/div&gt;
 &lt;div id=&#34;setting-up&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;Setting Up&lt;/h2&gt;
-&lt;p&gt;For this tutorial I will use the famous iris dataset. You can find it &lt;em&gt;anywhere&lt;/em&gt;, but it is primarily hosted at &lt;a href=&#34;UCI%20machine%20learning%20repository&#34;&gt;https://archive.ics.uci.edu/ml/datasets/iris&lt;/a&gt;. Download it and get it into Tableau. &lt;strong&gt;Important&lt;/strong&gt; - Make sure that your spreadsheet software creates an “ID” variable for each row (a row number for each row), and read it as a dimension.&lt;/p&gt;
+&lt;p&gt;For this tutorial I will use the famous iris dataset. You can find it &lt;em&gt;anywhere&lt;/em&gt;, but it is primarily hosted at &lt;a href=&#34;UCI%20machine%20learning%20repository&#34;&gt;https://archive.ics.uci.edu/ml/datasets/iris&lt;/a&gt;. Download it and get it into Tableau. &lt;strong&gt;Important&lt;/strong&gt; - Make sure that your spreadsheet software creates an “ID” variable for each row (a row number for each row), and read it as a dimension. &lt;strong&gt;I’ll call mine F1&lt;/strong&gt;.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Some things to figure out:&lt;/strong&gt;&lt;/p&gt;
 &lt;ol style=&#34;list-style-type: decimal&#34;&gt;
 &lt;li&gt;How to make a grid with your data (conventionally, a 10 x 10).&lt;/li&gt;

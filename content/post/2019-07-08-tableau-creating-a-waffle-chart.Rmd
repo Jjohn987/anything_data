@@ -25,7 +25,7 @@ In Tableau, a waffle chart is NOT one of the off-the-shelf charts that you can m
 
 ## Setting Up
 
-For this tutorial I will use the famous iris dataset. You can find it *anywhere*, but it is primarily hosted at [https://archive.ics.uci.edu/ml/datasets/iris](UCI machine learning repository). Download it and get it into Tableau. **Important** - Make sure that your spreadsheet software creates an "ID" variable for each row (a row number for each row), and read it as a dimension.
+For this tutorial I will use the famous iris dataset. You can find it *anywhere*, but it is primarily hosted at [https://archive.ics.uci.edu/ml/datasets/iris](UCI machine learning repository). Download it and get it into Tableau. **Important** - Make sure that your spreadsheet software creates an "ID" variable for each row (a row number for each row), and read it as a dimension. **I'll call mine F1**.
 
 **Some things to figure out:**
 
