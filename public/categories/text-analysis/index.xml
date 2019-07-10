@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Text Analysis on Anything Data</title>
+    <title>text analysis on Anything Data</title>
     <link>/categories/text-analysis/</link>
-    <description>Recent content in Text Analysis on Anything Data</description>
+    <description>Recent content in text analysis on Anything Data</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Fri, 08 Jun 2018 00:00:00 +0000</lastBuildDate>
@@ -38,7 +38,7 @@ This is where I ran into a problem with Tidytext – although it worked fine for
       
       <guid>/post/a-quasi-tidytext-analysis-of-3-chinese-classics/</guid>
       <description>For a long time I’ve admired the tidytext package and its wonderful companion book Text Mining with R. After reading it I thought, “Why not undertake a project of Chinese text analysis?” I am deeply interested in Chinese philosophy but I decided to keep the analysis narrow by selecting just three works - The Analects, Zhuangzi, and the Mozi.
-Following similar pace with Tidytext, I first download my data. Here I use my package ctextclassics and specifically, the function get_books(c(.</description>
+Following similar pace with Tidytext, I first download my data.</description>
     </item>
     
     <item>

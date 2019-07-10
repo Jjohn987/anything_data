@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Tidyverse on Anything Data</title>
+    <title>tidyverse on Anything Data</title>
     <link>/tags/tidyverse/</link>
-    <description>Recent content in Tidyverse on Anything Data</description>
+    <description>Recent content in tidyverse on Anything Data</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 29 Jan 2018 00:00:00 +0000</lastBuildDate>
@@ -18,7 +18,7 @@
       
       <guid>/post/plotting-fortune-500-hq-s-in-r/</guid>
       <description>Today I’d like to work a little on geospatial mapping in R, so I’ve chosen a small dataset (only 256 kb) that can be plotted on a map. It the location information of Fortune 500 company headquarters in the US. You can download it from here.
-R has several choices for plotting geospatial information. Here I use ggmap, however in the future I’ll check out the raster and sp packages. Anyway, let’s get started by loading in and cleaning the data.</description>
+R has several choices for plotting geospatial information. Here I use ggmap, however in the future I’ll check out the raster and sp packages.</description>
     </item>
     
   </channel>

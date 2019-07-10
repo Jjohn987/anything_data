@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+         
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Tableau - Creating a Waffle Chart</title>
+        
+        <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --accent: #5586BD;
+        --border-width:  5px ;
+    }
+
+</style>
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+
+
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+ 
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/go.min.js"></script>  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/haskell.min.js"></script>  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/kotlin.min.js"></script>  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/scala.min.js"></script>  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/swift.min.js"></script> 
+
+    <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+<script>$(document).on('click', function() { $('.collapse').collapse('hide'); })</script>
+ <meta name="generator" content="Hugo 0.55.6" />
+        
+
+        
+        
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-118999723-1"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments)};
+          gtag('js', new Date());
+
+          gtag('config', 'UA-118999723-1');
+        </script>
+        
+    </head>
+
+    
+    
+    <script type="text/javascript" async
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+    
+
+    <body>
+         
+        <nav class="navbar navbar-default navbar-fixed-top">
+
+            <div class="container">
+
+                <div class="navbar-header">
+
+                    <a class="navbar-brand visible-xs" href="#">Tableau - Creating a Waffle Chart</a>
+
+                    <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                </div>
+
+                <div class="collapse navbar-collapse">
+
+                    
+                        <ul class="nav navbar-nav">
+                            
+                                <li><a href="/">Home</a></li>
+                            
+                                <li><a href="/post/">Posts</a></li>
+                            
+                                <li><a href="/project/">Projects</a></li>
+                            
+                                <li><a href="https://www.r-bloggers.com/">R-bloggers</a></li>
+                            
+                        </ul>
+                    
+
+                    
+                        <ul class="nav navbar-nav navbar-right">
+                            
+                                <li class="navbar-icon"><a href="mailto:jeremyaaronjohnson@hotmail.com"><i class="fa fa-envelope-o"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://github.com/jjohn987/"><i class="fa fa-github"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://www.linkedin.com/in/jeremy-johnson-09016a112/"><i class="fa fa-linkedin"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://www.stackoverflow.com/superball10000/"><i class="fa fa-stack-overflow"></i></a></li>
+                            
+                        </ul>
+                    
+
+                </div>
+
+            </div>
+
+        </nav>
+
+
+<main>
+
+    <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/tableau-creating-a-waffle-chart/">Tableau - Creating a Waffle Chart</a></h4>
+    <h5>July 8, 2019</h5>
+    
+    <a href="/tags/tableau"><kbd class="item-tag">Tableau</kbd></a>
+    
+    <a href="/tags/waffle-chart"><kbd class="item-tag">Waffle Chart</kbd></a>
+    
+
+</div>
+
+
+    <br> <div class="text-justify">
+
+
+<div id="waffles-are-for-breakfast" class="section level1">
+<h1>Waffles are for Breakfast</h1>
+<p>It’s been a long time since my last update and I’ve decided to start with Tableau, of all topics! Although open source advocates do not look kindly upon Tableau, I find myself using it frequently and relearning all the stuff I can do in R. For my series of “how-to’s” regarding Tableau, I’d like to start with posting about <strong>how to make a waffle chart in Tableau</strong>.</p>
+<p>Without further ado:</p>
+<div id="whats-a-waffle-chart" class="section level2">
+<h2>What’s a Waffle Chart?</h2>
+<center>
+<img src="/post/2019-07-08-tableau-creating-a-waffle-chart_files/Waffle1.png" width="150" height="150" /> <img src="/post/2019-07-08-tableau-creating-a-waffle-chart_files/Waffle2.png" width="150" height="150" /> <img src="/post/2019-07-08-tableau-creating-a-waffle-chart_files/Waffle3.png" width="150" height="150" />
+</center>
+<p><br>There are a gazillion ways to depict an amount. Bar charts and pie charts are common, maybe you’ve even seen an area/tree chart. But variety is the spice of life – repeatedly looking at bar charts becomes tiring. Enter the waffle chart - It has the appearance of a waffle iron. It’s basically a grid of squares (or any other mark). Squares can be colored to represent an amount.</br></p>
+<p>In Tableau, a waffle chart is NOT one of the off-the-shelf charts that you can make by clicking the “Show Me” panel. If you want to create one, you’ll need to be, err, creative.</p>
+</div>
+<div id="setting-up" class="section level2">
+<h2>Setting Up</h2>
+<p>For this tutorial I will use the famous iris dataset. You can find it <em>anywhere</em>, but it is primarily hosted at <a href="UCI%20machine%20learning%20repository">https://archive.ics.uci.edu/ml/datasets/iris</a>. Download it and get it into Tableau. <strong>Important</strong> - Make sure that your spreadsheet software creates an “ID” variable for each row (a row number for each row), and read it as a dimension.</p>
+<p><strong>Some things to figure out:</strong></p>
+<ol style="list-style-type: decimal">
+<li>How to make a grid with your data (conventionally, a 10 x 10).</li>
+<li>How to assign color to the squares/marks in that grid.</li>
+<li>The calculation that will be used to create the color assignment.</li>
+</ol>
+<p>Of course, there’s always more than one way to do things in Tableau. I’ll show my unique way of building a waffle chart which serves my data needs quite well.</p>
+<p>We start by creating an index. To do so, all you have to do is make a calculated field with INDEX() in it.</p>
+<center>
+<img src="/post/2019-07-08-tableau-creating-a-waffle-chart_files/%5BINDEX%5D.png" style="width:40.0%" style="height:40.0%" /><img src="/post/2019-07-08-tableau-creating-a-waffle-chart_files/%5Btenths%5D.png" style="width:40.0%" style="height:40.0%" />
+</center>
+<p><br>Next up, use INDEX to partition the whole dataset into 10 rows to build out the x-axis. So let’s figure out how many rows are in a “tenth” of the data – divide the maximum value of the index by 10 or multiply by 0.1. <strong>Note</strong> it is important to use ROUND to square off the value. If not, you will have rows of unequal lengths later.</br></p>
+<p>To make the X-axis from here, I simply assign values based off of where their index stands in relation to each tenth percentile.</p>
+<center>
+<img src="/post/2019-07-08-tableau-creating-a-waffle-chart_files/%5Bx%5D.png" style="width:50.0%" style="height:50.0%" />
+</center>
+<p>At this point, you place your newly created X variable on the rows shelf and choose to “compute using ____” (your dimension/row-level ID variable), and doing so you can see a neat little row of marks as such:</p>
+<center>
+<img src="/post/2019-07-08-tableau-creating-a-waffle-chart_files/%5Bx%5D%20row.png" style="width:50.0%" style="height:50.0%" />
+</center>
+<p>Now we need to expand this single row into 10 Y-values. If you guessed that we will now partition the X-values into 10 different rows, you are right. To do this I multiply the index value by 100 and divide by the maximum index value. This is exactly what it sounds like - a percentage. Note that rounding the values to the nearest integer is very important. Without doing so we won’t achieve a neatly separated 10 x 10 grid but a continuous line of marks instead.</p>
+<center>
+<img src="/post/2019-07-08-tableau-creating-a-waffle-chart_files/%5By%5D.png" style="width:50.0%" style="height:50.0%" />
+</center>
+<p>The result is not a beautiful 10x10 grid, but a beautiful 11 x 11 grid.</p>
+<center>
+<img src="/post/2019-07-08-tableau-creating-a-waffle-chart_files/11x11%20grid.png" style="width:50.0%" style="height:50.0%" />
+</center>
+<p>This is because of the rounding we did earlier - for each tenth percentile partiion of X, the bottom portion of the Y values were closer to 0 than 1, which means they were rounded down. Other tutorials may have a workaround, however, they seem to employ other means which require their own unique workarounds as well. At the end of the day, you’re probably going to need a workaround. Here is mine:</p>
+<p>Simply fold the 0 and 1 Y values into each other with another calculated field, as such.</p>
+<center>
+<img src="/post/2019-07-08-tableau-creating-a-waffle-chart_files/Y.png" style="width:40.0%" style="height:40.0%" /> <strong>And we get ====&gt;</strong><img src="/post/2019-07-08-tableau-creating-a-waffle-chart_files/10x10%20grid.png" style="width:40.0%" style="height:40.0%" />
+</center>
+<p>Voila! Now we have our “template” for a waffle chart! Not that it was necessary to fold all the values of our data into the chart.</p>
+<p><strong>But we can’t eat waffles yet</strong> - we need to assign color to it first. I suppose I’ll color the waffle chart based off of the percentage of Virginica species in the Iris dataset. Notice that I need to use fixed LOD calculations for this. Since the “View” influences calculations, it is best to work with an LOD which will compute the calculation first in spite of whatever is happening in the view.</p>
+<center>
+<img src="/post/2019-07-08-tableau-creating-a-waffle-chart_files/Total%20Virginica.png" style="width:40.0%" style="height:40.0%" /><img src="/post/2019-07-08-tableau-creating-a-waffle-chart_files/Percentage%20Virginica.png" style="width:40.0%" style="height:40.0%" />
+</center>
+<p>
+<p>Now we are ready to assign a color using the percentage variable. The logic is profoundly simple once you figure out the concept. Essentially, you need to tell Tableau to color a mark based off of the values it is less than. That means, multiplying X values by 10, Y values by 1, and starting by looking at the previous row. This calculation handles all possibilities, except of course doing partial squares.</p>
+<center>
+<img src="/post/2019-07-08-tableau-creating-a-waffle-chart_files/Waffle%20Color.png" style="width:40.0%" style="height:40.0%" />
+</center>
+<p><br>Presto! Now we can finalize the beautiful waffle chart!</br></p>
+<center>
+<img src="/post/2019-07-08-tableau-creating-a-waffle-chart_files/Colored%20Waffle.png" style="width:50.0%" style="height:50.0%" />
+</center>
+<center>
+33% of the flowers in the iris dataset belong to the virginica species.
+</center>
+</div>
+<div id="the-end---enjoy-your-waffles" class="section level2">
+<h2>The End - Enjoy your Waffles!</h2>
+</div>
+</div>
+</div>
+
+    
+    
+
+    
+
+    
+
+        <h4 class="page-header">Comments</h4>
+
+        <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "anything-is-data-is-anything" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+    
+
+</main>
+
+        <footer>
+
+            <p class="copyright text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a></p>
+
+        </footer>
+       
+    </body>
+
+</html>
+

@@ -59,7 +59,7 @@
 
 
 <script>$(document).on('click', function() { $('.collapse').collapse('hide'); })</script>
- <meta name="generator" content="Hugo 0.40.2" />
+ <meta name="generator" content="Hugo 0.55.6" />
         
 
         
@@ -161,7 +161,10 @@
 </div>
 
 
-    <br> <div class="text-justify"><p>This is a continuation in my series of exploratory text analysis of 3 Chinese classic works. In the previous post, I calculated word counts for each book, and visualized common words using bar charts. This time, I’d like to examine word use <strong>across</strong> the texts with network visualization. The goal is to help see <strong>what’s common</strong> and <strong>what’s different</strong> between the texts regarding word usage.</p>
+    <br> <div class="text-justify">
+
+
+<p>This is a continuation in my series of exploratory text analysis of 3 Chinese classic works. In the previous post, I calculated word counts for each book, and visualized common words using bar charts. This time, I’d like to examine word use <strong>across</strong> the texts with network visualization. The goal is to help see <strong>what’s common</strong> and <strong>what’s different</strong> between the texts regarding word usage.</p>
 <p>Network visualization is particularly helpful for discovering simularities and differences between objects - this is because nodes and edges can form connections and clusters (or stay isolated). Thus, through a network structure we can get an idea of commonalities and differences between the word usages in these 3 works.</p>
 <p>Disclaimer - the setup of this post is very similar to last time. I’m essentially importing the same data. So just skip past these first 2 code blocks.</p>
 <pre class="r"><code>library(tidyverse)
@@ -398,7 +401,7 @@ In the case of the bigrams, there is a lot less in common between the works.</p>
         <h4 class="page-header">Comments</h4>
 
         <div id="disqus_thread"></div>
-<script>
+<script type="application/javascript">
     var disqus_config = function () {
     
     

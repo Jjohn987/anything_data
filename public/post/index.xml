@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on Anything Data</title>
@@ -6,10 +5,92 @@
     <description>Recent content in Posts on Anything Data</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 02 Mar 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 08 Jul 2019 00:00:00 +0000</lastBuildDate>
     
         <atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Tableau - Creating a Waffle Chart</title>
+      <link>/post/tableau-creating-a-waffle-chart/</link>
+      <pubDate>Mon, 08 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/tableau-creating-a-waffle-chart/</guid>
+      <description>
+
+
+&lt;div id=&#34;waffles-are-for-breakfast&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Waffles are for Breakfast&lt;/h1&gt;
+&lt;p&gt;It’s been a long time since my last update and I’ve decided to start with Tableau, of all topics! Although open source advocates do not look kindly upon Tableau, I find myself using it frequently and relearning all the stuff I can do in R. For my series of “how-to’s” regarding Tableau, I’d like to start with posting about &lt;strong&gt;how to make a waffle chart in Tableau&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Without further ado:&lt;/p&gt;
+&lt;div id=&#34;whats-a-waffle-chart&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;What’s a Waffle Chart?&lt;/h2&gt;
+&lt;center&gt;
+&lt;img src=&#34;/post/2019-07-08-tableau-creating-a-waffle-chart_files/Waffle1.png&#34; width=&#34;150&#34; height=&#34;150&#34; /&gt; &lt;img src=&#34;/post/2019-07-08-tableau-creating-a-waffle-chart_files/Waffle2.png&#34; width=&#34;150&#34; height=&#34;150&#34; /&gt; &lt;img src=&#34;/post/2019-07-08-tableau-creating-a-waffle-chart_files/Waffle3.png&#34; width=&#34;150&#34; height=&#34;150&#34; /&gt;
+&lt;/center&gt;
+&lt;p&gt;&lt;br&gt;There are a gazillion ways to depict an amount. Bar charts and pie charts are common, maybe you’ve even seen an area/tree chart. But variety is the spice of life – repeatedly looking at bar charts becomes tiring. Enter the waffle chart - It has the appearance of a waffle iron. It’s basically a grid of squares (or any other mark). Squares can be colored to represent an amount.&lt;/br&gt;&lt;/p&gt;
+&lt;p&gt;In Tableau, a waffle chart is NOT one of the off-the-shelf charts that you can make by clicking the “Show Me” panel. If you want to create one, you’ll need to be, err, creative.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;setting-up&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Setting Up&lt;/h2&gt;
+&lt;p&gt;For this tutorial I will use the famous iris dataset. You can find it &lt;em&gt;anywhere&lt;/em&gt;, but it is primarily hosted at &lt;a href=&#34;UCI%20machine%20learning%20repository&#34;&gt;https://archive.ics.uci.edu/ml/datasets/iris&lt;/a&gt;. Download it and get it into Tableau. &lt;strong&gt;Important&lt;/strong&gt; - Make sure that your spreadsheet software creates an “ID” variable for each row (a row number for each row), and read it as a dimension.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Some things to figure out:&lt;/strong&gt;&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;How to make a grid with your data (conventionally, a 10 x 10).&lt;/li&gt;
+&lt;li&gt;How to assign color to the squares/marks in that grid.&lt;/li&gt;
+&lt;li&gt;The calculation that will be used to create the color assignment.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Of course, there’s always more than one way to do things in Tableau. I’ll show my unique way of building a waffle chart which serves my data needs quite well.&lt;/p&gt;
+&lt;p&gt;We start by creating an index. To do so, all you have to do is make a calculated field with INDEX() in it.&lt;/p&gt;
+&lt;center&gt;
+&lt;img src=&#34;/post/2019-07-08-tableau-creating-a-waffle-chart_files/%5BINDEX%5D.png&#34; style=&#34;width:40.0%&#34; style=&#34;height:40.0%&#34; /&gt;&lt;img src=&#34;/post/2019-07-08-tableau-creating-a-waffle-chart_files/%5Btenths%5D.png&#34; style=&#34;width:40.0%&#34; style=&#34;height:40.0%&#34; /&gt;
+&lt;/center&gt;
+&lt;p&gt;&lt;br&gt;Next up, use INDEX to partition the whole dataset into 10 rows to build out the x-axis. So let’s figure out how many rows are in a “tenth” of the data – divide the maximum value of the index by 10 or multiply by 0.1. &lt;strong&gt;Note&lt;/strong&gt; it is important to use ROUND to square off the value. If not, you will have rows of unequal lengths later.&lt;/br&gt;&lt;/p&gt;
+&lt;p&gt;To make the X-axis from here, I simply assign values based off of where their index stands in relation to each tenth percentile.&lt;/p&gt;
+&lt;center&gt;
+&lt;img src=&#34;/post/2019-07-08-tableau-creating-a-waffle-chart_files/%5Bx%5D.png&#34; style=&#34;width:50.0%&#34; style=&#34;height:50.0%&#34; /&gt;
+&lt;/center&gt;
+&lt;p&gt;At this point, you place your newly created X variable on the rows shelf and choose to “compute using ____” (your dimension/row-level ID variable), and doing so you can see a neat little row of marks as such:&lt;/p&gt;
+&lt;center&gt;
+&lt;img src=&#34;/post/2019-07-08-tableau-creating-a-waffle-chart_files/%5Bx%5D%20row.png&#34; style=&#34;width:50.0%&#34; style=&#34;height:50.0%&#34; /&gt;
+&lt;/center&gt;
+&lt;p&gt;Now we need to expand this single row into 10 Y-values. If you guessed that we will now partition the X-values into 10 different rows, you are right. To do this I multiply the index value by 100 and divide by the maximum index value. This is exactly what it sounds like - a percentage. Note that rounding the values to the nearest integer is very important. Without doing so we won’t achieve a neatly separated 10 x 10 grid but a continuous line of marks instead.&lt;/p&gt;
+&lt;center&gt;
+&lt;img src=&#34;/post/2019-07-08-tableau-creating-a-waffle-chart_files/%5By%5D.png&#34; style=&#34;width:50.0%&#34; style=&#34;height:50.0%&#34; /&gt;
+&lt;/center&gt;
+&lt;p&gt;The result is not a beautiful 10x10 grid, but a beautiful 11 x 11 grid.&lt;/p&gt;
+&lt;center&gt;
+&lt;img src=&#34;/post/2019-07-08-tableau-creating-a-waffle-chart_files/11x11%20grid.png&#34; style=&#34;width:50.0%&#34; style=&#34;height:50.0%&#34; /&gt;
+&lt;/center&gt;
+&lt;p&gt;This is because of the rounding we did earlier - for each tenth percentile partiion of X, the bottom portion of the Y values were closer to 0 than 1, which means they were rounded down. Other tutorials may have a workaround, however, they seem to employ other means which require their own unique workarounds as well. At the end of the day, you’re probably going to need a workaround. Here is mine:&lt;/p&gt;
+&lt;p&gt;Simply fold the 0 and 1 Y values into each other with another calculated field, as such.&lt;/p&gt;
+&lt;center&gt;
+&lt;img src=&#34;/post/2019-07-08-tableau-creating-a-waffle-chart_files/Y.png&#34; style=&#34;width:40.0%&#34; style=&#34;height:40.0%&#34; /&gt; &lt;strong&gt;And we get ====&amp;gt;&lt;/strong&gt;&lt;img src=&#34;/post/2019-07-08-tableau-creating-a-waffle-chart_files/10x10%20grid.png&#34; style=&#34;width:40.0%&#34; style=&#34;height:40.0%&#34; /&gt;
+&lt;/center&gt;
+&lt;p&gt;Voila! Now we have our “template” for a waffle chart! Not that it was necessary to fold all the values of our data into the chart.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;But we can’t eat waffles yet&lt;/strong&gt; - we need to assign color to it first. I suppose I’ll color the waffle chart based off of the percentage of Virginica species in the Iris dataset. Notice that I need to use fixed LOD calculations for this. Since the “View” influences calculations, it is best to work with an LOD which will compute the calculation first in spite of whatever is happening in the view.&lt;/p&gt;
+&lt;center&gt;
+&lt;img src=&#34;/post/2019-07-08-tableau-creating-a-waffle-chart_files/Total%20Virginica.png&#34; style=&#34;width:40.0%&#34; style=&#34;height:40.0%&#34; /&gt;&lt;img src=&#34;/post/2019-07-08-tableau-creating-a-waffle-chart_files/Percentage%20Virginica.png&#34; style=&#34;width:40.0%&#34; style=&#34;height:40.0%&#34; /&gt;
+&lt;/center&gt;
+&lt;p&gt;
+&lt;p&gt;Now we are ready to assign a color using the percentage variable. The logic is profoundly simple once you figure out the concept. Essentially, you need to tell Tableau to color a mark based off of the values it is less than. That means, multiplying X values by 10, Y values by 1, and starting by looking at the previous row. This calculation handles all possibilities, except of course doing partial squares.&lt;/p&gt;
+&lt;center&gt;
+&lt;img src=&#34;/post/2019-07-08-tableau-creating-a-waffle-chart_files/Waffle%20Color.png&#34; style=&#34;width:40.0%&#34; style=&#34;height:40.0%&#34; /&gt;
+&lt;/center&gt;
+&lt;p&gt;&lt;br&gt;Presto! Now we can finalize the beautiful waffle chart!&lt;/br&gt;&lt;/p&gt;
+&lt;center&gt;
+&lt;img src=&#34;/post/2019-07-08-tableau-creating-a-waffle-chart_files/Colored%20Waffle.png&#34; style=&#34;width:50.0%&#34; style=&#34;height:50.0%&#34; /&gt;
+&lt;/center&gt;
+&lt;center&gt;
+33% of the flowers in the iris dataset belong to the virginica species.
+&lt;/center&gt;
+&lt;/div&gt;
+&lt;div id=&#34;the-end---enjoy-your-waffles&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;The End - Enjoy your Waffles!&lt;/h2&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
+    </item>
     
     <item>
       <title>My Shiny Dashboard, Milwaukee Beer </title>
@@ -17,7 +98,8 @@
       <pubDate>Sat, 02 Mar 2019 00:00:00 +0000</pubDate>
       
       <guid>/post/my-shiny-dashboard-milwaukee-beer/</guid>
-      <description>&lt;script src=&#34;/rmarkdown-libs/htmlwidgets/htmlwidgets.js&#34;&gt;&lt;/script&gt;
+      <description>
+&lt;script src=&#34;/rmarkdown-libs/htmlwidgets/htmlwidgets.js&#34;&gt;&lt;/script&gt;
 &lt;script src=&#34;/rmarkdown-libs/jquery/jquery.min.js&#34;&gt;&lt;/script&gt;
 &lt;script src=&#34;/rmarkdown-libs/proj4js/proj4.js&#34;&gt;&lt;/script&gt;
 &lt;link href=&#34;/rmarkdown-libs/highcharts/css/motion.css&#34; rel=&#34;stylesheet&#34; /&gt;
@@ -132,7 +214,10 @@ For anybody that hasn’t used the fabulous highcharter package before, &lt;code
       <pubDate>Tue, 01 Jan 2019 00:00:00 +0000</pubDate>
       
       <guid>/post/predicting-churn-using-tree-models/</guid>
-      <description>&lt;p&gt;Today I want to predict churn using data from a hypothetical telecom company. Although it isn’t real life data, it is based on real life data. The data are spread across 19 columns — 14 continuous, 4 categorical, and the outcome variable for prediction - “churn”. The dataset is small, with 3333 rows for training and 1667 for testing.&lt;/p&gt;
+      <description>
+
+
+&lt;p&gt;Today I want to predict churn using data from a hypothetical telecom company. Although it isn’t real life data, it is based on real life data. The data are spread across 19 columns — 14 continuous, 4 categorical, and the outcome variable for prediction - “churn”. The dataset is small, with 3333 rows for training and 1667 for testing.&lt;/p&gt;
 &lt;p&gt;Before modeling, I need to explore the data structure – the distributions, class balances/imbalances, relationships between variables, etc. Are there any visual patterns in the data? How does churn relate to the continuous and discrete variables? These are questions I am asking at this initial stage. Let’s start with a series of histograms.&lt;/p&gt;
 &lt;div id=&#34;data-overview&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;Data Overview&lt;/h2&gt;
@@ -239,7 +324,10 @@ predictions_list &amp;lt;- list(&amp;quot;knn&amp;quot; = knn_pred, &amp;quot;c5
       <pubDate>Mon, 03 Dec 2018 00:00:00 +0000</pubDate>
       
       <guid>/post/linear-classification-models-hepatic-dataset/</guid>
-      <description>&lt;p&gt;This post is following exercise 1 in Chapter 12 of &lt;a href=&#34;http://appliedpredictivemodeling.com&#34;&gt;Applied Predicative Modeling&lt;/a&gt;. Here I use the machine learning package CARET in R to make classification models; in particular, the linear classification models discussed in Chapter 12.&lt;/p&gt;
+      <description>
+
+
+&lt;p&gt;This post is following exercise 1 in Chapter 12 of &lt;a href=&#34;http://appliedpredictivemodeling.com&#34;&gt;Applied Predicative Modeling&lt;/a&gt;. Here I use the machine learning package CARET in R to make classification models; in particular, the linear classification models discussed in Chapter 12.&lt;/p&gt;
 &lt;p&gt;The dataset in question is about hepatic injury (liver damage). It includes a dataframe of biological related predictors of liver damage &lt;code&gt;bio&lt;/code&gt;, a dataframe of chemical related predictors &lt;code&gt;chem&lt;/code&gt;, and the response variable we are interested in, &lt;code&gt;injury&lt;/code&gt;. If a model can be fitted adequately, that model could potentially be used to screen for harmful compounds in the future.&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(caret)
 
@@ -607,7 +695,10 @@ pROC::plot.roc(injury_test, predictions_bio_lda$Yes)&lt;/code&gt;&lt;/pre&gt;
       <pubDate>Fri, 21 Sep 2018 00:00:00 +0000</pubDate>
       
       <guid>/post/first-app-halo-5-stats/</guid>
-      <description>&lt;p&gt;“Halo 5 Stats” is my first ever Shiny app, which is themed around the the popular sci-fi shooter Halo 5. It combines beatiful data with Halo’s beautiful graphics - something that Halo fans and data enthusiasts undoubtedly love. You can use my app at &lt;a href=&#34;https://jjohn9000.shinyapps.io/Halo_5_Stats/&#34; class=&#34;uri&#34;&gt;https://jjohn9000.shinyapps.io/Halo_5_Stats/&lt;/a&gt;
+      <description>
+
+
+&lt;p&gt;“Halo 5 Stats” is my first ever Shiny app, which is themed around the the popular sci-fi shooter Halo 5. It combines beatiful data with Halo’s beautiful graphics - something that Halo fans and data enthusiasts undoubtedly love. You can use my app at &lt;a href=&#34;https://jjohn9000.shinyapps.io/Halo_5_Stats/&#34; class=&#34;uri&#34;&gt;https://jjohn9000.shinyapps.io/Halo_5_Stats/&lt;/a&gt;
 &lt;br&gt;&lt;/p&gt;
 &lt;p&gt;After entering your gamertag, the app will automatically display your online game data using Microsoft’s Halo API and visualize your data with numerous customizable elements such as backdrop and plot colors.&lt;/p&gt;
 &lt;p&gt;The app is unlike most others in that it goes beyond simply displaying text-based statistics like leadership standings and kill ratios. After all, one of R’s strengths is that &lt;code&gt;ggplot2&lt;/code&gt; makes data beautiful - &lt;strong&gt;Beautiful data and beautiful Halo graphics, something all Halo fans will love.&lt;/strong&gt; &lt;br&gt;&lt;/p&gt;
@@ -635,7 +726,10 @@ Please give my app a look and enjoy it! Download plots and share with your frien
       <pubDate>Fri, 08 Jun 2018 00:00:00 +0000</pubDate>
       
       <guid>/post/part-ii-chinese-classics-word-network-plots/</guid>
-      <description>&lt;p&gt;This is a continuation in my series of exploratory text analysis of 3 Chinese classic works. In the previous post, I calculated word counts for each book, and visualized common words using bar charts. This time, I’d like to examine word use &lt;strong&gt;across&lt;/strong&gt; the texts with network visualization. The goal is to help see &lt;strong&gt;what’s common&lt;/strong&gt; and &lt;strong&gt;what’s different&lt;/strong&gt; between the texts regarding word usage.&lt;/p&gt;
+      <description>
+
+
+&lt;p&gt;This is a continuation in my series of exploratory text analysis of 3 Chinese classic works. In the previous post, I calculated word counts for each book, and visualized common words using bar charts. This time, I’d like to examine word use &lt;strong&gt;across&lt;/strong&gt; the texts with network visualization. The goal is to help see &lt;strong&gt;what’s common&lt;/strong&gt; and &lt;strong&gt;what’s different&lt;/strong&gt; between the texts regarding word usage.&lt;/p&gt;
 &lt;p&gt;Network visualization is particularly helpful for discovering simularities and differences between objects - this is because nodes and edges can form connections and clusters (or stay isolated). Thus, through a network structure we can get an idea of commonalities and differences between the word usages in these 3 works.&lt;/p&gt;
 &lt;p&gt;Disclaimer - the setup of this post is very similar to last time. I’m essentially importing the same data. So just skip past these first 2 code blocks.&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)
@@ -869,7 +963,8 @@ In the case of the bigrams, there is a lot less in common between the works.&lt;
       <pubDate>Fri, 01 Jun 2018 00:00:00 +0000</pubDate>
       
       <guid>/post/plotting-word-bigrams-with-3-chinese-classics/</guid>
-      <description>&lt;script src=&#34;/rmarkdown-libs/kePrint/kePrint.js&#34;&gt;&lt;/script&gt;
+      <description>
+&lt;script src=&#34;/rmarkdown-libs/kePrint/kePrint.js&#34;&gt;&lt;/script&gt;
 
 
 &lt;p&gt;In the last post, we saw frequencies of the most common words in the Analects, Zhuangzi, and Mozi texts. The faceted plot did an excellent job of capturing a generic “theme” of each text. However, I wondered how the results might change when plotting bigrams (2 word combinations of adjacent words) as opposed to single values.&lt;/p&gt;
@@ -1138,7 +1233,8 @@ top_10_bigrams &amp;lt;- book_bigram_count %&amp;gt;%
       <pubDate>Tue, 29 May 2018 00:00:00 +0000</pubDate>
       
       <guid>/post/a-quasi-tidytext-analysis-of-3-chinese-classics/</guid>
-      <description>&lt;script src=&#34;/rmarkdown-libs/kePrint/kePrint.js&#34;&gt;&lt;/script&gt;
+      <description>
+&lt;script src=&#34;/rmarkdown-libs/kePrint/kePrint.js&#34;&gt;&lt;/script&gt;
 
 
 &lt;p&gt;For a long time I’ve admired the &lt;code&gt;tidytext&lt;/code&gt; package and its wonderful companion book &lt;a href=&#34;https://www.tidytextmining.com&#34;&gt;&lt;em&gt;Text Mining with R&lt;/em&gt;&lt;/a&gt;. After reading it I thought, “Why not undertake a project of Chinese text analysis?” &lt;strong&gt;I am deeply interested in Chinese philosophy&lt;/strong&gt; but I decided to keep the analysis narrow by selecting just three works - &lt;strong&gt;The Analects, Zhuangzi, and the Mozi&lt;/strong&gt;.&lt;/p&gt;
@@ -1789,7 +1885,10 @@ ggplot(book_top_words, aes(x = reorder(word, word_freq), y = word_freq, fill = b
       <pubDate>Thu, 17 May 2018 00:00:00 +0000</pubDate>
       
       <guid>/post/ctextclassics-my-first-package/</guid>
-      <description>&lt;p&gt;My latest update is a milestone! I have authored my first ever R package which is an API caller for ctext.org. Ctext hosts numerous pre-modern Chinese texts and my package makes them available to you. The scope is broad, but think philosophical works in Confucianism, Daoism, Legalism, military doctrines, history compilations, works in medicine, and many more.&lt;/p&gt;
+      <description>
+
+
+&lt;p&gt;My latest update is a milestone! I have authored my first ever R package which is an API caller for ctext.org. Ctext hosts numerous pre-modern Chinese texts and my package makes them available to you. The scope is broad, but think philosophical works in Confucianism, Daoism, Legalism, military doctrines, history compilations, works in medicine, and many more.&lt;/p&gt;
 &lt;p&gt;The three main functions of ctextclassics are &lt;code&gt;get_chapter(&amp;quot;book&amp;quot;, &amp;quot;chapter&amp;quot;)&lt;/code&gt; ,&lt;code&gt;get_chapters(&amp;quot;book&amp;quot;, chapters)&lt;/code&gt;, &lt;code&gt;get_books(&amp;quot;book&amp;quot;)&lt;/code&gt; and the internal dataframe &lt;code&gt;book_list&lt;/code&gt; which shows the available texts. So perhaps try something like: &lt;br&gt;&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(ctextclassics)
 head(unique(book_list$book), n = 5)&lt;/code&gt;&lt;/pre&gt;
@@ -1859,7 +1958,10 @@ head(unique(book_list$book), n = 5)&lt;/code&gt;&lt;/pre&gt;
       <pubDate>Tue, 08 May 2018 00:00:00 +0000</pubDate>
       
       <guid>/post/scraping-for-a-booklist-of-the-chinese-classics/</guid>
-      <description>&lt;p&gt;Last week I was considering a project that would be interesting and unique. I decided I would like to do a text analysis on classical Chinese texts, but wasn’t sure what kind of analysis regarding which texts. I decided to keep it small - and use five of the “core” Chinese classics - The Analects, The Mengzi, Dao De Jing, Zhuangzi, and Mozi. While there are many books in Confucianism, Daoism, and Moism, these texts are often used as the most representative examples of each “genre”.&lt;/p&gt;
+      <description>
+
+
+&lt;p&gt;Last week I was considering a project that would be interesting and unique. I decided I would like to do a text analysis on classical Chinese texts, but wasn’t sure what kind of analysis regarding which texts. I decided to keep it small - and use five of the “core” Chinese classics - The Analects, The Mengzi, Dao De Jing, Zhuangzi, and Mozi. While there are many books in Confucianism, Daoism, and Moism, these texts are often used as the most representative examples of each “genre”.&lt;/p&gt;
 &lt;p&gt;Of course, the first key question was, &lt;strong&gt;from where can I get the data?&lt;/strong&gt; One website with a rich amount of Chinese text data regarding the classics is &lt;a href=&#34;https://ctext.org/&#34;&gt;ctext.org&lt;/a&gt;.&lt;/p&gt;
 &lt;div class=&#34;figure&#34;&gt;
 &lt;img src=&#34;/img/ctextscreen.png&#34; alt=&#34;A screenshot of Ctext.org&#34; /&gt;
@@ -1958,7 +2060,10 @@ book_list &amp;lt;- all_works %&amp;gt;% do.call(rbind, .)&lt;/code&gt;&lt;/pre&
       <pubDate>Sun, 06 May 2018 00:00:00 +0000</pubDate>
       
       <guid>/post/on-relocating-to-github-netlify/</guid>
-      <description>&lt;p&gt;&lt;strong&gt;Deep, labored breathing&lt;/strong&gt;&lt;/p&gt;
+      <description>
+
+
+&lt;p&gt;&lt;strong&gt;Deep, labored breathing&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;Hello everyone, this is the opening post on my new blog, which I’m relocating from Wordpress to GitHub Pages and Netlify. It’s so nice I’ve given it a name - because nice things have names!&lt;/p&gt;
 &lt;p&gt;But, why was I &lt;strong&gt;panting&lt;/strong&gt;? The relocation effort wasn’t easy. Why did I follow through with it? Becuase it is &lt;strong&gt;worth the effort&lt;/strong&gt;. This post is evidence of my victory. Now please, let me explain.&lt;/p&gt;
 &lt;p&gt;A few months ago, when I explored options for creating a blog to help me keep track of my learning, and to display my progress (and creativity) to the world, I decided on Wordpress. It was convenient, quick to set up, and easy to forget about.&lt;/p&gt;
@@ -1988,7 +2093,10 @@ book_list &amp;lt;- all_works %&amp;gt;% do.call(rbind, .)&lt;/code&gt;&lt;/pre&
       <pubDate>Sun, 01 Apr 2018 00:00:00 +0000</pubDate>
       
       <guid>/post/visualizing-european-ww1-defense-treaties-with-igraph/</guid>
-      <description>&lt;p&gt;I suddenly got bit by a bug to learn about network analysis. So I recalled the &lt;a href=&#34;http://www.correlatesofwar.org/data-sets/formal-alliances&#34;&gt;Correlates of War Project&lt;/a&gt; having a dataset about alliances. I decided to revisit them and download the data for this new project, which you can do too.&lt;/p&gt;
+      <description>
+
+
+&lt;p&gt;I suddenly got bit by a bug to learn about network analysis. So I recalled the &lt;a href=&#34;http://www.correlatesofwar.org/data-sets/formal-alliances&#34;&gt;Correlates of War Project&lt;/a&gt; having a dataset about alliances. I decided to revisit them and download the data for this new project, which you can do too.&lt;/p&gt;
 &lt;p&gt;To start small, I decided to visualize a certain topic, e.g., European Defense Treaties relating to World War I. For that purpose I filtered the dataset &lt;strong&gt;for treaties that occured between 1878 and 1914.&lt;/strong&gt; As usual there’s a lot of cleaning to be done before anything else can be done.&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)
 library(lubridate)
@@ -2083,7 +2191,10 @@ Zweig, K. A. (2013). Network analysis literacy: A practical approach to network 
       <pubDate>Mon, 29 Jan 2018 00:00:00 +0000</pubDate>
       
       <guid>/post/plotting-fortune-500-hq-s-in-r/</guid>
-      <description>&lt;p&gt;Today I’d like to work a little on geospatial mapping in R, so I’ve chosen a small dataset (only 256 kb) that can be plotted on a map. It the location information of Fortune 500 company headquarters in the US. You can download it from &lt;a href=&#34;https://hifld-geoplatform.opendata.arcgis.com/datasets/a4d813c396934fc09d0b801a0c491852_0?geometry=-140.445%2C24.931%2C-21.881%2C49.099&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+      <description>
+
+
+&lt;p&gt;Today I’d like to work a little on geospatial mapping in R, so I’ve chosen a small dataset (only 256 kb) that can be plotted on a map. It the location information of Fortune 500 company headquarters in the US. You can download it from &lt;a href=&#34;https://hifld-geoplatform.opendata.arcgis.com/datasets/a4d813c396934fc09d0b801a0c491852_0?geometry=-140.445%2C24.931%2C-21.881%2C49.099&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;R has several choices for plotting geospatial information. Here I use &lt;code&gt;ggmap&lt;/code&gt;, however in the future I’ll check out the &lt;code&gt;raster&lt;/code&gt; and &lt;code&gt;sp&lt;/code&gt; packages. Anyway, let’s get started by loading in and cleaning the data.&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)
 library(ggmap)
@@ -2225,7 +2336,10 @@ geom_point(data = cities, aes(x = X, y = Y), color = &amp;quot;red&amp;quot;, al
       <pubDate>Sat, 01 Jul 2017 00:00:00 +0000</pubDate>
       
       <guid>/post/top-mba-programs-by-us-news/</guid>
-      <description>&lt;p&gt;Somebody once asked me for reccomendations on MBA programs based on rank and tuition. I didn’t have any information on hand, but knew how toget it. Webscraping.&lt;/p&gt;
+      <description>
+
+
+&lt;p&gt;Somebody once asked me for reccomendations on MBA programs based on rank and tuition. I didn’t have any information on hand, but knew how toget it. Webscraping.&lt;/p&gt;
 &lt;p&gt;Webscraping is an immensly useful tool for gathering data from webpages, when it isn’t hosted on an API or stored in a file somewhere. R’s best tool for webscraping is &lt;strong&gt;Rvest.&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;So I decided to scrape information on the US News website for university rankings, which has at least 20 pages of MBA probrams available. To copy and paste that much data into a spreadsheet would be annoying and quite an eye strain.&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)

@@ -6,7 +6,7 @@
     <description>Recent content on Anything Data</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 02 Mar 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 08 Jul 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
@@ -40,6 +40,15 @@ Purpose The purpose of this project was to learn Shiny, R Studio’s powerful fr
       <guid>/project/project1/</guid>
       <description>Predicting Churn with Telecom Data Exploring Numeric Data Exploring Categorical Data Modeling Model Test Performance Conclusion    Predicting Churn with Telecom Data 
 This project used machine learning to predict customer churn in a telecom company. The data came from the UCI machine learning repository, and consisted of 19 columns, along with 3333 rows for training and 1667 for testing. First, I explored the data structure – the distributions, relationships between variables, and the class balances and imbalances.</description>
+    </item>
+    
+    <item>
+      <title>Tableau - Creating a Waffle Chart</title>
+      <link>/post/tableau-creating-a-waffle-chart/</link>
+      <pubDate>Mon, 08 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/tableau-creating-a-waffle-chart/</guid>
+      <description>Waffles are for Breakfast It’s been a long time since my last update and I’ve decided to start with Tableau, of all topics! Although open source advocates do not look kindly upon Tableau, I find myself using it frequently and relearning all the stuff I can do in R. For my series of “how-to’s” regarding Tableau, I’d like to start with posting about how to make a waffle chart in Tableau.</description>
     </item>
     
     <item>
@@ -107,7 +116,7 @@ This is where I ran into a problem with Tidytext – although it worked fine for
       
       <guid>/post/a-quasi-tidytext-analysis-of-3-chinese-classics/</guid>
       <description>For a long time I’ve admired the tidytext package and its wonderful companion book Text Mining with R. After reading it I thought, “Why not undertake a project of Chinese text analysis?” I am deeply interested in Chinese philosophy but I decided to keep the analysis narrow by selecting just three works - The Analects, Zhuangzi, and the Mozi.
-Following similar pace with Tidytext, I first download my data. Here I use my package ctextclassics and specifically, the function get_books(c(.</description>
+Following similar pace with Tidytext, I first download my data.</description>
     </item>
     
     <item>
@@ -157,7 +166,7 @@ To start small, I decided to visualize a certain topic, e.g., European Defense T
       
       <guid>/post/plotting-fortune-500-hq-s-in-r/</guid>
       <description>Today I’d like to work a little on geospatial mapping in R, so I’ve chosen a small dataset (only 256 kb) that can be plotted on a map. It the location information of Fortune 500 company headquarters in the US. You can download it from here.
-R has several choices for plotting geospatial information. Here I use ggmap, however in the future I’ll check out the raster and sp packages. Anyway, let’s get started by loading in and cleaning the data.</description>
+R has several choices for plotting geospatial information. Here I use ggmap, however in the future I’ll check out the raster and sp packages.</description>
     </item>
     
     <item>

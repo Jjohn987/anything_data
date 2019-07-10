@@ -1,25 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Shiny on Anything Data</title>
+    <title>shiny on Anything Data</title>
     <link>/tags/shiny/</link>
-    <description>Recent content in Shiny on Anything Data</description>
+    <description>Recent content in shiny on Anything Data</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 02 Mar 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/shiny/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>Project 2 - Halo 5 Stats</title>
-      <link>/project/project2/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>/project/project2/</guid>
-      <description>Shiny App - Halo 5 Stats Purpose Technology Learned About the App    Shiny App - Halo 5 Stats 
-Purpose The purpose of this project was to learn Shiny, R Studio’s powerful framework for packaging R code into web applications. With Shiny, the possibilities for communicating data are endless, including connecting to API’s or creating dashboards that update in real time. You might embed a machine learning model for producing results on the go, or track metrics that constantly update.</description>
-    </item>
     
     <item>
       <title>Project 3 - Milwaukee Beer</title>
@@ -30,6 +20,16 @@ Purpose The purpose of this project was to learn Shiny, R Studio’s powerful fr
       <description>App: https://jjohn9000.shinyapps.io/Milwaukee_Beer_App/ 
 Introduction: Milwaukee Beer is a dashboard I built with R’s shinydashboard package – It provides quick insights into Milwaukee breweries, and beer brewed in Milwaukee. You can toggle dropdown tabs to:
  get ratings for beers and breweries display results in reactive, dynamic, nice graphs track sentiment sourced from comments / product reviews posted on beeradvocate.org search for beers by flavor for convenient comparison and even dive in to the data yourself  Feel free to search for beer by type and flavor too!</description>
+    </item>
+    
+    <item>
+      <title>Project 2 - Halo 5 Stats</title>
+      <link>/project/project2/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/project/project2/</guid>
+      <description>Shiny App - Halo 5 Stats Purpose Technology Learned About the App    Shiny App - Halo 5 Stats 
+Purpose The purpose of this project was to learn Shiny, R Studio’s powerful framework for packaging R code into web applications. With Shiny, the possibilities for communicating data are endless, including connecting to API’s or creating dashboards that update in real time. You might embed a machine learning model for producing results on the go, or track metrics that constantly update.</description>
     </item>
     
     <item>

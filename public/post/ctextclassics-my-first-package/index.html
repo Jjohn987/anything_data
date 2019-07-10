@@ -59,7 +59,7 @@
 
 
 <script>$(document).on('click', function() { $('.collapse').collapse('hide'); })</script>
- <meta name="generator" content="Hugo 0.40.2" />
+ <meta name="generator" content="Hugo 0.55.6" />
         
 
         
@@ -165,7 +165,10 @@
 </div>
 
 
-    <br> <div class="text-justify"><p>My latest update is a milestone! I have authored my first ever R package which is an API caller for ctext.org. Ctext hosts numerous pre-modern Chinese texts and my package makes them available to you. The scope is broad, but think philosophical works in Confucianism, Daoism, Legalism, military doctrines, history compilations, works in medicine, and many more.</p>
+    <br> <div class="text-justify">
+
+
+<p>My latest update is a milestone! I have authored my first ever R package which is an API caller for ctext.org. Ctext hosts numerous pre-modern Chinese texts and my package makes them available to you. The scope is broad, but think philosophical works in Confucianism, Daoism, Legalism, military doctrines, history compilations, works in medicine, and many more.</p>
 <p>The three main functions of ctextclassics are <code>get_chapter(&quot;book&quot;, &quot;chapter&quot;)</code> ,<code>get_chapters(&quot;book&quot;, chapters)</code>, <code>get_books(&quot;book&quot;)</code> and the internal dataframe <code>book_list</code> which shows the available texts. So perhaps try something like: <br></p>
 <pre class="r"><code>library(ctextclassics)
 head(unique(book_list$book), n = 5)</code></pre>
@@ -284,7 +287,7 @@ head(unique(book_list$book), n = 5)</code></pre>
         <h4 class="page-header">Comments</h4>
 
         <div id="disqus_thread"></div>
-<script>
+<script type="application/javascript">
     var disqus_config = function () {
     
     

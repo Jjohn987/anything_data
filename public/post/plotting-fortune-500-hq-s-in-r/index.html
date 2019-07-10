@@ -59,7 +59,7 @@
 
 
 <script>$(document).on('click', function() { $('.collapse').collapse('hide'); })</script>
- <meta name="generator" content="Hugo 0.40.2" />
+ <meta name="generator" content="Hugo 0.55.6" />
         
 
         
@@ -163,7 +163,10 @@
 </div>
 
 
-    <br> <div class="text-justify"><p>Today I’d like to work a little on geospatial mapping in R, so I’ve chosen a small dataset (only 256 kb) that can be plotted on a map. It the location information of Fortune 500 company headquarters in the US. You can download it from <a href="https://hifld-geoplatform.opendata.arcgis.com/datasets/a4d813c396934fc09d0b801a0c491852_0?geometry=-140.445%2C24.931%2C-21.881%2C49.099">here</a>.</p>
+    <br> <div class="text-justify">
+
+
+<p>Today I’d like to work a little on geospatial mapping in R, so I’ve chosen a small dataset (only 256 kb) that can be plotted on a map. It the location information of Fortune 500 company headquarters in the US. You can download it from <a href="https://hifld-geoplatform.opendata.arcgis.com/datasets/a4d813c396934fc09d0b801a0c491852_0?geometry=-140.445%2C24.931%2C-21.881%2C49.099">here</a>.</p>
 <p>R has several choices for plotting geospatial information. Here I use <code>ggmap</code>, however in the future I’ll check out the <code>raster</code> and <code>sp</code> packages. Anyway, let’s get started by loading in and cleaning the data.</p>
 <pre class="r"><code>library(tidyverse)
 library(ggmap)
@@ -308,7 +311,7 @@ geom_point(data = cities, aes(x = X, y = Y), color = &quot;red&quot;, alpha = 0.
         <h4 class="page-header">Comments</h4>
 
         <div id="disqus_thread"></div>
-<script>
+<script type="application/javascript">
     var disqus_config = function () {
     
     

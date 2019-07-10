@@ -59,7 +59,7 @@
 
 
 <script>$(document).on('click', function() { $('.collapse').collapse('hide'); })</script>
- <meta name="generator" content="Hugo 0.40.2" />
+ <meta name="generator" content="Hugo 0.55.6" />
         
 
         
@@ -159,7 +159,10 @@
 </div>
 
 
-    <br> <div class="text-justify"><p>This post is following exercise 1 in Chapter 12 of <a href="http://appliedpredictivemodeling.com">Applied Predicative Modeling</a>. Here I use the machine learning package CARET in R to make classification models; in particular, the linear classification models discussed in Chapter 12.</p>
+    <br> <div class="text-justify">
+
+
+<p>This post is following exercise 1 in Chapter 12 of <a href="http://appliedpredictivemodeling.com">Applied Predicative Modeling</a>. Here I use the machine learning package CARET in R to make classification models; in particular, the linear classification models discussed in Chapter 12.</p>
 <p>The dataset in question is about hepatic injury (liver damage). It includes a dataframe of biological related predictors of liver damage <code>bio</code>, a dataframe of chemical related predictors <code>chem</code>, and the response variable we are interested in, <code>injury</code>. If a model can be fitted adequately, that model could potentially be used to screen for harmful compounds in the future.</p>
 <pre class="r"><code>library(caret)
 
@@ -530,7 +533,7 @@ pROC::plot.roc(injury_test, predictions_bio_lda$Yes)</code></pre>
         <h4 class="page-header">Comments</h4>
 
         <div id="disqus_thread"></div>
-<script>
+<script type="application/javascript">
     var disqus_config = function () {
     
     

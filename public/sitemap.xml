@@ -15,174 +15,66 @@
   </url>
   
   <url>
-    <loc>/post/my-shiny-dashboard-milwaukee-beer/</loc>
-    <lastmod>2019-03-02T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/post/predicting-churn-using-tree-models/</loc>
-    <lastmod>2019-01-01T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/post/linear-classification-models-hepatic-dataset/</loc>
-    <lastmod>2018-12-03T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/post/first-app-halo-5-stats/</loc>
-    <lastmod>2018-09-21T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/post/part-ii-chinese-classics-word-network-plots/</loc>
-    <lastmod>2018-06-08T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/post/plotting-word-bigrams-with-3-chinese-classics/</loc>
-    <lastmod>2018-06-01T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/post/a-quasi-tidytext-analysis-of-3-chinese-classics/</loc>
-    <lastmod>2018-05-29T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/post/ctextclassics-my-first-package/</loc>
-    <lastmod>2018-05-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/post/scraping-for-a-booklist-of-the-chinese-classics/</loc>
-    <lastmod>2018-05-08T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/post/on-relocating-to-github-netlify/</loc>
-    <lastmod>2018-05-06T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/post/visualizing-european-ww1-defense-treaties-with-igraph/</loc>
-    <lastmod>2018-04-01T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/post/plotting-fortune-500-hq-s-in-r/</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/post/top-mba-programs-by-us-news/</loc>
-    <lastmod>2017-07-01T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>/</loc>
-    <lastmod>2019-03-02T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/api/</loc>
-    <lastmod>2018-05-17T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/categories/api/</loc>
-    <lastmod>2018-05-17T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/blogdown/</loc>
-    <lastmod>2018-05-06T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/categories/blogging/</loc>
-    <lastmod>2018-05-06T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/caret/</loc>
-    <lastmod>2019-01-01T00:00:00+00:00</lastmod>
+    <lastmod>2019-07-08T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/categories/</loc>
-    <lastmod>2018-05-17T00:00:00+00:00</lastmod>
+    <lastmod>2019-07-08T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/tags/chinese/</loc>
-    <lastmod>2018-05-17T00:00:00+00:00</lastmod>
+    <loc>/post/</loc>
+    <lastmod>2019-07-08T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/tags/chinese-classics/</loc>
-    <lastmod>2018-05-08T00:00:00+00:00</lastmod>
+    <loc>/categories/tableau/</loc>
+    <lastmod>2019-07-08T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/categories/chinese-text/</loc>
-    <lastmod>2018-05-08T00:00:00+00:00</lastmod>
+    <loc>/tags/tableau/</loc>
+    <lastmod>2019-07-08T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/tags/chinese-text-analysis/</loc>
-    <lastmod>2018-06-08T00:00:00+00:00</lastmod>
+    <loc>/post/tableau-creating-a-waffle-chart/</loc>
+    <lastmod>2019-07-08T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/</loc>
+    <lastmod>2019-07-08T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/categories/chinese-text-analysis/</loc>
-    <lastmod>2018-05-29T00:00:00+00:00</lastmod>
+    <loc>/categories/vizualization/</loc>
+    <lastmod>2019-07-08T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/tags/churn/</loc>
-    <lastmod>2019-01-01T00:00:00+00:00</lastmod>
+    <loc>/tags/waffle-chart/</loc>
+    <lastmod>2019-07-08T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/tags/classification/</loc>
-    <lastmod>2018-12-03T00:00:00+00:00</lastmod>
-    <priority>0</priority>
+    <loc>/post/my-shiny-dashboard-milwaukee-beer/</loc>
+    <lastmod>2019-03-02T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/tags/correlates-of-war-project/</loc>
-    <lastmod>2018-04-01T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/ctext.org/</loc>
-    <lastmod>2018-05-08T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/ctextclassics/</loc>
-    <lastmod>2018-06-01T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/dashboard/</loc>
+    <loc>/categories/shiny/</loc>
+    <lastmod>2019-03-02T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -193,182 +85,13 @@
   </url>
   
   <url>
-    <loc>/tags/fortune-500s/</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/categories/geospatial-mapping/</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/ggmap/</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/ggplot2/</loc>
-    <lastmod>2018-09-21T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/ggraph/</loc>
-    <lastmod>2018-06-08T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/github-pages/</loc>
-    <lastmod>2018-05-06T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/google/</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/halo/</loc>
-    <lastmod>2018-09-21T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/halo-5/</loc>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/highcharter/</loc>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>/tags/highchartr/</loc>
     <lastmod>2019-03-02T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/tags/httr/</loc>
-    <lastmod>2018-05-17T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/igraph/</loc>
-    <lastmod>2018-04-01T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/linear-models/</loc>
-    <lastmod>2018-12-03T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/machine-learning/</loc>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/categories/machine-learning/</loc>
-    <lastmod>2019-01-01T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/microsoft-halo-5-api/</loc>
-    <lastmod>2018-09-21T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/categories/modeling/</loc>
-    <lastmod>2018-12-03T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/netlify/</loc>
-    <lastmod>2018-05-06T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/network-analysis/</loc>
-    <lastmod>2018-04-01T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/categories/network-analysis/</loc>
-    <lastmod>2018-06-08T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/network-visualization/</loc>
-    <lastmod>2018-04-01T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/post/</loc>
-    <lastmod>2019-03-02T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/predictive-modeling/</loc>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/categories/predictive-modeling/</loc>
-    <lastmod>2019-01-01T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/project/</loc>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/rvest/</loc>
-    <lastmod>2018-05-08T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/scraping/</loc>
-    <lastmod>2018-05-08T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/categories/scraping/</loc>
-    <lastmod>2018-05-08T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>/tags/shiny/</loc>
-    <lastmod>2019-03-02T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/categories/shiny/</loc>
     <lastmod>2019-03-02T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
@@ -380,14 +103,106 @@
   </url>
   
   <url>
-    <loc>/tags/</loc>
-    <lastmod>2018-05-17T00:00:00+00:00</lastmod>
+    <loc>/post/predicting-churn-using-tree-models/</loc>
+    <lastmod>2019-01-01T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/caret/</loc>
+    <lastmod>2019-01-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/tags/text-analysis/</loc>
-    <lastmod>2018-05-17T00:00:00+00:00</lastmod>
+    <loc>/tags/churn/</loc>
+    <lastmod>2019-01-01T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/categories/machine-learning/</loc>
+    <lastmod>2019-01-01T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/categories/predictive-modeling/</loc>
+    <lastmod>2019-01-01T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/post/linear-classification-models-hepatic-dataset/</loc>
+    <lastmod>2018-12-03T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/classification/</loc>
+    <lastmod>2018-12-03T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/linear-models/</loc>
+    <lastmod>2018-12-03T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/categories/modeling/</loc>
+    <lastmod>2018-12-03T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/post/first-app-halo-5-stats/</loc>
+    <lastmod>2018-09-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/halo/</loc>
+    <lastmod>2018-09-21T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/microsoft-halo-5-api/</loc>
+    <lastmod>2018-09-21T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/ggplot2/</loc>
+    <lastmod>2018-09-21T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/categories/visualization/</loc>
+    <lastmod>2018-09-21T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/chinese-text-analysis/</loc>
+    <lastmod>2018-06-08T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/categories/network-analysis/</loc>
+    <lastmod>2018-06-08T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/post/part-ii-chinese-classics-word-network-plots/</loc>
+    <lastmod>2018-06-08T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/ggraph/</loc>
+    <lastmod>2018-06-08T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -404,14 +219,19 @@
   </url>
   
   <url>
-    <loc>/tags/tidytext/</loc>
+    <loc>/post/plotting-word-bigrams-with-3-chinese-classics/</loc>
+    <lastmod>2018-06-01T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/ctextclassics/</loc>
     <lastmod>2018-06-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/tags/tidyverse/</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <loc>/tags/tidytext/</loc>
+    <lastmod>2018-06-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -422,14 +242,223 @@
   </url>
   
   <url>
+    <loc>/post/a-quasi-tidytext-analysis-of-3-chinese-classics/</loc>
+    <lastmod>2018-05-29T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/categories/chinese-text-analysis/</loc>
+    <lastmod>2018-05-29T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/categories/api/</loc>
+    <lastmod>2018-05-17T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/api/</loc>
+    <lastmod>2018-05-17T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/chinese/</loc>
+    <lastmod>2018-05-17T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/post/ctextclassics-my-first-package/</loc>
+    <lastmod>2018-05-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/httr/</loc>
+    <lastmod>2018-05-17T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/text-analysis/</loc>
+    <lastmod>2018-05-17T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/categories/chinese-text/</loc>
+    <lastmod>2018-05-08T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/chinese-classics/</loc>
+    <lastmod>2018-05-08T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/ctext.org/</loc>
+    <lastmod>2018-05-08T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/rvest/</loc>
+    <lastmod>2018-05-08T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/categories/scraping/</loc>
+    <lastmod>2018-05-08T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/post/scraping-for-a-booklist-of-the-chinese-classics/</loc>
+    <lastmod>2018-05-08T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/scraping/</loc>
+    <lastmod>2018-05-08T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/github-pages/</loc>
+    <lastmod>2018-05-06T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/netlify/</loc>
+    <lastmod>2018-05-06T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/post/on-relocating-to-github-netlify/</loc>
+    <lastmod>2018-05-06T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/blogdown/</loc>
+    <lastmod>2018-05-06T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/categories/blogging/</loc>
+    <lastmod>2018-05-06T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/correlates-of-war-project/</loc>
+    <lastmod>2018-04-01T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/post/visualizing-european-ww1-defense-treaties-with-igraph/</loc>
+    <lastmod>2018-04-01T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/igraph/</loc>
+    <lastmod>2018-04-01T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/network-analysis/</loc>
+    <lastmod>2018-04-01T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/network-visualization/</loc>
+    <lastmod>2018-04-01T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/fortune-500s/</loc>
+    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/post/plotting-fortune-500-hq-s-in-r/</loc>
+    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/categories/geospatial-mapping/</loc>
+    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/ggmap/</loc>
+    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/google/</loc>
+    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/tidyverse/</loc>
+    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/post/top-mba-programs-by-us-news/</loc>
+    <lastmod>2017-07-01T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/tags/us-news-rankings/</loc>
     <lastmod>2017-07-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/categories/visualization/</loc>
-    <lastmod>2018-09-21T00:00:00+00:00</lastmod>
+    <loc>/tags/halo-5/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/project/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/dashboard/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/highcharter/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/machine-learning/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/predictive-modeling/</loc>
     <priority>0</priority>
   </url>
   
