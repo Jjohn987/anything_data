@@ -24,7 +24,7 @@ googleAnalytics = "UA-118999723-1"
 
 [[menu.main]]
     url = "/post/"
-    name = "Posts"
+    name = "R Blog"
     weight = 2
 
 [[menu.main]]
@@ -34,7 +34,7 @@ googleAnalytics = "UA-118999723-1"
 
 [[menu.main]]
     url = "/Tableau/"
-    name = "Tableau"
+    name = "Tableau Blog"
     weight = 3
     
 [[menu.main]]
