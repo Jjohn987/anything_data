@@ -13,10 +13,10 @@
     
     <item>
       <title>Tableau - Creating a Waffle Chart</title>
-      <link>/post/tableau-creating-a-waffle-chart/</link>
+      <link>/tableau/tableau-creating-a-waffle-chart/</link>
       <pubDate>Mon, 08 Jul 2019 00:00:00 +0000</pubDate>
       
-      <guid>/post/tableau-creating-a-waffle-chart/</guid>
+      <guid>/tableau/tableau-creating-a-waffle-chart/</guid>
       <description>Waffles are for Breakfast It’s been a long time since my last update and I’ve decided to start with Tableau, of all topics! Although open source advocates do not look kindly upon Tableau, I find myself using it frequently and relearning all the stuff I can do in R. For my series of “how-to’s” regarding Tableau, I’d like to start with posting about how to make a waffle chart in Tableau.</description>
     </item>
     

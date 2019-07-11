@@ -33,6 +33,11 @@ googleAnalytics = "UA-118999723-1"
     weight = 3
 
 [[menu.main]]
+    url = "/Tableau/"
+    name = "Tableau"
+    weight = 3
+    
+[[menu.main]]
     url = "https://www.r-bloggers.com/"
     name = "R-bloggers"
     weight = 7 
